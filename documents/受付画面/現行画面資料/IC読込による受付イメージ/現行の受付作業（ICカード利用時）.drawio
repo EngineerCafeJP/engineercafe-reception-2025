@@ -1,0 +1,274 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36" version="26.0.11">
+  <diagram name="ページ1" id="GCRJYcmQu8o8tYEnokpZ">
+    <mxGraphModel dx="1003" dy="649" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-5" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/png,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAA3xJREFUeF7tW1GS2jAMtYF7lD3Jlj8G5w5dTtLlJE3vEDP8lZ5k03vguKs03oZMwkq2lAlDMsPw4yjW85MsS7JWIz7b7Xa9Wq3WSqmv3vtn+FdKle//Z631H/gviuI84pSUHutjWZaB0r8Q3yu11j+LonhFjE0eIg4ArPpyufzRrDZlwrlz7nA6nYAhYo8oAI3ybwmzL51zG0kQRAEwxgDlwc5TnrO1dpMi4Na7YgDsdrsXrTVQP/nRWh+kfIIYAMYYn6z5fwFipiACAOfqBwykWCACgDEGqP/CyAAQJeILpAAAzw8BD+dTWmufOAWCLCkAOO0/6HwfADDs/YOL7Jx74o4J2BkwA/Av9E2J/mYGDCEwm8Cj+wBrLbvPYhcI9GU6BHUtIbfW7u8iDsiy7NV7/515sncFADb7g8bIe78/Ho85+gXkQBETSMgCDU1bJAoUC4VBMGdApLXeSCVLRRgQlpHDF0gdgz+O2UhTiRrWsACcYezRWOQI3FZGlAEpTJBe+VEY0Eaa4BjPzrk996lviMJiDIBCSJ/jCtWhqqrWWmuoDqnPqkLwDoyTAIUdgCYfCHYPCh4ul0ueMvGWIy2994eqqs4p8rpMYAOgKX1BLrCbCoO6H6S1STW/BshvPXUFKJ3tqfJETQAZ+wMQv28VQEHpxWKx9t6D4jdzihzsSg6ECI6tbwGg5ge/oGhMEjXZYSaZAHLlo2IIwktJRZNoACaifI1TSswQBQBHiEtYYdTQWBDIAHAeclCaEQbF5AzJAExx9T/C2ogqMhkA5qovYX1xQ6ksIAEgUfXFqYUfRc0ckQCYMv1bEJFyhyQAprT13eAEKYdABUCi6ovnN3IkpX6ABmDK218XF4ojnAFAskoROj2xIsXGUbLIaAbMAOB7fcVWFit4ZgChkDKbAJZWsw+YfQD6wgOWVGLjxnaCIdtbK4TJ6CZoXt8mCe+3rt1ciRwVgG4qyhgj0SYbFLzqExg6nc4AjLkNPgwDmtMgXIG5KmBMEQCR0yAYYV/9b2oAUOy/rilQPXIXhAkBEFU0JQMAgLXNYSIARNcIowAIrIFtqKqqst2/N/Y2CHNJuVGWBEBgQ7thYUwAqObbNz4ZgK7Qhwcg7BbNDfFPGx2Qq5g3F6pJXSYY2ewM6H4Udg1oiGo6P770NERAXBGaJeqL0tA0Bb6Fux+oD5C/AdGMXwRWQp8AAAAASUVORK5CYII=;" vertex="1" parent="1">
+          <mxGeometry x="10" y="400" width="64" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-6" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/png,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAABC5JREFUeF7lW+uRmzAQRrb7yF0lOf/zGHrIuZKcKwnpwXj8L1wlIX0AipeTGBASWonlZTOTiedGEruf9r0LC0Z4DofDy3a7/RkEwYv4lzHGznmeZ7fbLet75fF4fGeM/ZD7YC3svVwu6QikBoz6UMHAL9O5nPNTWZapCkQURR+cc8l4Z7sA4YOaXlIAxM3/RRIpb1RKiXUbgHe9XmPrQocFpACIWwTRH+tJkyTZUx5OCkAYhpySON1ZRVG82uyICw1kADiKvwuNrbWMsT2lQVwdANR2gAyACfRfSkKcJMnJW4SUjWsEgNQQkgEQhuGfIAjeqG6m7xxKQ0gJwOgeQIKyOACm8gASAEpDSCIBtvB3BLUgM4QkAEzoASSWaVEUJ4qAiASAKQ2gIk1VPnEPjj7F31NMxtk8gwqAyQwgUp1SAYoVkMEAhGEIqe87krA5lmWc87MuBa+kx4ciYfS+L5xxlTWt3UADsFKm1UQKKkutoooVAMG4LG/5CMyS9mRJkryijGAURW+cc9BvqNg8xKMrq2klYAa/PgXAWVEUezV26ADwoMwbM8gWAFPH9FNcuy1veFgAbIxL8DsqsILApk9wYsbYb5eaYQeARldnydFdEwQIe707R8Y4QLjBZntrCpW1vQOSH2itgWuuq09DukbWQAgoUsCAP40dGwCTVabHOf9U4/gwDKH71KLBt0qEAkC9FkuQBISbAALG6uYoY+wfnF2WZQZMwm9bjm9w050IzyZKRiOI3WiKF1xuAsLszWaTYY2WyU2PrgImUHSiCGsxIDS9DYYBIXVQee48SZJ4STIc5L1R2AZoaWuboWIeINaJtM7Vuq6vRfjLA3i3zQcBAESYpKBxTZXlBn2/J1ffhPXuM6Lgy+XalrWnvv3BEmCTAqw98V2HUR3b2YMlQEjBHGUxkhbZYABmrAgD9nFRFGeb6+yTAm8AFlQw0eb5NtEfFAf0uSTsi6nXYVyv7p3OErBE5iVjPiA4AbCCgomzOjgBMEMT1FlTsIUQbxuw4DI5BFsnbF7hDYDcOLP7UyXDOyZwUgH1rUuoIA+NBgcB8NShsHCHMNw8d+1wnJqgyfw2ymOTTIQ5uAEvINAqIGIASHqWxnjHILqMz6AAWIP/V1HAxgNWABbm7hw04utLkzzPtVUpVBywZuabFak+lTBKwIMwL3EwjtU9zXyAKWDSzQfAZIi2/OykgAtcrEuXdd3hTttpgbz4ktQ/I7SCfN+X8Xqf+slNSwJWPhuABac1aF0D8Ay3ryudqRLwyPov+W/ZAdOIDMT7Y88AYEWWcl3nO4O1TYj4gBHDkIXpk1trLgBvBPuw2+2qRuU9RoAhaXjQ3/z6UO2xp27CyoELTMcIBUAfMRKcsixfNptNpTaiC9xUIVWd+tSr+Xm9/F39D11jYA5+w2CF68cROj7+A0svjF+EOqkaAAAAAElFTkSuQmCC;" vertex="1" parent="1">
+          <mxGeometry x="160" y="400" width="64" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-8" value="現行の受付作業（ICカード利用時）" style="text;strokeColor=#6c8ebf;fillColor=#dae8fc;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="10" y="10" width="810" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-9" value="IC Card" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=6;" vertex="1" parent="1">
+          <mxGeometry x="80" y="370" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-12" value="&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;1. ICカード提示&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="69" y="400" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-18" value="" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=22;" vertex="1" parent="1">
+          <mxGeometry x="274" y="280" width="78" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-20" value="2. 読取り準備&lt;div&gt;　・画面情報クリア&lt;/div&gt;&lt;div&gt;　・リーダー起動 等&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="100" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-24" value="3. 準備完了" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="160" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-25" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="460" y="89" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-14" value="Webシステム" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-25">
+          <mxGeometry width="123.75" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-15" value="IC：abc...xyz..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-14">
+          <mxGeometry y="30" width="123.75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-16" value="..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-14">
+          <mxGeometry y="60" width="123.75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-17" value="..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-14">
+          <mxGeometry y="90" width="123.75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-22" value="&lt;div&gt;＜読取後＞&lt;/div&gt;・ICキー、ユーザー名が表示される。&lt;div&gt;・カフェIDは&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;クリップボードに&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　保持される。&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;labelBackgroundColor=#FFCCE6;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-25">
+          <mxGeometry x="127.06" y="-10" width="232.94" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-28" value="5. 読取開始" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="330" y="250" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-31" value="4. リーダーに&lt;div&gt;　カードをセット&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="350" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-34" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="614" y="340" width="213" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-32" value="ＤＢ１" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-34">
+          <mxGeometry x="-40" width="79.44" height="71.11" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-33" value="&lt;div&gt;&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;・ICキー（要 事前登録）&lt;/span&gt;&lt;/div&gt;&lt;div&gt;・カフェID（要 事前登録）&lt;/div&gt;&lt;div&gt;・施設利用履歴の保持&lt;/div&gt;&lt;div&gt;　※施設開始、終了&lt;/div&gt;&lt;div&gt;　　延長申請 など&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;labelBackgroundColor=#FFCCE6;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-34">
+          <mxGeometry x="42.6" width="170.4" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-37" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;6.&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;DB検索。&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　ICキーを基に&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　カフェID等&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　を取得&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="505" y="280" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-39" value="7. ユーザー名&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;表示＆&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;カフェIDをクリップ&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="619" y="260" width="142" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-41" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="186" y="390" as="sourcePoint" />
+            <mxPoint x="410" y="130" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="166" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-44" value="" style="endArrow=classic;html=1;rounded=0;labelBorderColor=#0000FF;fontSize=14;strokeWidth=3;fillColor=#6a00ff;strokeColor=#3700CC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="215" y="381.16999999999996" as="sourcePoint" />
+            <mxPoint x="285" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-47" value="" style="endArrow=classic;html=1;rounded=0;labelBorderColor=#0000FF;fontSize=14;strokeWidth=3;fillColor=#6a00ff;strokeColor=#3700CC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="587" y="230" as="sourcePoint" />
+            <mxPoint x="614" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-49" value="" style="endArrow=classic;html=1;rounded=0;labelBorderColor=#0000FF;fontSize=14;strokeWidth=3;fillColor=#6a00ff;strokeColor=#3700CC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="629" y="330" as="sourcePoint" />
+            <mxPoint x="599" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-50" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="220" as="sourcePoint" />
+            <mxPoint x="240" y="440" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="470" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-51" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="150" as="sourcePoint" />
+            <mxPoint x="200" y="350" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="210" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-52" value="" style="endArrow=classic;html=1;rounded=0;labelBorderColor=#0000FF;fontSize=14;strokeWidth=3;fillColor=#6a00ff;strokeColor=#3700CC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="339" y="279.99999999999994" as="sourcePoint" />
+            <mxPoint x="445" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-57" value="8. 確認" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="380" y="380" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-58" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="450" y="610" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-59" value="Flutterシステム" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-58">
+          <mxGeometry width="123.75" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-60" value="..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-59">
+          <mxGeometry y="30" width="123.75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-61" value="..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-59">
+          <mxGeometry y="60" width="123.75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-62" value="..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-59">
+          <mxGeometry y="90" width="123.75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-63" value="&lt;div&gt;&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;＜カード一覧画面＞&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;・カフェID入力テキストに、&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　クリップしたカフェIDを貼付けると、&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　ユーザー名が表示。&lt;/span&gt;&lt;/div&gt;&lt;div&gt;　　→&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;ユーザー選択後、&lt;/span&gt;&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;カードを選択して&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(rgb(255, 204, 230), rgb(84, 40, 63)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　　　カードと紐づける。&lt;/span&gt;&lt;/div&gt;&lt;div&gt;・カード返却時はカードをクリックして、&lt;/div&gt;&lt;div&gt;　紐づけられたユーザーを解除。&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;labelBackgroundColor=#FFCCE6;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-58">
+          <mxGeometry x="127.06" y="-10" width="232.94" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-65" value="9. カード一覧画面で&lt;div&gt;　カフェIDを貼付けて&lt;/div&gt;&lt;div&gt;　検索を実施&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="510" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-67" value="13. ユーザーに対して&lt;div&gt;　　貸出カード番号を&lt;/div&gt;&lt;div&gt;　　紐づけて登録処理&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="220" y="660" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-73" value="15. 完了" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="640" y="500" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-74" value="14. DB登録" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="560" y="464" width="108" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-83" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="80" y="520" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-76" value="" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;size=7;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-83">
+          <mxGeometry width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-77" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.smiley" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-83">
+          <mxGeometry x="3.43" y="6" width="16.57" height="14" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-78" value="101" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="W4UwG_xCtUd7rEqfo9wK-83">
+          <mxGeometry x="17" y="6" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-84" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="160" y="470" as="sourcePoint" />
+            <mxPoint x="60" y="470" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="110" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-85" value="17.&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;カード貸出&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="69" y="490" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-89" value="" style="endArrow=classic;html=1;rounded=0;labelBorderColor=#0000FF;fontSize=14;strokeWidth=3;fillColor=#6a00ff;strokeColor=#3700CC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="80" y="430" as="sourcePoint" />
+            <mxPoint x="150" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-92" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="465" y="570" as="sourcePoint" />
+            <mxPoint x="565" y="410" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="475" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-93" value="16. 確認" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="220" y="720" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-94" value="10. カフェIDより&lt;div&gt;　　ユーザー情報の&lt;/div&gt;&lt;div&gt;　　検索を実施&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="380" y="464" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-96" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="230" y="480" as="sourcePoint" />
+            <mxPoint x="440" y="640" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="240" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-97" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="570" y="430" as="sourcePoint" />
+            <mxPoint x="480" y="590" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="490" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-98" value="11.&amp;nbsp;&lt;div&gt;ユーザーの&lt;/div&gt;&lt;div&gt;情報を&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;表示&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="500" y="510" width="108" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-99" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="190" y="500" as="sourcePoint" />
+            <mxPoint x="440" y="690" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="140" y="780" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-100" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="600" as="sourcePoint" />
+            <mxPoint x="650" y="420" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="660" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-102" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="670" y="430" as="sourcePoint" />
+            <mxPoint x="600" y="590" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="670" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-103" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="410" y="650" as="sourcePoint" />
+            <mxPoint x="210" y="470" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="230" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-104" value="12. 確認" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="230" y="580" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-105" value="" style="curved=1;endArrow=classic;html=1;rounded=0;strokeWidth=3;fillColor=#0050ef;strokeColor=#001DBC;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="710" as="sourcePoint" />
+            <mxPoint x="180" y="480" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="110" y="790" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W4UwG_xCtUd7rEqfo9wK-108" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;課題&lt;/h1&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;・「IC読取り」⇔「カード貸与」の操作画面が完全に分離している。&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　そのため ICキーの読取り後に以下の操作が発生！&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　　→画面（Web&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;ページ）の切り替えの手間がかかる&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;　　→クリップボードの情報を用いて、ユーザー情報の探す必要があり手間がかかる&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;・DBがNoSQL（RDBに移行）　←※先日のMTGの記憶。。。&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="37" y="800" width="763" height="320" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
