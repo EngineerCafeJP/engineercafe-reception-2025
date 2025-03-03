@@ -298,24 +298,20 @@ CREATE TABLE
     pronunciation text,
     email text,
     phone text,
+    prefecture_id bigint,
+    city text,
     address1 text,
     address2 text,
-    city text,
-    prefecture_id bigint,
-    -- prefecturesテーブルのIDを参照
     belongs_id bigint,
-    -- belongsテーブルのIDを参照
-    belongs_other text,
     -- 所属が「その他」の場合の自由入力欄
+    belongs_other text,
     belongs_detail text,
     job_id bigint,
-    -- jobsテーブルのIDを参照
-    job_other text,
     -- 職業が「その他」の場合の自由入力欄
+    job_other text,
     found_id bigint,
-    -- foundsテーブルのIDを参照
-    found_other text,
     -- 見つけたきっかけが「その他」の場合の自由入力欄
+    found_other text,
     comments text,
     warnings text,
     created_at timestamptz DEFAULT now (),
@@ -332,10 +328,10 @@ INSERT INTO
     pronunciation,
     email,
     phone,
+    prefecture_id,
+    city,
     address1,
     address2,
-    city,
-    prefecture_id,
     belongs_id,
     belongs_detail,
     job_id,
@@ -349,9 +345,6 @@ VALUES
     'やまだたろう',
     'taro@example.com',
     '09012345678',
-    '神南1',
-    '',
-    '渋谷区',
     (
       SELECT
         id
@@ -360,6 +353,9 @@ VALUES
       WHERE
         name = '東京都'
     ),
+    '渋谷区',
+    '神南1',
+    '',
     (
       SELECT
         id
@@ -368,6 +364,7 @@ VALUES
       WHERE
         name = '個人'
     ),
+    'サンプルの詳細情報です。',
     (
       SELECT
         id
@@ -376,7 +373,7 @@ VALUES
       WHERE
         name = '学生'
     ),
-    'サンプルの詳細情報です。' (
+    (
       SELECT
         id
       FROM
@@ -384,7 +381,7 @@ VALUES
       WHERE
         name = 'SNS'
     ),
-    'サンプルのコメントです。',
+    'サンプルのコメントです。'
   );
 
 -- NFC
@@ -393,7 +390,7 @@ CREATE TABLE
     id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id bigint,
     nfc_id TEXT UNIQUE,
-    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
   );
 
 -- 座席利用
@@ -407,5 +404,5 @@ CREATE TABLE
     remarks text,
     created_at timestamptz NOT NULL DEFAULT now (),
     FOREIGN KEY (seat_id) REFERENCES seats (id),
-    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
   );
