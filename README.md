@@ -52,9 +52,9 @@ https://supabase.com/docs/guides/local-development/cli/getting-started
 
 
 ### supabase local 起動
-supabase ディレクトリがあるところで
 ```bash
-supabase start
+cd supabase/
+npx supabase start
 ```
 
 ### supabase studioにアクセス
@@ -65,7 +65,7 @@ http://127.0.0.1:54323
 
 ```
 engineercafe-reception-2025
-├── 📂 reception-app    # ソースコード
+├── 📂 app    # ソースコード
 │   ├── 📂 app          # UI コンポーネント
 │   ├── 📂 components   # 共通のUIコンポーネント
 │   ├── 📂 hooks        # React Hook
