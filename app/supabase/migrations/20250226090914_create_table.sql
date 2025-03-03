@@ -67,7 +67,7 @@ INSERT INTO belongs (name) VALUES
   ('法人'),
   ('その他');
 
--- 仕事テーブル作成
+-- 仕事テーブル
 CREATE TABLE IF NOT EXISTS jobs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name text NOT NULL,
@@ -90,7 +90,7 @@ INSERT INTO jobs (name) VALUES
   ('フリーランス'),
   ('その他');
 
--- テーブル作成
+-- きっかけテーブル
 CREATE TABLE IF NOT EXISTS founds (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name text NOT NULL,
@@ -159,7 +159,7 @@ INSERT INTO seats (category_id, name) VALUES
 
 CREATE TABLE IF NOT EXISTS users (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  number text UNIQUE,
+  number bigint UNIQUE,
   name text,
   pronunciation text,
   email text,
@@ -170,12 +170,13 @@ CREATE TABLE IF NOT EXISTS users (
   prefecture_id bigint,       -- prefecturesテーブルのIDを参照
   belongs_id bigint,           -- belongsテーブルのIDを参照
   belongs_other text,          -- 所属が「その他」の場合の自由入力欄
+  belongs_detail text,
   job_id bigint,               -- jobsテーブルのIDを参照
   job_other text,              -- 職業が「その他」の場合の自由入力欄
   found_id bigint,             -- foundsテーブルのIDを参照
   found_other text,            -- 見つけたきっかけが「その他」の場合の自由入力欄
   comments text,
-  details text,
+  warnings text,
   created_at timestamptz DEFAULT now(),
   FOREIGN KEY (prefecture_id) REFERENCES prefectures(id),
   FOREIGN KEY (belongs_id) REFERENCES belongs(id),
@@ -194,13 +195,10 @@ INSERT INTO users (
   city,
   prefecture_id,
   belongs_id,
-  belongs_other,
+  belongs_detail,
   job_id,
-  job_other,
   found_id,
-  found_other,
-  comments,
-  details
+  comments
 ) VALUES (
   '000123',
   '山田太郎',
@@ -212,11 +210,16 @@ INSERT INTO users (
   '渋谷区',
   (SELECT id FROM prefectures WHERE name = '東京都'),
   (SELECT id FROM belongs WHERE name = '個人'),
-  NULL,
   (SELECT id FROM jobs WHERE name = '学生'),
-  NULL,
-  (SELECT id FROM founds WHERE name = 'SNS'),
-  NULL,
-  'サンプルのコメントです。',
   'サンプルの詳細情報です。'
+  (SELECT id FROM founds WHERE name = 'SNS'),
+  'サンプルのコメントです。',
+);
+
+-- NFC
+CREATE TABLE IF NOT EXISTS nfcs (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id bigint,
+  nfc_id TEXT UNIQUE,
+  FOREIGN KEY (user_id) REFERENCES users(id),
 );
