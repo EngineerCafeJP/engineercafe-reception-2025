@@ -156,3 +156,67 @@ INSERT INTO seats (category_id, name) VALUES
   -- テラスカテゴリの座席
   ((SELECT id FROM seat_categories WHERE name = 'テラス'), 'テラス-1'),
   ((SELECT id FROM seat_categories WHERE name = 'テラス'), 'テラス-2');
+
+CREATE TABLE IF NOT EXISTS users (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  number text UNIQUE,
+  name text,
+  pronunciation text,
+  email text,
+  phone text,
+  address1 text,
+  address2 text,
+  city text,
+  prefecture_id bigint,       -- prefecturesテーブルのIDを参照
+  belongs_id bigint,           -- belongsテーブルのIDを参照
+  belongs_other text,          -- 所属が「その他」の場合の自由入力欄
+  job_id bigint,               -- jobsテーブルのIDを参照
+  job_other text,              -- 職業が「その他」の場合の自由入力欄
+  found_id bigint,             -- foundsテーブルのIDを参照
+  found_other text,            -- 見つけたきっかけが「その他」の場合の自由入力欄
+  comments text,
+  details text,
+  created_at timestamptz DEFAULT now(),
+  FOREIGN KEY (prefecture_id) REFERENCES prefectures(id),
+  FOREIGN KEY (belongs_id) REFERENCES belongs(id),
+  FOREIGN KEY (job_id) REFERENCES jobs(id),
+  FOREIGN KEY (found_id) REFERENCES founds(id)
+);
+
+INSERT INTO users (
+  number,
+  name,
+  pronunciation,
+  email,
+  phone,
+  address1,
+  address2,
+  city,
+  prefecture_id,
+  belongs_id,
+  belongs_other,
+  job_id,
+  job_other,
+  found_id,
+  found_other,
+  comments,
+  details
+) VALUES (
+  '000123',
+  '山田太郎',
+  'やまだたろう',
+  'taro@example.com',
+  '09012345678',
+  '神南1',
+  '',
+  '渋谷区',
+  (SELECT id FROM prefectures WHERE name = '東京都'),
+  (SELECT id FROM belongs WHERE name = '個人'),
+  NULL,
+  (SELECT id FROM jobs WHERE name = '学生'),
+  NULL,
+  (SELECT id FROM founds WHERE name = 'SNS'),
+  NULL,
+  'サンプルのコメントです。',
+  'サンプルの詳細情報です。'
+);
