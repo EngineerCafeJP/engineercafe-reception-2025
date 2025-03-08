@@ -1,3 +1,34 @@
+CREATE TABLE old_logs (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  document_id integer,
+  member_number text,
+  space text,
+  start_time time,
+  end_time time,
+  registration_datetime timestamp,
+  acquisition_datetime timestamp
+);
+
+CREATE TABLE old_users (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  document_id text,
+  member_number text,
+  full_name text,
+  furigana text,
+  phone_number text,
+  email text,
+  affiliation text,
+  affiliation_detail text,
+  attribute text,
+  prefecture text,
+  city text,
+  address text,
+  building text,
+  how_did_you_know text,
+  registration_datetime timestamp,
+  acquisition_datetime timestamp
+);
+
 -- 都道府県テーブル
 CREATE TABLE
   IF NOT EXISTS prefectures (
@@ -55,7 +86,8 @@ VALUES
   ('大分県'),
   ('宮崎県'),
   ('鹿児島県'),
-  ('沖縄県');
+  ('沖縄県'),
+  ('その他');
 
 -- 所属テーブル
 CREATE TABLE
@@ -299,6 +331,7 @@ CREATE TABLE
     email text,
     phone text,
     prefecture_id bigint,
+    prefecture_other text,
     city text,
     address1 text,
     address2 text,

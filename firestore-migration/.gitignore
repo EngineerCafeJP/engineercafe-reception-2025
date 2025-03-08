@@ -1,0 +1,8 @@
+node_modules/
+
+*.log
+
+.env
+
+logs.csv
+users.csv
