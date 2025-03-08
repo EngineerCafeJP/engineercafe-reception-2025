@@ -82,13 +82,13 @@
 
 ---
 
-## 13. address → address1
+## 13. address
 - **対応:**  
   - そのまま移行する。前処理（トリムなど）は不要。
 
 ---
 
-## 14. building → address2
+## 14. building
 - **対応:**  
   - そのまま移行する。
 
