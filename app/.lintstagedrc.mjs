@@ -7,6 +7,7 @@ const buildEslintCommand = (filenames) =>
 
 const lintStagedConfig = {
   "*.{js,jsx,ts,tsx,mjs}": [buildEslintCommand],
+  "**/*": "prettier --write --ignore-unknown",
 };
 
 export default lintStagedConfig;
