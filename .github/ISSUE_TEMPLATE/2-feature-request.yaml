@@ -1,0 +1,43 @@
+name: Feature Request
+description: 新機能や改善の提案をするためのテンプレート
+labels: [enhancement]
+
+body:
+  - type: markdown
+    attributes:
+      value: "## 要望の詳細"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 機能の概要
+      description: 提案する機能について簡潔に説明してください。
+      placeholder: 例) ログイン後にユーザーのプロフィールを編集できるようにする
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: なぜこの機能が必要か
+      description: 現在の問題点や改善したい理由を説明してください。
+      placeholder: 例) 現在、ユーザー情報を変更する方法がなく、間違ったメールアドレスで登録しても修正できない。
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 解決策の提案
+      description: どのような方法で解決できそうか、アイデアがあれば記入してください。
+      placeholder: 例) プロフィール編集ページを作成し、名前・メールアドレスを変更できるようにする。
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: 補足情報
+      description: 関連する情報や参考リンクがあれば記入してください。
+    validations:
+      required: false
