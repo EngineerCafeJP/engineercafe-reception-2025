@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import SignInForm from "./client-components/SignInForm";
 

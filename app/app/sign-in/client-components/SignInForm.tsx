@@ -1,19 +1,21 @@
-"use client"
+"use client";
 
 const SignInForm: React.FC = () => {
   return (
-    <div className="max-w-[680px] max-h-[400px] mx-auto border-1 border-neutral-content py-[40px]">
-
-
-      <div className="max-w-[420px] m-auto">
+    <div className="border-1 border-neutral-content mx-auto max-h-[400px] max-w-[680px] py-[40px]">
+      <div className="m-auto max-w-[420px]">
         <h2 className="text-center">管理者ログイン</h2>
-        <div className="w-full mb-[24px]">
+        <div className="mb-[24px] w-full">
           <label className="block">メールアドレス</label>
-          <input type="email" className="input w-full" placeholder="email" />
+          <input className="input w-full" placeholder="email" type="email" />
         </div>
-        <div className="w-full mb-[24px]">
+        <div className="mb-[24px] w-full">
           <label className="block">パスワード</label>
-          <input type="password" className="input w-full" placeholder="password" />
+          <input
+            className="input w-full"
+            placeholder="password"
+            type="password"
+          />
         </div>
         <div className="text-right">
           <button className="btn btn-primary mx-auto">ログイン</button>
@@ -21,6 +23,6 @@ const SignInForm: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default SignInForm;

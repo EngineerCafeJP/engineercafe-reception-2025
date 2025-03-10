@@ -1,18 +1,26 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 
 const Header: React.FC = () => {
   return (
-    <header className="navbar bg-base-100 shadow-md p-4 h-[80px] border-b-2">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="flex item-center">
-          <Image src="/images/logo.png" alt="Logo" width={60} height={60} className="my-auto mx-2" />
-          <a><h1 className="text-[1.5rem] ml-[8px]">エンジニアカフェ受付</h1></a>
+    <header className="navbar bg-base-100 h-[80px] border-b-2 p-4 shadow-md">
+      <div className="container mx-auto flex items-center justify-between">
+        <div className="item-center flex">
+          <Image
+            alt="Logo"
+            className="mx-2 my-auto"
+            height={60}
+            src="/images/logo.png"
+            width={60}
+          />
+          <a>
+            <h1 className="ml-[8px] text-[1.5rem]">エンジニアカフェ受付</h1>
+          </a>
         </div>
       </div>
     </header>
   );
-}
+};
 
 export default Header;
