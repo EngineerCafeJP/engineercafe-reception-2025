@@ -1,8 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: "#228BE6";
+  --color-secondary: "#000000";
+  --color-accent: "#FAB005";
+  --color-warning: "#FF6B6B";
+  --color-error: "#F03E3E";
+  --color-success: "#37B24D";
+}
 
 :root {
   --background: #ffffff;
@@ -25,7 +34,9 @@ body {
   min-height: 100vh;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
