@@ -29,14 +29,17 @@ body {
   box-sizing: border-box;
 }
 
-@plugin "daisyui";
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
   --color-primary: "#228BE6";
-  --color-secondary: "#000000";
+  --color-secondary: "#ACACAC";
   --color-accent: "#FAB005";
   --color-warning: "#FF6B6B";
   --color-error: "#F03E3E";
   --color-success: "#37B24D";
+  --color-primary-content: "#ffffff";
+  --color-secondary-content: "#ffffff";
+  --color-black: "#000000";
+  --color-white: "#ffffff";
 }
