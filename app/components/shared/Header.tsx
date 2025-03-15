@@ -1,8 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 const Header: React.FC = () => {
+  const { session, signOut } = useAuth();
+
   return (
     <header className="navbar bg-base-100 h-[80px] border-b-2 p-4 shadow-md">
       <div className="container mx-auto flex items-center justify-between">
@@ -18,6 +21,11 @@ const Header: React.FC = () => {
             <h1 className="ml-[8px] text-[1.5rem]">エンジニアカフェ受付</h1>
           </a>
         </div>
+        {session && (
+          <div className="flex item-center">
+            <button className="btn btn-primary" onClick={signOut}>ログアウト</button>
+          </div>
+        )}
       </div>
     </header>
   );

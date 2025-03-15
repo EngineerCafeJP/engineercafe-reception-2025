@@ -164,12 +164,13 @@ CREATE TABLE
 INSERT INTO
   seat_categories (name)
 VALUES
-  ('メイン'),
-  ('集中'),
-  ('アンダー'),
-  ('メーカーズ'),
-  ('ミーティング'),
-  ('テラス');
+  ('集中スペース'),
+  ('Underスペース'),
+  ('ミーティングスペース'),
+  ('MAKERSスペース'),
+  ('テラス'),
+  ('メインホール'),
+  ('その他');
 
 -- 座席テーブル
 CREATE TABLE
@@ -181,147 +182,54 @@ CREATE TABLE
     FOREIGN KEY (category_id) REFERENCES seat_categories (id)
   );
 
-INSERT INTO
-  seats (category_id, name)
-VALUES
-  -- メインカテゴリの座席
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'メイン'
-    ),
-    'メイン-1'
-  ),
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'メイン'
-    ),
-    'メイン-2'
-  ),
-  -- 集中カテゴリの座席
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = '集中'
-    ),
-    '集中-1'
-  ),
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = '集中'
-    ),
-    '集中-2'
-  ),
-  -- アンダーカテゴリの座席
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'アンダー'
-    ),
-    'アンダー-1'
-  ),
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'アンダー'
-    ),
-    'アンダー-2'
-  ),
-  -- メーカーズカテゴリの座席
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'メーカーズ'
-    ),
-    'メーカーズ-1'
-  ),
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'メーカーズ'
-    ),
-    'メーカーズ-2'
-  ),
-  -- ミーティングカテゴリの座席
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'ミーティング'
-    ),
-    'ミーティング-1'
-  ),
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'ミーティング'
-    ),
-    'ミーティング-2'
-  ),
-  -- テラスカテゴリの座席
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'テラス'
-    ),
-    'テラス-1'
-  ),
-  (
-    (
-      SELECT
-        id
-      FROM
-        seat_categories
-      WHERE
-        name = 'テラス'
-    ),
-    'テラス-2'
-  );
+-- 集中スペース: 1～6
+INSERT INTO seats (category_id, name)
+SELECT id, concat('集中スペース', ':', gs.num)
+FROM seat_categories, generate_series(1, 6) AS gs(num)
+WHERE seat_categories.name = '集中スペース';
+
+-- Underスペース: 11～15
+INSERT INTO seats (category_id, name)
+SELECT id, concat('Underスペース', ':', gs.num)
+FROM seat_categories, generate_series(11, 15) AS gs(num)
+WHERE seat_categories.name = 'Underスペース';
+
+-- 防音室: 単一レコードとして登録
+INSERT INTO seats (category_id, name)
+SELECT id, 'Underスペース:防音室'
+FROM seat_categories
+WHERE name = 'Underスペース';
+
+-- ミーティングスペース: 21～26
+INSERT INTO seats (category_id, name)
+SELECT id, concat('ミーティングスペース', ':', gs.num)
+FROM seat_categories, generate_series(21, 26) AS gs(num)
+WHERE seat_categories.name = 'ミーティングスペース';
+
+-- MAKERSスペース: 31～34
+INSERT INTO seats (category_id, name)
+SELECT id, concat('MAKERSスペース', ':', gs.num)
+FROM seat_categories, generate_series(31, 34) AS gs(num)
+WHERE seat_categories.name = 'MAKERSスペース';
+
+-- テラス: 41～42
+INSERT INTO seats (category_id, name)
+SELECT id, concat('テラス', ':', gs.num)
+FROM seat_categories, generate_series(41, 42) AS gs(num)
+WHERE seat_categories.name = 'テラス';
+
+-- メインホール: 101～119
+INSERT INTO seats (category_id, name)
+SELECT id, concat('メインホール', ':', gs.num)
+FROM seat_categories, generate_series(101, 119) AS gs(num)
+WHERE seat_categories.name = 'メインホール';
+
+-- その他: 単一レコードとして登録
+INSERT INTO seats (category_id, name)
+SELECT id, 'その他'
+FROM seat_categories
+WHERE name = 'その他';
+
 
 CREATE TABLE
   IF NOT EXISTS users (

@@ -61,6 +61,16 @@ npx supabase start
 http://127.0.0.1:54323
 
 
+## supabase Authenticationの設定
+
+supabase local起動時に表示される
+API URL と anon keyを環境変数に設定する
+
+``` .env.local
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhxxxxx...
+```
+
 ## ディレクトリの構成
 
 ```
@@ -71,8 +81,8 @@ engineercafe-reception-2025
 │   ├── 📂 hooks        # React Hook
 │   ├── 📂 lib          # API クライアント・DB接続
 │   ├── 📂 supabase     # Supabase
+│   ├── 📄 .env.example     # 環境変数サンプル
+│   ├── 📄 package.json     # 依存関係
 ├── 📂 documents        # ドキュメント
-├── 📄 .env.example     # 環境変数サンプル
-├── 📄 package.json     # 依存関係
 ├── 📄 README.md        # 本ファイル
 ```
