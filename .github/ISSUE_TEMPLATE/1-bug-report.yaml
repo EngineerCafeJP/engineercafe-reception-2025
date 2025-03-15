@@ -1,0 +1,71 @@
+name: Bug Report
+description: バグを報告するためのテンプレート
+labels: [bug]
+
+body:
+  - type: markdown
+    attributes:
+      value: "## バグの詳細"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: バグの概要
+      description: 発生しているバグの詳細を記入してください。
+      placeholder: 例) ログイン時に500エラーが発生する
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce_steps
+    attributes:
+      label: 再現手順
+      description: バグを再現するための手順を記入してください。
+      placeholder: |
+        1. `/login` ページにアクセスする
+        2. 正しいメールアドレスとパスワードを入力する
+        3. "ログイン" ボタンをクリックする
+        4. 500エラーが表示される
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: 期待する動作
+      description: 本来どう動作すべきかを記入してください。
+      placeholder: 例) 正しくログインでき、ダッシュボードにリダイレクトされる
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: エラーログ
+      description: コンソールやサーバーのエラーログを記入してください（可能なら）。
+      placeholder: |
+        ```
+        Error: Unexpected token in JSON
+        at Object.parse (native)
+        ```
+    validations:
+      required: false
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: 環境
+      description: 使用している環境を選択してください。
+      options:
+        - "Local (開発環境)"
+        - "Production (本番環境)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: 補足情報
+      description: その他の情報があれば記入してください。
+    validations:
+      required: false
