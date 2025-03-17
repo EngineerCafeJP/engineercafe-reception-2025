@@ -97,4 +97,10 @@ INNER JOIN users u
 LEFT JOIN seats s
   ON s.name = f.final_normalized_space;
 
+-- NFCデータのマイグレーション
+INSERT INTO nfcs (user_id, nfc_id)
+SELECT u.id, o.nfc_id
+FROM old_nfcs o
+JOIN users u ON u.number = o.number::bigint;
+
 COMMIT;
