@@ -29,6 +29,12 @@ CREATE TABLE old_users (
   acquisition_datetime timestamp
 );
 
+CREATE TABLE old_nfcs (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  nfc_id text,
+  number text
+);
+
 -- 都道府県テーブル
 CREATE TABLE
   IF NOT EXISTS prefectures (
