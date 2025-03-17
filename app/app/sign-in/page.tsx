@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useAuth } from "@/app/contexts/AuthContext";
 import SignInForm from "./client-components/SignInForm";
