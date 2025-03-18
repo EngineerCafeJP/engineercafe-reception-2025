@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { User } from "@/app/types";
 import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
-import { User } from "../types";
 
 // ダミーデータ
 const seats = [
@@ -84,15 +84,38 @@ const seatUsages = [
 ];
 
 const dummyUserList = [
-  { id: 1, code: "001234", name: "山田太郎", createdAt: "2025-03-14 10:00:00", updatedAt: "2025-03-14 10:00:00" },
-  { id: 2, code: "001235", name: "山田次郎", createdAt: "2025-03-14 10:00:00", updatedAt: "2025-03-14 10:00:00" },
-  { id: 3, code: "001236", name: "山田三郎", createdAt: "2025-03-14 10:00:00", updatedAt: "2025-03-14 10:00:00" },
-  { id: 4, code: "001237", name: "山田四郎", createdAt: "2025-03-14 10:00:00", updatedAt: "2025-03-14 10:00:00" },
+  {
+    id: 1,
+    code: "001234",
+    name: "山田太郎",
+    createdAt: "2025-03-14 10:00:00",
+    updatedAt: "2025-03-14 10:00:00",
+  },
+  {
+    id: 2,
+    code: "001235",
+    name: "山田次郎",
+    createdAt: "2025-03-14 10:00:00",
+    updatedAt: "2025-03-14 10:00:00",
+  },
+  {
+    id: 3,
+    code: "001236",
+    name: "山田三郎",
+    createdAt: "2025-03-14 10:00:00",
+    updatedAt: "2025-03-14 10:00:00",
+  },
+  {
+    id: 4,
+    code: "001237",
+    name: "山田四郎",
+    createdAt: "2025-03-14 10:00:00",
+    updatedAt: "2025-03-14 10:00:00",
+  },
 ];
 
 export default function HomePage() {
   const [userList, setUserList] = useState<User[] | null>(null);
-
 
   const onChangeUserCode = (userCode: string) => {
     if (userCode.length === 0) {
@@ -100,16 +123,24 @@ export default function HomePage() {
       return;
     }
 
-    const users = dummyUserList.filter((user) => user.code.startsWith(userCode));
+    const users = dummyUserList.filter((user) =>
+      user.code.startsWith(userCode),
+    );
     setUserList(users);
   };
 
   return (
-    <div className="max-w-[80rem] mx-auto">
+    <div className="mx-auto max-w-[80rem]">
       <div className="flex justify-end py-[1rem]">
-        <ReceptionForm searchUserList={userList} seats={seats} onChangeUserCode={onChangeUserCode} onClose={() => {}} onNextButtonClick={() => {}} />
+        <ReceptionForm
+          searchUserList={userList}
+          seats={seats}
+          onChangeUserCode={onChangeUserCode}
+          onClose={() => {}}
+          onNextButtonClick={() => {}}
+        />
       </div>
-      <SeatAreaMap seats={seats} seatUsages={seatUsages} />
+      <SeatAreaMap seatUsages={seatUsages} seats={seats} />
     </div>
   );
 }
