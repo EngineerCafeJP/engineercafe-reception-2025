@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 @plugin "daisyui";
 @plugin "daisyui/theme" {
   name: "light";
@@ -11,6 +9,11 @@
   --color-warning: "#FF6B6B";
   --color-error: "#F03E3E";
   --color-success: "#37B24D";
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 }
 
 :root {
