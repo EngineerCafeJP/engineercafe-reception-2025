@@ -1,0 +1,2 @@
+cd app
+npx --no -- commitlint --edit $1
