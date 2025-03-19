@@ -29,7 +29,7 @@
     "@commitlint/config-conventional": "^19.8.0",
     "@commitlint/cz-commitlint": "^19.8.0",
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4.0.9",
+    "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
