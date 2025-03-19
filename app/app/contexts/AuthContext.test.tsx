@@ -1,180 +1,199 @@
-import { render, screen, act, renderHook } from '@testing-library/react'
-import { AuthProvider, useAuth } from './AuthContext'
-import supabase from '@/utils/supabase/client'
-import { Session, Subscription, User } from '@supabase/supabase-js'
-import { redirect } from 'next/navigation'
+import { Session, Subscription, User } from "@supabase/supabase-js";
+import { render, screen, act, renderHook } from "@testing-library/react";
+import { redirect } from "next/navigation";
+import supabase from "@/utils/supabase/client";
+import { AuthProvider, useAuth } from "./AuthContext";
 
-jest.mock('@/utils/supabase/client');
-jest.mock('next/navigation', () => ({
+jest.mock("@/utils/supabase/client");
+jest.mock("next/navigation", () => ({
   redirect: jest.fn(),
 }));
 
 // テスト用のコンシューマーコンポーネント
 const TestComponent = () => {
-  const { session, signIn, signOut } = useAuth()
+  const { session, signIn, signOut } = useAuth();
   return (
     <div>
-      <div data-testid="session">{session ? 'signed in' : 'signed out'}</div>
-      <button onClick={() => signIn('test@example.com', 'password')}>
+      <div data-testid="session">{session ? "signed in" : "signed out"}</div>
+      <button onClick={() => signIn("test@example.com", "password")}>
         Sign In
       </button>
       <button onClick={signOut}>Sign Out</button>
     </div>
-  )
-}
+  );
+};
 
-describe('AuthContext', () => {
+describe("AuthContext", () => {
   const mockUser = {
-    id: '123',
-    email: 'test@example.com'
-  } as unknown as User
+    id: "123",
+    email: "test@example.com",
+  } as unknown as User;
   const mockSession = {
     user: mockUser,
-    access_token: '123',
-    refresh_token: '123',
+    access_token: "123",
+    refresh_token: "123",
     expires_in: 1000,
-    token_type: 'Bearer'
-  } as unknown as Session
-  // let mockAuthListener: ((event: AuthChangeEvent, session: Session | null) => void | Promise<void>) | null = null
+    token_type: "Bearer",
+  } as unknown as Session;
 
   beforeEach(() => {
     jest.mocked(supabase.auth.getSession).mockResolvedValue({
       data: { session: null },
-      error: null
-    })
+      error: null,
+    });
 
     jest.mocked(supabase.auth.onAuthStateChange).mockImplementation(() => {
       return {
-        data: { subscription: { id: "123", unsubscribe: jest.fn() } as unknown as Subscription }
-      }
-    })
+        data: {
+          subscription: {
+            id: "123",
+            unsubscribe: jest.fn(),
+          } as unknown as Subscription,
+        },
+      };
+    });
 
     jest.mocked(supabase.auth.signInWithPassword).mockResolvedValue({
       data: {
         user: mockUser,
         session: mockSession,
       },
-      error: null
-    })
+      error: null,
+    });
     jest.mocked(supabase.auth.signOut).mockResolvedValue({
-      error: null
-    })
-  })
+      error: null,
+    });
+  });
 
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  describe('サインイン', () => {
-    it('signInボタンをクリックするとサインインが実行される', async () => {
+  describe("サインイン", () => {
+    it("signInボタンをクリックするとサインインが実行される", async () => {
       render(
         <AuthProvider>
           <TestComponent />
-        </AuthProvider>
-      )
+        </AuthProvider>,
+      );
 
-      const signInButton = screen.getByText('Sign In')
+      const signInButton = screen.getByText("Sign In");
 
       await act(async () => {
-        signInButton.click()
-      })
+        signInButton.click();
+      });
 
       expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        password: 'password'
-      })
-    })
-  })
+        email: "test@example.com",
+        password: "password",
+      });
+    });
+  });
 
-  describe('サインアウト', () => {
-    it('signOutボタンをクリックするとサインアウトが実行される', async () => {
-      render(
-        <AuthProvider>
-          <TestComponent />
-        </AuthProvider>
-      )
+  describe("サインアウト", () => {
+    it("signOutボタンをクリックするとサインアウトが実行される", async () => {
+      await act(async () => {
+        render(
+          <AuthProvider>
+            <TestComponent />
+          </AuthProvider>,
+        );
+      });
 
       // サインアウト
-      const signOutButton = screen.getByText('Sign Out')
+      const signOutButton = screen.getByText("Sign Out");
       await act(async () => {
-        signOutButton.click()
-      })
+        signOutButton.click();
+      });
 
-      expect(supabase.auth.signOut).toHaveBeenCalled()
-    })
-  })
+      expect(supabase.auth.signOut).toHaveBeenCalled();
+    });
+  });
 
-  describe('セッションの変更', () => {
-    describe('初期状態', () => {
-      it('セッションがnullである', () => {
-        const wrapper = ({ children }: { children: React.ReactNode }) => (
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        )
+  describe("セッションの変更", () => {
+    let callbackMock: any;
 
-        const { result } = renderHook(() => useAuth(), { wrapper })
-
-        expect(result.current.session).toEqual(null)
-      })
-    })
-
-    describe('サインイン', () => {
-      beforeEach(() => {
-        jest.mocked(supabase.auth.onAuthStateChange).mockImplementation((callback) => {
-          callback("SIGNED_IN", mockSession)
+    beforeEach(() => {
+      jest
+        .mocked(supabase.auth.onAuthStateChange)
+        .mockImplementation((callback) => {
+          callbackMock = callback;
           return {
-            data: { subscription: { id: "123", unsubscribe: jest.fn() } as unknown as Subscription }
-          }
-        })
-      })
+            data: {
+              subscription: {
+                id: "123",
+                unsubscribe: jest.fn(),
+              } as unknown as Subscription,
+            },
+          };
+        });
+    });
 
-      it('サインイン後はセッションが変更される', () => {
-
-        const wrapper = ({ children }: { children: React.ReactNode }) => (
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        )
-
-        const { result } = renderHook(() => useAuth(), { wrapper })
-
-        expect(result.current.session).toEqual(mockSession)
-
-
-      })
-      describe('サインアウト', () => {
-        beforeEach(() => {
-          jest.mocked(supabase.auth.onAuthStateChange).mockImplementation((callback) => {
-            callback("SIGNED_OUT", null)
-            return {
-              data: { subscription: { id: "123", unsubscribe: jest.fn() } as unknown as Subscription }
-            }
-          })
-        })
-
-        it('サインイン後はセッションが変更される',  () => {
+    describe("初期状態", () => {
+      it("セッションがnullである", async () => {
+        let handleResult: any;
+        await act(async () => {
           const wrapper = ({ children }: { children: React.ReactNode }) => (
-            <AuthProvider>
-            {children}
-          </AuthProvider>
-        )
+            <AuthProvider>{children}</AuthProvider>
+          );
 
-        const { result } = renderHook(() => useAuth(), { wrapper })
+          const { result } = renderHook(() => useAuth(), { wrapper });
+          handleResult = result;
+        });
+        expect(handleResult.current.session).toEqual(null);
+      });
+    });
 
-          expect(result.current.session).toEqual(null)
-          expect(redirect).toHaveBeenCalledWith('/sign-in')
-        })
-      })
-    })
-  })
-})
+    describe("サインイン", () => {
+      it("サインイン後はセッションが変更される", async () => {
+        let handleResult: any;
 
-describe('useAuth', () => {
-  test('AuthProviderの外でuseAuthを使用するとエラーが発生する', () => {
+        await act(async () => {
+          const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <AuthProvider>{children}</AuthProvider>
+          );
+
+          const { result } = renderHook(() => useAuth(), { wrapper });
+          handleResult = result;
+        });
+        await act(async () => {
+          callbackMock("SIGNED_IN", mockSession);
+        });
+        expect(handleResult.current.session).toEqual(mockSession);
+      });
+    });
+
+    describe("サインアウト", () => {
+      it("サインアウト後はセッションが変更される", async () => {
+        let handleResult: any;
+
+        await act(async () => {
+          const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <AuthProvider>{children}</AuthProvider>
+          );
+          const { result } = renderHook(() => useAuth(), { wrapper });
+          handleResult = result;
+        });
+
+        await act(async () => {
+          callbackMock("SIGNED_IN", mockSession);
+        });
+
+        await act(async () => {
+          callbackMock("SIGNED_OUT", null);
+        });
+        expect(handleResult.current.session).toEqual(null);
+        expect(redirect).toHaveBeenCalledWith("/sign-in");
+      });
+    });
+  });
+});
+
+describe("useAuth", () => {
+  test("AuthProviderの外でuseAuthを使用するとエラーが発生する", () => {
     // エラーがスローされることを期待
     expect(() => {
-      renderHook(() => useAuth())
-    }).toThrow('useAuth must be used within an AuthProvider')
+      renderHook(() => useAuth());
+    }).toThrow("useAuth must be used within an AuthProvider");
   });
-})
+});
