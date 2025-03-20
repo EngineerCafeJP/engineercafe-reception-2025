@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
+import { redirect } from "next/navigation";
 import { useAuth } from "@/app/contexts/AuthContext";
 import SignInForm from "./client-components/SignInForm";
-import { redirect } from "next/navigation";
 
 export default function SignInPage() {
   const { session, signIn } = useAuth();

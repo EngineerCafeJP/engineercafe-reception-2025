@@ -29,6 +29,12 @@ CREATE TABLE old_users (
   acquisition_datetime timestamp
 );
 
+CREATE TABLE old_nfcs (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  nfc_id text,
+  number text
+);
+
 -- 都道府県テーブル
 CREATE TABLE IF NOT EXISTS prefectures (
   id bigint PRIMARY KEY,
@@ -385,69 +391,6 @@ CREATE TABLE
     FOREIGN KEY (belongs_id) REFERENCES belongs (id),
     FOREIGN KEY (job_id) REFERENCES jobs (id),
     FOREIGN KEY (found_id) REFERENCES founds (id)
-  );
-
-INSERT INTO
-  users (
-    number,
-    name,
-    pronunciation,
-    email,
-    phone,
-    prefecture_id,
-    city,
-    address,
-    building,
-    belongs_id,
-    belongs_detail,
-    job_id,
-    found_id,
-    comments
-  )
-VALUES
-  (
-    '999999',
-    '山田太郎',
-    'やまだたろう',
-    'taro@example.com',
-    '09012345678',
-    (
-      SELECT
-        id
-      FROM
-        prefectures
-      WHERE
-        name = '東京都'
-    ),
-    '渋谷区',
-    '神南1',
-    '',
-    (
-      SELECT
-        id
-      FROM
-        belongs
-      WHERE
-        name = '個人'
-    ),
-    'サンプルの詳細情報です。',
-    (
-      SELECT
-        id
-      FROM
-        jobs
-      WHERE
-        name = '学生'
-    ),
-    (
-      SELECT
-        id
-      FROM
-        founds
-      WHERE
-        name = 'SNS'
-    ),
-    'サンプルのコメントです。'
   );
 
 -- NFC
