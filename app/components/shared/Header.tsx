@@ -22,8 +22,10 @@ const Header: React.FC = () => {
           </a>
         </div>
         {session && (
-          <div className="flex item-center">
-            <button className="btn btn-primary" onClick={signOut}>ログアウト</button>
+          <div className="item-center flex">
+            <button className="btn btn-primary" onClick={signOut}>
+              ログアウト
+            </button>
           </div>
         )}
       </div>
