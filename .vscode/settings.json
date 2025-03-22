@@ -10,5 +10,6 @@
   },
   "editor.quickSuggestions": {
     "strings": "on"
-  }
+  },
+  "typescript.preferences.importModuleSpecifier": "non-relative"
 }
