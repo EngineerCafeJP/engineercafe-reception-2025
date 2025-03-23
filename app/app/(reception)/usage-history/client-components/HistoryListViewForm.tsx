@@ -11,7 +11,7 @@ const HistoryListViewForm: React.FC<Props> = ({ listViewItemEntities }) => {
   let index = 1;
 
   return (
-    <div className="border-neutral-content mx-auto mt-[1.5em] max-h-[510px] max-w-[770px] overflow-y-auto border-2 p-[0.5em]">
+    <div className="border-neutral-content mx-auto mt-[1.5em] max-h-[510px] w-full overflow-y-auto border-2 p-[0.5em]">
       {listViewItemEntities.map((item) => (
         <HistoryListViewItemForm
           key={item.Key}

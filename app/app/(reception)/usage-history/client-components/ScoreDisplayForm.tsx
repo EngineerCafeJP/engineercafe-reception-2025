@@ -13,10 +13,14 @@ const ScoreDisplayForm: React.FC<Props> = ({
   socoreOfUsers,
 }) => {
   return (
-    <div className="border-neutral-content mx-auto mt-[1.5em] max-h-[400px] max-w-[430px] border-1 py-[15px]">
+    <div className="border-neutral-content mx-auto mt-[1.5em] max-w-[450px] border-1 py-[15px]">
       <div className="columns-2 text-center">
-        <div className="w-full">本日の利用数：{socoreOfUsages}</div>
-        <div className="w-full">本日の利用者数：{socoreOfUsers}</div>
+        <div className="w-full">
+          利用数：<b className="text-[1.5em]">{socoreOfUsages}</b>
+        </div>
+        <div className="w-full">
+          利用者数：<b className="text-[1.5em]">{socoreOfUsers}</b>
+        </div>
       </div>
     </div>
   );

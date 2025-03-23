@@ -26,7 +26,7 @@ export default function UsageHistory() {
   };
 
   return (
-    <div className="container mx-auto mt-[1rem] p-4">
+    <div className="container mx-auto mt-[1rem] max-w-[770px] p-4">
       <PageTitleForm />
 
       <DateSelectorForm
