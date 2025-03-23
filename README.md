@@ -57,6 +57,11 @@ cd supabase/
 npx supabase start
 ```
 
+#### モックデータのインサート
+```
+supabase db query --file supabase/scripts/mock.sql
+```
+
 ### supabase studioにアクセス
 http://127.0.0.1:54323
 

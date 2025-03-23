@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import supabase from "@/utils/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
+import { createContext, useContext, useEffect, useState } from "react";
+import supabase from "@/utils/supabase/client";
 
 interface AuthContextType {
   session: Session | null;
@@ -19,7 +19,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // 初回取得
     const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       setSession(session);
     };
 
@@ -34,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setSession(null);
           redirect("/sign-in");
         }
-      }
+      },
     );
 
     return () => {
@@ -44,14 +46,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     await supabase.auth.signInWithPassword({ email, password });
-  }
+  };
 
   const signOut = async () => {
     await supabase.auth.signOut();
   };
 
   return (
-    <AuthContext.Provider value={{ session,  signIn, signOut }}>
+    <AuthContext.Provider value={{ session, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
