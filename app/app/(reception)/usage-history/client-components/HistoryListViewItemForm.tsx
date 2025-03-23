@@ -56,7 +56,7 @@ const HistoryListViewItemForm: React.FC<Props> = ({
         <div className="h-full text-center">
           {/* // TODO: (KUROKI) add ~/components/icons/trashCanIcon.tsx */}
           <button className="rounded-full bg-blue-200 px-2 py-2 text-[0.75em] font-bold text-white hover:bg-red-200">
-            <img className="h-[21px] w-[21px]" src="/images/trashCan.png" />
+            <img className="h-[19px] w-[19px]" src="/images/trashCan.png" />
           </button>
         </div>
       </div>
