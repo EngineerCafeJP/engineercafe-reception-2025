@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useAuth } from "@/app/contexts/AuthContext";
+import { useAuth } from "@/app/(reception)/contexts/AuthContext";
 
 const Header: React.FC = () => {
   const { session, signOut } = useAuth();

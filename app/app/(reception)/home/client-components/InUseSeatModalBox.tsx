@@ -1,9 +1,8 @@
-import SeatIcon from "@/components/icons/SeatIcon";
-import UserIcon from "@/components/icons/UserIcon";
-import ClockIcon from "@/components/icons/ClockIcon";
-import formatTime from "@/utils/formatTime";
-
 import { Seat, SeatUsage } from "@/app/types";
+import formatTime from "@/utils/formatTime";
+import ClockIcon from "@/app/(reception)/components/icons/ClockIcon";
+import SeatIcon from "@/app/(reception)/components/icons/SeatIcon";
+import UserIcon from "@/app/(reception)/components/icons/UserIcon";
 
 interface InUseSeatModalBoxProps {
   seat: Seat;
@@ -23,42 +22,42 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
   onExtendSeatClick,
 }) => {
   return (
-    <div className="modal-box p-[0] border-2 border-accent">
-      <div className="bg-accent text-[1.25rem] font-[800] text-primary-content h-[50px] flex items-center justify-center">
+    <div className="modal-box border-accent border-2 p-[0]">
+      <div className="bg-accent text-primary-content flex h-[50px] items-center justify-center text-[1.25rem] font-[800]">
         利用中
       </div>
-      <div className="p-[1rem] flex flex-col gap-[1rem] p-[2rem]">
+      <div className="flex flex-col gap-[1rem] p-[1rem] p-[2rem]">
         <div className="flex flex-col gap-[1rem]">
-          <ul className="list bg-base-100 rounded-box shadow-md px-[0]">
-            <li className="list-row border-b rounded-none border-base-300 py-[0.5rem]">
+          <ul className="list bg-base-100 rounded-box px-[0] shadow-md">
+            <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">
               <div>
                 <SeatIcon size={40} />
               </div>
-              <div className="text-[1.25rem] align-[middle] flex items-center">
+              <div className="flex items-center align-[middle] text-[1.25rem]">
                 <div>{`${seat.areaName} ${seat.name}`}</div>
               </div>
               <button className="btn" onClick={onMoveSeatClick}>
                 移動
               </button>
             </li>
-            <li className="list-row border-b rounded-none border-base-300 py-[0.5rem]">
+            <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">
               <div>
                 <UserIcon size={40} />
               </div>
-              <div className="text-[1.25rem] align-[middle] flex items-center">
+              <div className="flex items-center align-[middle] text-[1.25rem]">
                 <div>{seatUsage.userCode}</div>
               </div>
               <button className="btn" onClick={onLeaveSeatClick}>
                 退席
               </button>
             </li>
-            <li className="list-row border-b rounded-none border-base-300 py-[0.5rem]">
+            <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">
               <div>
                 <ClockIcon size={40} />
               </div>
-              <div className="text-[1.25rem] align-[middle] flex items-center">
+              <div className="flex items-center align-[middle] text-[1.25rem]">
                 <div>{`${formatTime(seatUsage.startTime)} - ${formatTime(
-                  seatUsage.endTime
+                  seatUsage.endTime,
                 )}`}</div>
               </div>
               <button className="btn" onClick={onExtendSeatClick}>

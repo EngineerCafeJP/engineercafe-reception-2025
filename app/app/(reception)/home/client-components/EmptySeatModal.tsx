@@ -1,6 +1,6 @@
 import React from "react";
-import { EmptySeatModalBox } from "./EmptySeatModalBox";
 import { Seat } from "@/app/types";
+import { EmptySeatModalBox } from "./EmptySeatModalBox";
 
 interface SeatModalProps {
   isOpen: boolean;
@@ -11,16 +11,14 @@ interface SeatModalProps {
 export const EmptySeatModal: React.FC<SeatModalProps> = ({
   isOpen,
   onClose,
-  seat
+  seat,
 }) => {
-
-
   if (seat == null) {
-    return <></>
+    return <></>;
   }
 
   return (
-    <dialog id="seat-modal" className={`modal ${isOpen ? "modal-open" : ""}`}>
+    <dialog className={`modal ${isOpen ? "modal-open" : ""}`} id="seat-modal">
       <EmptySeatModalBox seat={seat} onClose={onClose} />
       <div className="modal-backdrop" onClick={onClose}></div>
     </dialog>
