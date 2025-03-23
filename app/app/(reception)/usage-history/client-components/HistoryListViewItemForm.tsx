@@ -30,6 +30,7 @@ const HistoryListViewItemForm: React.FC<Props> = ({
       </div>
       <div className="w-3/12 p-2">
         <div className="flex flex-col">
+          {/* // TODO: (KUROKI) use ~/components/icons/ClockIcon.tsx after pull feature-7*/}
           <div className="h-[1.8em] pt-[0.4em]">{checkInTimeStr} -</div>
           <div className="h-[1.8em] pt-[0.4em]">{checkOutTimeStr}</div>
         </div>
@@ -37,9 +38,11 @@ const HistoryListViewItemForm: React.FC<Props> = ({
       <div className="w-4/12 p-2">
         <div className="flex flex-col">
           <div className="h-[1.8em] pt-[0.2em]">
+            {/* // TODO: (KUROKI) use ~/components/icons/SeatIcon.tsx after pull feature-7 */}
             {areaName}　{seatName}
           </div>
           <div className="h-[1.8em] pt-[0.2em]">
+            {/* // TODO: (KUROKI) use ~/components/icons/UserIcon.tsx after pull feature-7 */}
             {membershipNumber}　{userName}
           </div>
         </div>
