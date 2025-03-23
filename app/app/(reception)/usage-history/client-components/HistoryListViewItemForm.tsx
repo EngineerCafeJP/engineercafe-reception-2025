@@ -23,18 +23,18 @@ const HistoryListViewItemForm: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex items-center justify-between border-b border-gray-200">
-      <div className="w-1/12">
+      <div className="w-1/12 p-2">
         <div className="h-full pl-[5] text-left">
           <div>{rowNo}</div>
         </div>
       </div>
-      <div className="w-3/12 p-4">
+      <div className="w-3/12 p-2">
         <div className="flex flex-col">
           <div className="h-[1.8em] pt-[0.4em]">{checkInTimeStr} -</div>
           <div className="h-[1.8em] pt-[0.4em]">{checkOutTimeStr}</div>
         </div>
       </div>
-      <div className="w-5/12 p-4">
+      <div className="w-4/12 p-2">
         <div className="flex flex-col">
           <div className="h-[1.8em] pt-[0.2em]">
             {areaName}　{seatName}
@@ -44,14 +44,16 @@ const HistoryListViewItemForm: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      <div className="w-2/12 p-4">
+      <div className="w-2/12 p-2">
         <div className="h-full text-center">
           <div>{status}</div>
         </div>
       </div>
-      <div className="w-1/12 p-4">
+      <div className="w-2/12 p-2">
         <div className="h-full text-center">
-          <div>del</div>
+          <button className="rounded-full bg-blue-500 px-4 py-2 text-[0.75em] font-bold text-white hover:bg-red-700">
+            削除
+          </button>
         </div>
       </div>
     </div>
