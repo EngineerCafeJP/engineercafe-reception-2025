@@ -3,27 +3,20 @@ import HistoryListViewItemEntity from "./HistoryListViewItemEntity";
 export default class HistoryPageEntity {
   constructor() {
     this.HistoryListViewItemEntities = new Array<HistoryListViewItemEntity>();
-    this.AddMockHistoryItem(1);
-    this.AddMockHistoryItem(2);
-    this.AddMockHistoryItem(3);
-    this.AddMockHistoryItem(4);
-    this.AddMockHistoryItem(5);
-    this.AddMockHistoryItem(6);
-    this.AddMockHistoryItem(7);
-    this.AddMockHistoryItem(8);
-    this.AddMockHistoryItem(9);
-    this.AddMockHistoryItem(10);
-    this.AddMockHistoryItem(11);
-    this.AddMockHistoryItem(12);
+
+    // mockdata
+    for (let index = 0; index < 1010; index++) {
+      this.AddMockHistoryItem(index);
+    }
   }
 
   private AddMockHistoryItem(id: number) {
     const item = new HistoryListViewItemEntity();
-    item.Key = id.toString();
+    //item.Key = id.toString();
     item.UserEntity = {
       Id: id.toString(),
       MembershipNumber: "001001",
-      UserName: "あべ　ひろし",
+      UserName: "マイケル・つのだ☆ひろし・ロビンソン",
     };
     item.AreaEntity = {
       Id: id.toString(),

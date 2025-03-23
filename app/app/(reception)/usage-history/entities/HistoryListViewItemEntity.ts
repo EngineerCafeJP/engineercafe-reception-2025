@@ -1,5 +1,5 @@
 export default class HistoryListViewItemEntity {
-  public Key!: string;
+  //public Key!: string;
 
   public CheckInTime!: Date;
   public get CheckInTime_YYYY_HH_MM() {

@@ -14,7 +14,7 @@ const HistoryListViewForm: React.FC<Props> = ({ listViewItemEntities }) => {
     <div className="border-neutral-content mx-auto mt-[1.5em] max-h-[510px] w-full overflow-y-auto border-2 p-[0.5em]">
       {listViewItemEntities.map((item) => (
         <HistoryListViewItemForm
-          key={item.Key}
+          key={index}
           {...{
             rowNo: index++,
             checkInTimeStr: item.CheckInTime_YYYY_HH_MM,
