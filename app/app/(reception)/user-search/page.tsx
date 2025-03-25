@@ -7,7 +7,7 @@ export default function UserSearch() {
   const [searchText, setSearchText] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [filters, setFilters] = useState({
-    id: true,
+    id: false,
     email: false,
     phone: false,
   });
@@ -88,21 +88,23 @@ export default function UserSearch() {
           </label>
         </div>
 
-        {/* フリーテキスト検索 */}
-        <textarea
-          className="mb-4 h-24 w-full rounded-md border p-3 focus:ring focus:ring-blue-300"
-          placeholder="フリーテキストで検索"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
+        {/* 検索ボックスとボタンを横並びに配置 */}
+        <div className="mb-4 flex items-center gap-4">
+          <input
+            className="w-full rounded-md border p-3 focus:ring focus:ring-blue-300"
+            placeholder="フリーテキストで検索"
+            type="text"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
 
-        {/* 検索ボタン */}
-        <button
-          className="w-full rounded-md bg-blue-500 py-2 text-white transition hover:bg-blue-600"
-          onClick={handleSearch}
-        >
-          検索
-        </button>
+          <button
+            className="rounded-md bg-blue-500 px-6 py-3 text-white transition hover:bg-blue-600"
+            onClick={handleSearch}
+          >
+            検索
+          </button>
+        </div>
 
         {/* 検索結果 */}
         <div className="mt-6">
