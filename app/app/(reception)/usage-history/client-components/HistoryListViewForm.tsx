@@ -5,9 +5,16 @@ import HistoryListViewItemForm from "./HistoryListViewItemForm";
 
 interface Props {
   listViewItemEntities: Array<HistoryListViewItemEntity>;
+  onDeleteHistory: (
+    rowNo: number,
+    deleteItem: HistoryListViewItemEntity,
+  ) => void;
 }
 
-const HistoryListViewForm: React.FC<Props> = ({ listViewItemEntities }) => {
+const HistoryListViewForm: React.FC<Props> = ({
+  listViewItemEntities,
+  onDeleteHistory,
+}) => {
   let index = 1;
 
   return (
@@ -17,13 +24,8 @@ const HistoryListViewForm: React.FC<Props> = ({ listViewItemEntities }) => {
           key={index}
           {...{
             rowNo: index++,
-            checkInTimeStr: item.CheckInTime_YYYY_HH_MM,
-            checkOutTimeStr: item.CheckOutTime_YYYY_HH_MM,
-            status: item.Status,
-            userName: item.UserName,
-            membershipNumber: item.MembershipNumber,
-            areaName: item.AreaName,
-            seatName: item.SeatName,
+            item: item,
+            onDeleteHistory: onDeleteHistory,
           }}
         />
       ))}

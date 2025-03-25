@@ -12,10 +12,16 @@ export default class HistoryPageEntity {
 
   private AddMockHistoryItem(id: number) {
     const item = new HistoryListViewItemEntity();
-    //item.Key = id.toString();
+
+    item.Id = id.toString();
+
+    const tmpNumber = `00000${id}`;
     item.UserEntity = {
       Id: id.toString(),
-      MembershipNumber: "001001",
+      MembershipNumber: tmpNumber.substring(
+        tmpNumber.length - 6,
+        tmpNumber.length,
+      ),
       UserName: "マイケル・つのだ☆ひろし・ロビンソン",
     };
     item.AreaEntity = {

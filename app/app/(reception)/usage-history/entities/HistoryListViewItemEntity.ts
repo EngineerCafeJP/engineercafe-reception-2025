@@ -1,6 +1,8 @@
 export default class HistoryListViewItemEntity {
   //public Key!: string;
 
+  public Id!: string;
+
   public CheckInTime!: Date;
   public get CheckInTime_YYYY_HH_MM() {
     return this.CheckInTime == null
