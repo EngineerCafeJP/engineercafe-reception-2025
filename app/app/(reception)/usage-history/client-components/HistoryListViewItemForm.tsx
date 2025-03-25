@@ -1,6 +1,9 @@
 "use client";
 
 import HistoryListViewItemEntity from "@/app/(reception)/usage-history/entities/HistoryListViewItemEntity";
+import SeatIconLabel from "@/components/shared/SeatIconLabel";
+import TimerIconLabel from "@/components/shared/TimerIconLabel";
+import UserIconLabel from "@/components/shared/UserIconLabel";
 
 interface Props {
   rowNo: number;
@@ -23,26 +26,58 @@ const HistoryListViewItemForm: React.FC<Props> = ({
           {rowNo}.
         </div>
       </div>
-      <div className="w-2/14 p-2">
+      <div className="w-3/14 p-2">
         <div className="flex flex-col">
           {/* // TODO: (KUROKI) use ~/components/icons/ClockIcon.tsx after pull feature-7*/}
           <div className="h-[1.8em] pt-[0.4em]">
+            {/*
             {item.CheckInTime_YYYY_HH_MM} -
+            */}
+            <TimerIconLabel
+              iconOpacity={1}
+              iconSize={21}
+              textSize={"1.0em"}
+              timeText={`${item.CheckInTime_YYYY_HH_MM} ~`}
+            />
           </div>
           <div className="h-[1.8em] pt-[0.4em]">
+            {/*
             {item.CheckOutTime_YYYY_HH_MM}
+            */}
+            <TimerIconLabel
+              iconOpacity={0}
+              iconSize={21}
+              textSize={"1.0em"}
+              timeText={`${item.CheckOutTime_YYYY_HH_MM}`}
+            />
           </div>
         </div>
       </div>
-      <div className="w-7/14 p-2">
+      <div className="w-6/14 p-2">
         <div className="flex flex-col">
-          <div className="h-[1.8em] pt-[0.2em]">
+          <div className="pt-[0.2em]">
             {/* // TODO: (KUROKI) use ~/components/icons/SeatIcon.tsx after pull feature-7 */}
+            {/*
             {item.AreaName}　{item.SeatName}
+            */}
+            <SeatIconLabel
+              areaText={item.AreaName}
+              iconSize={21}
+              seatText={item.SeatName}
+              textSize={"1.0em"}
+            />
           </div>
           <div className="h-[1.8em] overflow-hidden pt-[0.2em] text-ellipsis whitespace-nowrap">
             {/* // TODO: (KUROKI) use ~/components/icons/UserIcon.tsx after pull feature-7 */}
+            {/*
             {item.MembershipNumber}　{item.UserName}
+            */}
+            <UserIconLabel
+              iconSize={21}
+              membershipNumberText={item.MembershipNumber}
+              textSize={"1.0em"}
+              userNameText={item.UserName}
+            />
           </div>
         </div>
       </div>

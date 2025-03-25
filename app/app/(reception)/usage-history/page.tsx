@@ -93,7 +93,7 @@ export default function UsageHistory() {
       <ConfirmDialog
         isOpen={isOpenConfirmDeleteHistoryDialog}
         messageContext={deleteHistoryConfirmMessage}
-        title="履歴削除の確認"
+        title="履歴削除"
         onApplied={onAppliedDeleteHistory}
         onCanceled={onCanceledDeleteHistory}
       />
