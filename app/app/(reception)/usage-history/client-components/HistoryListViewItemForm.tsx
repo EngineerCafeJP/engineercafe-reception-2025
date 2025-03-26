@@ -2,7 +2,7 @@
 
 import HistoryListViewItemEntity from "@/app/(reception)/usage-history/entities/HistoryListViewItemEntity";
 import SeatIconLabel from "@/components/shared/SeatIconLabel";
-import TimerIconLabel from "@/components/shared/TimerIconLabel";
+import TimerRangeIconLabel from "@/components/shared/TimerRangeIconLabel";
 import UserIconLabel from "@/components/shared/UserIconLabel";
 
 interface Props {
@@ -29,26 +29,22 @@ const HistoryListViewItemForm: React.FC<Props> = ({
       <div className="w-3/14 p-2">
         <div className="flex flex-col">
           {/* // TODO: (KUROKI) use ~/components/icons/ClockIcon.tsx after pull feature-7*/}
-          <div className="h-[1.8em] pt-[0.4em]">
-            {/*
-            {item.CheckInTime_YYYY_HH_MM} -
-            */}
-            <TimerIconLabel
+          <div className="pt-[0.2em]">
+            <TimerRangeIconLabel
               iconOpacity={1}
               iconSize={21}
               textSize={"1.0em"}
-              timeText={`${item.CheckInTime_YYYY_HH_MM} ~`}
+              timeEndText={null}
+              timeStartText={`${item.CheckInTime_YYYY_HH_MM}`}
             />
           </div>
-          <div className="h-[1.8em] pt-[0.4em]">
-            {/*
-            {item.CheckOutTime_YYYY_HH_MM}
-            */}
-            <TimerIconLabel
+          <div className="h-[1.8em] pt-[0.2em]">
+            <TimerRangeIconLabel
               iconOpacity={0}
               iconSize={21}
               textSize={"1.0em"}
-              timeText={`${item.CheckOutTime_YYYY_HH_MM}`}
+              timeEndText={`${item.CheckOutTime_YYYY_HH_MM}`}
+              timeStartText={null}
             />
           </div>
         </div>

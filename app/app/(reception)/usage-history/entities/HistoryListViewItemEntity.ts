@@ -7,14 +7,20 @@ export default class HistoryListViewItemEntity {
   public get CheckInTime_YYYY_HH_MM() {
     return this.CheckInTime == null
       ? ""
-      : this.CheckInTime.toISOString().split("T")[1].split(".")[0]; // TODO: (KUROKI) use date-fns
+      : this.CheckInTime.toISOString()
+          .split("T")[1]
+          .split(".")[0]
+          .substring(0, 5); // TODO: (KUROKI) use date-fns
   }
 
   public CheckOutTime!: Date;
   public get CheckOutTime_YYYY_HH_MM() {
     return this.CheckOutTime == null
       ? ""
-      : this.CheckOutTime.toISOString().split("T")[1].split(".")[0]; // TODO: (KUROKI)  use date-fns
+      : this.CheckOutTime.toISOString()
+          .split("T")[1]
+          .split(".")[0]
+          .substring(0, 5); // TODO: (KUROKI)  use date-fns
   }
 
   public Status!: string;

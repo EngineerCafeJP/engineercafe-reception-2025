@@ -23,7 +23,7 @@ const SeatIconLabel: React.FC<Props> = ({
 
   const textStyle = {
     fontSize: `${textSize}`,
-    marginLeft: "0.5em",
+    marginLeft: "0.3em",
   };
 
   const isVisibleArea = areaText;

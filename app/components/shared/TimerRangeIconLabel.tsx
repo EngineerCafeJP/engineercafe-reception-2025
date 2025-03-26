@@ -6,14 +6,16 @@ interface Props {
   iconOpacity: number;
   iconSize: number;
   textSize: string;
-  timeText: string | null;
+  timeStartText: string | null;
+  timeEndText: string | null;
 }
 
-const TimerIconLabel: React.FC<Props> = ({
+const TimerRangeIconLabel: React.FC<Props> = ({
   iconOpacity,
   iconSize,
   textSize,
-  timeText,
+  timeStartText,
+  timeEndText,
 }) => {
   const iconStyle = {
     width: `${iconSize}px`,
@@ -27,8 +29,8 @@ const TimerIconLabel: React.FC<Props> = ({
     marginLeft: "0.3em",
   };
 
-  //const iconClassName = `opacity-[${(iconSize > 0 ? 1 : 0.3)}]`;
-  const isVisibleTime = timeText;
+  const isVisibleTimeStart = timeStartText;
+  const isVisibleTimeEnd = timeEndText;
 
   return (
     <div className={`flex flex-row gap-1 h-[${iconSize}px]`}>
@@ -39,13 +41,23 @@ const TimerIconLabel: React.FC<Props> = ({
         style={iconStyle}
         width={iconSize}
       />
-      {isVisibleTime && (
-        <div style={textStyle} title={timeText}>
-          {timeText}
+      {isVisibleTimeStart && (
+        <div style={textStyle} title={timeStartText}>
+          {timeStartText}
+        </div>
+      )}
+      {isVisibleTimeStart && (
+        <div className="text-center" style={textStyle}>
+          ~
+        </div>
+      )}
+      {isVisibleTimeEnd && (
+        <div style={textStyle} title={timeEndText}>
+          {timeEndText}
         </div>
       )}
     </div>
   );
 };
 
-export default TimerIconLabel;
+export default TimerRangeIconLabel;
