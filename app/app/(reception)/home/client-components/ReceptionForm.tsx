@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, User } from "@/app/types";
-import UserIcon from "@/app/(reception)/components/icons/UserIcon";
 
 interface ReceptionFormProps {
   searchUserList: User[] | null;

@@ -1,9 +1,9 @@
 import React from "react";
+import ClockIcon from "@/app/components/icons/ClockIcon";
+import SeatIcon from "@/app/components/icons/SeatIcon";
+import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/app/types";
 import formatTime from "@/utils/formatTime";
-import ClockIcon from "@/app/(reception)/components/icons/ClockIcon";
-import SeatIcon from "@/app/(reception)/components/icons/SeatIcon";
-import UserIcon from "@/app/(reception)/components/icons/UserIcon";
 
 interface ExtendSeatConfirmModalBoxProps {
   seat: Seat;

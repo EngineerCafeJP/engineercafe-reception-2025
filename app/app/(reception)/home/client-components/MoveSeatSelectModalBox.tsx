@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/app/types";
-import UserIcon from "@/app/(reception)/components/icons/UserIcon";
 
 interface MoveSeatSelectModalBoxProps {
   seatUsage: SeatUsage;

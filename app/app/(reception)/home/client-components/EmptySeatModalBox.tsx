@@ -1,8 +1,8 @@
 import React from "react";
+import ClockIcon from "@/app/components/icons/ClockIcon";
+import SeatIcon from "@/app/components/icons/SeatIcon";
+import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat } from "@/app/types";
-import ClockIcon from "@/app/(reception)/components/icons/ClockIcon";
-import SeatIcon from "@/app/(reception)/components/icons/SeatIcon";
-import UserIcon from "@/app/(reception)/components/icons/UserIcon";
 
 interface EmptySeatModalBoxProps {
   seat: Seat;
