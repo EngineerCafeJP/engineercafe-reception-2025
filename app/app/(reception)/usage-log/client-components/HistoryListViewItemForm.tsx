@@ -1,6 +1,6 @@
 "use client";
 
-import HistoryListViewItemEntity from "@/app/(reception)/usage-history/entities/HistoryListViewItemEntity";
+import HistoryListViewItemEntity from "@/app/(reception)/usage-log/entities/HistoryListViewItemEntity";
 import SeatIconLabel from "@/components/shared/SeatIconLabel";
 import TimerRangeIconLabel from "@/components/shared/TimerRangeIconLabel";
 import UserIconLabel from "@/components/shared/UserIconLabel";
