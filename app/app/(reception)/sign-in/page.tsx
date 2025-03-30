@@ -1,7 +1,7 @@
 "use client";
 
 import { redirect } from "next/navigation";
-import { useAuth } from "@/app/contexts/AuthContext";
+import { useAuth } from "@/app/(reception)/contexts/AuthContext";
 import SignInForm from "./client-components/SignInForm";
 
 export default function SignInPage() {
