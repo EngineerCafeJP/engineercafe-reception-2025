@@ -26,7 +26,7 @@ export const EmptySeatModalBox: React.FC<EmptySeatModalBoxProps> = ({
                 <SeatIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${seat.areaName} ${seat.name}`}</div>
+                <div>{seat.name}</div>
               </div>
             </li>
             <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">

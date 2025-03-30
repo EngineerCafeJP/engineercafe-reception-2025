@@ -20,7 +20,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   onNextButtonClick,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [selectedArea, setSelectedArea] = useState<string | null>(null);
+  const [selectedArea, setSelectedArea] = useState<number | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [userList, setUserList] = useState<User[] | null>(null);
 
@@ -33,14 +33,14 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   };
 
   const areaList = seats
-    .map((seat: Seat) => seat.areaName)
+    .map((seat: Seat) => seat.categoryId)
     .filter(
-      (areaName: string, index: number, self: string[]) =>
-        self.indexOf(areaName) === index,
+      (categoryId: number, index: number, self: number[]) =>
+        self.indexOf(categoryId) === index,
     );
 
-  const seatList = (areaName: string) =>
-    seats.filter((seat: Seat) => seat.areaName === areaName);
+  const seatList = (categoryId: number) =>
+    seats.filter((seat: Seat) => seat.categoryId === categoryId);
 
   const handleClose = () => {
     setSelectedUser(null);
@@ -89,19 +89,19 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
             <div className="grid h-[280px] grid-cols-2 gap-[2rem]">
               <div className="h-full overflow-y-auto rounded-lg border p-[0.5rem]">
                 <ul className="list bg-base-100 rounded-box my-[0] px-[0] shadow-md">
-                  {areaList.map((areaName: string) => (
+                  {areaList.map((categoryId: number) => (
                     <li
-                      key={areaName}
+                      key={categoryId}
                       className="list-row border-base-300 rounded-none border-b py-[0.5rem]"
                       style={{
                         backgroundColor:
-                          selectedArea === areaName
+                          selectedArea === categoryId
                             ? "var(--color-accent)"
                             : "var(--color-base-100)",
                       }}
-                      onClick={() => setSelectedArea(areaName)}
+                      onClick={() => setSelectedArea(categoryId)}
                     >
-                      <div>{`${areaName}`}</div>
+                      <div>{`${categoryId}`}</div>
                     </li>
                   ))}
                 </ul>

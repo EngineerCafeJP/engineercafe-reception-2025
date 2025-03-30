@@ -30,7 +30,7 @@ export const MoveSeatConfirmModalBox: React.FC<
                 <SeatIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${prevSeat.areaName} ${prevSeat.name} -> ${nextSeat.areaName} ${nextSeat.name}`}</div>
+                <div>{`${prevSeat.name} -> ${nextSeat.name}`}</div>
               </div>
             </li>
             <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">
@@ -38,7 +38,7 @@ export const MoveSeatConfirmModalBox: React.FC<
                 <UserIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{nextSeatUsage.userCode}</div>
+                <div>{nextSeatUsage.userId}</div>
               </div>
             </li>
             <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">

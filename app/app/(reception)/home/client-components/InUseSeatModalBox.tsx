@@ -34,7 +34,7 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
                 <SeatIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${seat.areaName} ${seat.name}`}</div>
+                <div>{seat.name}</div>
               </div>
               <button className="btn" onClick={onMoveSeatClick}>
                 移動
@@ -45,7 +45,7 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
                 <UserIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{seatUsage.userCode}</div>
+                <div>{seatUsage.userId}</div>
               </div>
               <button className="btn" onClick={onLeaveSeatClick}>
                 退席

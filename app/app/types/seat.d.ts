@@ -2,5 +2,11 @@
 export type Seat = {
   id: number;
   name: string;
-  areaName: string;
+  categoryId: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type SeatWithCategory = Seat & {
+  seatCategory: SeatCategory;
 };

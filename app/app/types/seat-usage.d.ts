@@ -2,7 +2,11 @@
 export type SeatUsage = {
   id: number;
   seatId: number;
-  userCode: string;
+  userId: number;
   startTime: string;
   endTime: string;
+  remark: string;
+  createdAt?: string;
+  updatedAt?: string;
+  isDeleted?: boolean;
 };

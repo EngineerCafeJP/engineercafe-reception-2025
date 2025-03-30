@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
-import { Seat, SeatUsage } from "@/app/types";
+import { Seat, SeatUsage, SeatWithCategory } from "@/app/types";
 import { AreaBox } from "./AreaBox";
 import EmptySeatModal from "./EmptySeatModal";
 import InUseSeatModal from "./InUseSeatModal";
 
 type SeatAreaMapProps = {
-  seats: Seat[];
+  seats: SeatWithCategory[];
   seatUsages: SeatUsage[];
 };
 
@@ -19,6 +19,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
     setSelectedSeat(seat);
     setSelectedSeatUsage(seatUsage);
   };
+
   return (
     <div className="m-[1rem]">
       <div className="flex justify-between gap-[0.5rem] overflow-x-auto">
@@ -26,14 +27,18 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
           areaName="メインホール"
           maxCol={10}
           seatUsages={seatUsages}
-          seats={seats.filter((seat) => seat.areaName === "メインホール")}
+          seats={seats.filter(
+            (seat) => seat.seatCategory.name === "メインホール",
+          )}
           onSeatClick={handleSeatClick}
         />
         <AreaBox
           areaName="MAKERSスペース"
           maxCol={2}
           seatUsages={[]}
-          seats={seats.filter((seat) => seat.areaName === "MAKERSスペース")}
+          seats={seats.filter(
+            (seat) => seat.seatCategory.name === "MAKERSスペース",
+          )}
           onSeatClick={handleSeatClick}
         />
       </div>
@@ -42,7 +47,9 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
           areaName="集中スペース"
           maxCol={3}
           seatUsages={[]}
-          seats={seats.filter((seat) => seat.areaName === "集中スペース")}
+          seats={seats.filter(
+            (seat) => seat.seatCategory.name === "集中スペース",
+          )}
           onSeatClick={handleSeatClick}
         />
         <AreaBox
@@ -50,22 +57,24 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
           maxCol={3}
           seatUsages={[]}
           seats={seats.filter(
-            (seat) => seat.areaName === "ミーティングスペース",
+            (seat) => seat.seatCategory.name === "ミーティングスペース",
           )}
           onSeatClick={handleSeatClick}
         />
         <AreaBox
-          areaName="Underペース"
+          areaName="Underスペース"
           maxCol={3}
           seatUsages={[]}
-          seats={seats.filter((seat) => seat.areaName === "UNDERスペース")}
+          seats={seats.filter(
+            (seat) => seat.seatCategory.name === "Underスペース",
+          )}
           onSeatClick={handleSeatClick}
         />
         <AreaBox
           areaName="テラス"
           maxCol={2}
           seatUsages={[]}
-          seats={seats.filter((seat) => seat.areaName === "テラス")}
+          seats={seats.filter((seat) => seat.seatCategory.name === "テラス")}
           onSeatClick={handleSeatClick}
         />
       </div>
