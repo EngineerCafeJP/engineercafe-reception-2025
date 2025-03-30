@@ -20,7 +20,7 @@ const SeatCard: React.FC<SeatProps> = ({
 }) => {
   return (
     <div
-      className={`card card-xs card-border ${seatUsage?.userCode ? "border-accent bg-accent/30" : "border-primary"} h-[6rem] w-[6rem]`}
+      className={`card card-xs card-border ${seatUsage?.userCode ? "border-accent bg-accent/30" : "border-primary"} h-[7rem] w-[7rem]`}
       onClick={() => onSeatClick(seat, seatUsage)}
     >
       <div className="card-body">

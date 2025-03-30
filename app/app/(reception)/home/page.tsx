@@ -130,7 +130,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="mx-auto max-w-[80rem]">
+    <div className="mx-auto max-w-full">
       <div className="flex justify-end py-[1rem]">
         <ReceptionForm
           searchUserList={userList}
