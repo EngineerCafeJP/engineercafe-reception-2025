@@ -5,7 +5,7 @@ BEGIN;
 
 --ユーザーのマイグレーション
 INSERT INTO users (
-  number,
+  id,
   name,
   pronunciation,
   email,
@@ -15,8 +15,8 @@ INSERT INTO users (
   city,
   address,
   building,
-  belongs_id,
-  belongs_other,
+  belong_id,
+  belong_other,
   job_id,
   job_other,
   found_id,
@@ -24,32 +24,37 @@ INSERT INTO users (
   created_at
 )
 SELECT
-  CAST(trim(member_number) AS bigint) AS number,
+  CAST(trim(member_number) AS bigint) AS id,
   full_name,
   furigana,
   email,
   phone_number,
-  p.id AS prefecture_id,
-  CASE WHEN p.id IS NULL THEN prefecture ELSE NULL END AS prefecture_other,
+  p.prefecture_id AS prefecture_id,
+  CASE WHEN p.prefecture_id IS NULL THEN prefecture ELSE NULL END AS prefecture_other,
   city,
   address,
   building,
-  COALESCE(b.id, (SELECT id FROM belongs WHERE name = 'その他')) AS belongs_id,
-  CASE WHEN b.id IS NULL THEN affiliation ELSE NULL END AS belongs_other,
-  COALESCE(j.id, (SELECT id FROM jobs WHERE name = 'その他')) AS job_id,
-  CASE WHEN j.id IS NULL OR attribute = '' THEN attribute ELSE NULL END AS job_other,
-  COALESCE(f.id, (SELECT id FROM founds WHERE name = 'その他')) AS found_id,
-  CASE WHEN f.id IS NULL THEN how_did_you_know ELSE NULL END AS found_other,
-  registration_datetime AS created_at
+  COALESCE(b.belong_id, (SELECT belong_id FROM belong_translations WHERE name = 'その他')) AS belong_id,
+  CASE WHEN b.belong_id IS NULL THEN affiliation ELSE NULL END AS belongs_other,
+  COALESCE(j.job_id, (SELECT job_id FROM job_translations WHERE name = 'その他')) AS job_id,
+  CASE WHEN j.job_id IS NULL OR attribute = '' THEN attribute ELSE NULL END AS job_other,
+  COALESCE(f.found_id, (SELECT found_id FROM found_translations WHERE name = 'その他')) AS found_id,
+  CASE WHEN f.found_id IS NULL THEN how_did_you_know ELSE NULL END AS found_other,
+  coalesce(registration_datetime,now()) AS created_at
 FROM old_users
-LEFT JOIN prefectures p
+LEFT JOIN prefecture_translations p
   ON old_users.prefecture = p.name
-LEFT JOIN belongs b
+  and p.locale='ja'
+LEFT JOIN belong_translations b
   ON old_users.affiliation = b.name
-LEFT JOIN jobs j
+  and b.locale='ja'
+LEFT JOIN job_translations j
   ON old_users.attribute = j.name
-LEFT JOIN founds f
-  ON old_users.how_did_you_know = f.name;
+  and j.locale='ja'
+LEFT JOIN found_translations f
+  ON old_users.how_did_you_know = f.name
+  and f.locale='ja';
+
 
 --座席ログのマイグレーション
 
@@ -93,7 +98,7 @@ SELECT
   f.registration_datetime AS created_at
 FROM final_norm f
 INNER JOIN users u
-  ON u.number = CAST(translate(trim(f.old_member_number), '０１２３４５６７８９', '0123456789') AS bigint)
+  ON u.id = CAST(translate(trim(f.old_member_number), '０１２３４５６７８９', '0123456789') AS bigint)
 LEFT JOIN seats s
   ON s.name = f.final_normalized_space;
 
@@ -101,6 +106,6 @@ LEFT JOIN seats s
 INSERT INTO nfcs (user_id, nfc_id)
 SELECT u.id, o.nfc_id
 FROM old_nfcs o
-JOIN users u ON u.number = o.number::bigint;
+JOIN users u ON u.id = o.member_number::bigint;
 
 COMMIT;

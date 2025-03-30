@@ -131,7 +131,7 @@ async function processFile(filePath, documentId) {
       // nfcs テーブルへの挿入用オブジェクトを作成
       const nfcInsertion = {
         nfc_id: safeNfcId,
-        number: safeNumber,
+        member_number: safeNumber,
       };
   
       const { error } = await supabase

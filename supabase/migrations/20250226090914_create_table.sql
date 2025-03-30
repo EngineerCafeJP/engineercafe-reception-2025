@@ -32,7 +32,7 @@ CREATE TABLE old_users (
 CREATE TABLE old_nfcs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   nfc_id text,
-  number text
+  member_number text
 );
 
 -- 都道府県テーブル
@@ -363,8 +363,7 @@ WHERE name = 'その他';
 
 CREATE TABLE
   IF NOT EXISTS users (
-    id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    number bigint UNIQUE,
+    id bigint PRIMARY KEY,
     name text,
     pronunciation text,
     email text,
@@ -386,9 +385,11 @@ CREATE TABLE
     found_other text,
     comments text,
     warnings text,
-    created_at timestamptz DEFAULT now (),
+    created_at timestamptz NOT NULL DEFAULT now (),
+    updated_at timestamptz,
+    is_delete boolean,
     FOREIGN KEY (prefecture_id) REFERENCES prefectures (id),
-    FOREIGN KEY (belongs_id) REFERENCES belongs (id),
+    FOREIGN KEY (belong_id) REFERENCES belongs (id),
     FOREIGN KEY (job_id) REFERENCES jobs (id),
     FOREIGN KEY (found_id) REFERENCES founds (id)
   );
@@ -397,9 +398,12 @@ CREATE TABLE
 CREATE TABLE
   IF NOT EXISTS nfcs (
     id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id bigint,
-    nfc_id TEXT UNIQUE,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    user_id bigint NOT NULL,
+    nfc_id TEXT UNIQUE NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now (),
+    updated_at timestamptz,
+    is_delete boolean,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE
   );
 
 -- 座席利用
@@ -412,6 +416,8 @@ CREATE TABLE
     end_time timestamptz,
     remarks text,
     created_at timestamptz NOT NULL DEFAULT now (),
-    FOREIGN KEY (seat_id) REFERENCES seats (id),
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    updated_at timestamptz,
+    is_delete boolean,
+    FOREIGN KEY (seat_id) REFERENCES seats (id) ON UPDATE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE
   );
