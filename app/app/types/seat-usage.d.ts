@@ -9,5 +9,4 @@ export type SeatUsage = {
   createdAt?: string;
   updatedAt?: string;
   isDeleted?: boolean;
-  scheduledEndTime: string;
 };

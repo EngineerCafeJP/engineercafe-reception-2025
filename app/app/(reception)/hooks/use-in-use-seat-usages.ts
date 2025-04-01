@@ -1,6 +1,6 @@
 import humps from "humps";
 import { useEffect, useState } from "react";
-import { fetchInUseSeatUsageLogs } from "@/app/(reception)/queries/seat-usages";
+import { fetchInUseSeatUsageLogs } from "@/app/(reception)/queries/seat-usages-queries";
 import { SeatUsage } from "@/app/types";
 
 export const useInUseSeatUsages = () => {
@@ -18,6 +18,7 @@ export const useInUseSeatUsages = () => {
 
     if (error) {
       setError(error);
+      setIsLoading(false);
       return;
     }
     const camelizedData = humps.camelizeKeys(data);

@@ -1,6 +1,6 @@
 import humps from "humps";
 import { useEffect, useState } from "react";
-import { getSeatsWithCategory } from "@/app/(reception)/queries/seats";
+import { getSeatsWithCategory } from "@/app/(reception)/queries/seats-queries";
 import { SeatWithCategory } from "@/app/types";
 
 export const useSeatsWithCategory = () => {
@@ -15,6 +15,7 @@ export const useSeatsWithCategory = () => {
 
       if (error) {
         setError(error);
+        setIsLoading(false);
         return;
       }
       const camelizedData = humps.camelizeKeys(data);

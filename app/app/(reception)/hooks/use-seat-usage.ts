@@ -2,8 +2,10 @@ import humps from "humps";
 import { useState } from "react";
 import {
   createSeatUsage,
+  fetchInUseSeatUsageLogsBySeatId,
+  fetchSeatUsageLogById,
   updateSeatUsageEndtime,
-} from "@/app/(reception)/queries/seat-usages";
+} from "@/app/(reception)/queries/seat-usages-queries";
 import { SeatUsage } from "@/app/types";
 
 export const useSeatUsage = () => {
@@ -16,6 +18,15 @@ export const useSeatUsage = () => {
   //@returns 更新後の座席使用データ
   const create = async (seatId: number, userId: number) => {
     setIsLoading(true);
+
+    // validate duplicate
+    const { error: seatUsageError } =
+      await fetchInUseSeatUsageLogsBySeatId(seatId);
+    if (seatUsageError) {
+      setError(seatUsageError);
+      return;
+    }
+
     const { data, error } = await createSeatUsage(seatId, userId);
     if (error) {
       setError(error);
@@ -31,6 +42,12 @@ export const useSeatUsage = () => {
   //@returns 更新後の座席使用データ
   const extendSeatUsage = async (seatUsage: SeatUsage) => {
     setIsLoading(true);
+    const { error: seatUsageError } = await fetchSeatUsageLogById(seatUsage.id);
+    if (seatUsageError) {
+      setError(seatUsageError);
+      return;
+    }
+
     const { error: updateSeatUsageEndtimeError } = await updateSeatUsageEndtime(
       seatUsage.id,
       new Date().toISOString(),
@@ -55,6 +72,12 @@ export const useSeatUsage = () => {
   //@returns 更新後の座席使用データ
   const finishSeatUsage = async (seatUsage: SeatUsage) => {
     setIsLoading(true);
+    const { error: seatUsageError } = await fetchSeatUsageLogById(seatUsage.id);
+    if (seatUsageError) {
+      setError(seatUsageError);
+      return;
+    }
+
     const { data, error } = await updateSeatUsageEndtime(
       seatUsage.id,
       new Date().toISOString(),
@@ -77,6 +100,13 @@ export const useSeatUsage = () => {
     nextSeatUsage: SeatUsage,
   ) => {
     setIsLoading(true);
+    const { error: prevSeatUsageError } = await fetchSeatUsageLogById(
+      prevSeatUsage.id,
+    );
+    if (prevSeatUsageError) {
+      setError(prevSeatUsageError);
+      return;
+    }
 
     const { error: finishPrevSeatUsageError } = await updateSeatUsageEndtime(
       prevSeatUsage.id,
