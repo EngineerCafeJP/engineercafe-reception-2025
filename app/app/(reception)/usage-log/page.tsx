@@ -2,8 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { useState } from "react";
+import ConfirmDialog from "@/app/(reception)/usage-log/client-components/elements/ConfirmDialog";
 import { useAuth } from "@/app/contexts/AuthContext";
-import ConfirmDialog from "@/components/shared/ConfirmDialog";
 import DateSelectorForm from "./client-components/DateSelectorForm";
 import HistoryListViewForm from "./client-components/HistoryListViewForm";
 import PageTitleForm from "./client-components/PageTitleForm";

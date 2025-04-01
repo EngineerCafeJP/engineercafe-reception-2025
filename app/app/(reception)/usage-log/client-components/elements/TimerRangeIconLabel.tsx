@@ -29,9 +29,6 @@ const TimerRangeIconLabel: React.FC<Props> = ({
     marginLeft: "0.3em",
   };
 
-  const isVisibleTimeStart = timeStartText;
-  const isVisibleTimeEnd = timeEndText;
-
   return (
     <div className={`flex flex-row gap-1 h-[${iconSize}px]`}>
       <Image
@@ -41,17 +38,17 @@ const TimerRangeIconLabel: React.FC<Props> = ({
         style={iconStyle}
         width={iconSize}
       />
-      {isVisibleTimeStart && (
+      {timeStartText && (
         <div style={textStyle} title={timeStartText}>
           {timeStartText}
         </div>
       )}
-      {isVisibleTimeStart && (
+      {timeStartText && (
         <div className="text-center" style={textStyle}>
           ~
         </div>
       )}
-      {isVisibleTimeEnd && (
+      {timeEndText && (
         <div style={textStyle} title={timeEndText}>
           {timeEndText}
         </div>

@@ -26,9 +26,6 @@ const SeatIconLabel: React.FC<Props> = ({
     marginLeft: "0.3em",
   };
 
-  const isVisibleArea = areaText;
-  const isVisibleSeat = seatText;
-
   return (
     <div className={`flex flex-row gap-1 h-[${iconSize}px]`}>
       <Image
@@ -38,12 +35,12 @@ const SeatIconLabel: React.FC<Props> = ({
         style={iconStyle}
         width={iconSize}
       />
-      {isVisibleArea && (
+      {areaText && (
         <div style={textStyle} title={areaText}>
           {areaText}
         </div>
       )}
-      {isVisibleSeat && (
+      {seatText && (
         <div style={textStyle} title={seatText}>
           {seatText}
         </div>

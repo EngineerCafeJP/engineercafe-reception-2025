@@ -26,9 +26,6 @@ const UserIconLabel: React.FC<Props> = ({
     marginLeft: "0.3em",
   };
 
-  const isVisibleMembershipNumber = membershipNumberText;
-  const isVisibleUserName = userNameText;
-
   return (
     <div className={`flex flex-row gap-1 h-[${iconSize}px]`}>
       <Image
@@ -38,12 +35,12 @@ const UserIconLabel: React.FC<Props> = ({
         style={iconStyle}
         width={iconSize}
       />
-      {isVisibleMembershipNumber && (
+      {membershipNumberText && (
         <div style={textStyle} title={membershipNumberText}>
           {membershipNumberText}
         </div>
       )}
-      {isVisibleUserName && (
+      {userNameText && (
         <div
           className="overflow-hidden text-ellipsis whitespace-nowrap"
           style={textStyle}

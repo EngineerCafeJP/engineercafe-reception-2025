@@ -1,9 +1,9 @@
 "use client";
 
+import SeatIconLabel from "@/app/(reception)/usage-log/client-components/elements/SeatIconLabel";
+import TimerRangeIconLabel from "@/app/(reception)/usage-log/client-components/elements/TimerRangeIconLabel";
+import UserIconLabel from "@/app/(reception)/usage-log/client-components/elements/UserIconLabel";
 import HistoryListViewItemEntity from "@/app/(reception)/usage-log/entities/HistoryListViewItemEntity";
-import SeatIconLabel from "@/components/shared/SeatIconLabel";
-import TimerRangeIconLabel from "@/components/shared/TimerRangeIconLabel";
-import UserIconLabel from "@/components/shared/UserIconLabel";
 
 interface Props {
   rowNo: number;
