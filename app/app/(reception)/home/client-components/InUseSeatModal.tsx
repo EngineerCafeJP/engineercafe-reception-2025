@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Seat, SeatUsage } from "@/app/types";
 import { ExtendSeatConfirmModalBox } from "./ExtendSeatConfirmModalBox";
@@ -11,9 +13,9 @@ interface InUseSeatModalProps {
   onClose: () => void;
   seat: Seat;
   seatUsage: SeatUsage;
-  onLeaveSeatClick: (seat: Seat, seatUsage: SeatUsage) => void;
-  onMoveSeatClick: (seat: Seat, seatUsage: SeatUsage) => void;
-  onExtendSeatClick: (seat: Seat, seatUsage: SeatUsage) => void;
+  onFinishSeatUsage: (seatUsage: SeatUsage) => void;
+  onMoveSeat: (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => void;
+  onExtendSeatUsage: (seatUsage: SeatUsage) => void;
   seats: Seat[];
 }
 
@@ -23,14 +25,14 @@ type InUseSeatModalType =
   | "moveSeatConfirm"
   | "extendConfirm";
 
-export const SeatModal: React.FC<InUseSeatModalProps> = ({
+export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
   isOpen,
   onClose,
   seat,
   seatUsage,
-  onLeaveSeatClick,
-  onMoveSeatClick,
-  onExtendSeatClick,
+  onFinishSeatUsage,
+  onMoveSeat,
+  onExtendSeatUsage,
   seats,
 }) => {
   const [modalType, setModalType] = useState<InUseSeatModalType | null>(null);
@@ -45,7 +47,7 @@ export const SeatModal: React.FC<InUseSeatModalProps> = ({
   };
 
   const handleLeaveSeatClick = () => {
-    onLeaveSeatClick(seat, seatUsage);
+    onFinishSeatUsage(seatUsage);
     handleClose();
   };
 
@@ -55,19 +57,32 @@ export const SeatModal: React.FC<InUseSeatModalProps> = ({
     setNextSeatUsage({
       ...seatUsage,
       startTime: new Date().toISOString(),
-      endTime: new Date().toISOString(),
+      endTime: null,
       seatId: nextSeat.id,
     });
   };
 
   const handleMoveSeatConfirmClick = () => {
-    onMoveSeatClick(seat, seatUsage);
+    if (nextSeatUsage == null) return;
+
+    onMoveSeat(seatUsage, nextSeatUsage);
     handleClose();
   };
 
-  const handleExtendSeatClick = () => {
-    onExtendSeatClick(seat, seatUsage);
+  const handleExtendSeatUsage = () => {
+    if (nextSeatUsage == null) return;
+
+    onExtendSeatUsage(nextSeatUsage);
     handleClose();
+  };
+
+  const handleExtendSeatClicked = () => {
+    setNextSeatUsage({
+      ...seatUsage,
+      startTime: new Date().toISOString(),
+      endTime: null,
+    });
+    setModalType("extendConfirm");
   };
 
   const renderModalBox = () => {
@@ -103,12 +118,15 @@ export const SeatModal: React.FC<InUseSeatModalProps> = ({
         />
       );
     } else if (modalType == "extendConfirm") {
+      if (nextSeatUsage == null) return null;
+
       return (
         <ExtendSeatConfirmModalBox
+          nextSeatUsage={nextSeatUsage}
           seat={seat}
           seatUsage={seatUsage}
           onClose={handleClose}
-          onNextButtonClick={handleExtendSeatClick}
+          onNextButtonClick={handleExtendSeatUsage}
         />
       );
     } else {
@@ -117,7 +135,7 @@ export const SeatModal: React.FC<InUseSeatModalProps> = ({
           seat={seat}
           seatUsage={seatUsage}
           onClose={handleClose}
-          onExtendSeatClick={() => setModalType("extendConfirm")}
+          onExtendSeatClick={() => handleExtendSeatClicked()}
           onLeaveSeatClick={() => setModalType("leaveConfirm")}
           onMoveSeatClick={() => setModalType("moveSeatSelect")}
         />
@@ -132,4 +150,4 @@ export const SeatModal: React.FC<InUseSeatModalProps> = ({
   );
 };
 
-export default SeatModal;
+export default InUseSeatModal;

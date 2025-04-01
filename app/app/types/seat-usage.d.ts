@@ -4,9 +4,10 @@ export type SeatUsage = {
   seatId: number;
   userId: number;
   startTime: string;
-  endTime: string;
+  endTime?: string | null;
   remark: string;
   createdAt?: string;
   updatedAt?: string;
   isDeleted?: boolean;
+  scheduledEndTime: string;
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import { FC, useState } from "react";
 import { Seat, SeatUsage, SeatWithCategory } from "@/app/types";
 import { AreaBox } from "./AreaBox";
@@ -7,9 +9,18 @@ import InUseSeatModal from "./InUseSeatModal";
 type SeatAreaMapProps = {
   seats: SeatWithCategory[];
   seatUsages: SeatUsage[];
+  onExtendSeatUsage: (seatUsage: SeatUsage) => void;
+  onFinishSeatUsage: (seatUsage: SeatUsage) => void;
+  onMoveSeat: (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => void;
 };
 
-export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
+export const SeatAreaMap: FC<SeatAreaMapProps> = ({
+  seats,
+  seatUsages,
+  onExtendSeatUsage,
+  onFinishSeatUsage,
+  onMoveSeat,
+}) => {
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [selectedSeatUsage, setSelectedSeatUsage] = useState<SeatUsage | null>(
     null,
@@ -35,7 +46,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
         <AreaBox
           areaName="MAKERSスペース"
           maxCol={2}
-          seatUsages={[]}
+          seatUsages={seatUsages}
           seats={seats.filter(
             (seat) => seat.seatCategory.name === "MAKERSスペース",
           )}
@@ -46,7 +57,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
         <AreaBox
           areaName="集中スペース"
           maxCol={3}
-          seatUsages={[]}
+          seatUsages={seatUsages}
           seats={seats.filter(
             (seat) => seat.seatCategory.name === "集中スペース",
           )}
@@ -55,7 +66,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
         <AreaBox
           areaName="ミーティングスペース"
           maxCol={3}
-          seatUsages={[]}
+          seatUsages={seatUsages}
           seats={seats.filter(
             (seat) => seat.seatCategory.name === "ミーティングスペース",
           )}
@@ -64,7 +75,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
         <AreaBox
           areaName="Underスペース"
           maxCol={3}
-          seatUsages={[]}
+          seatUsages={seatUsages}
           seats={seats.filter(
             (seat) => seat.seatCategory.name === "Underスペース",
           )}
@@ -73,7 +84,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
         <AreaBox
           areaName="テラス"
           maxCol={2}
-          seatUsages={[]}
+          seatUsages={seatUsages}
           seats={seats.filter((seat) => seat.seatCategory.name === "テラス")}
           onSeatClick={handleSeatClick}
         />
@@ -86,10 +97,11 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
           seats={seats}
           onClose={() => {
             setSelectedSeat(null);
+            setSelectedSeatUsage(null);
           }}
-          onExtendSeatClick={() => {}}
-          onLeaveSeatClick={() => {}}
-          onMoveSeatClick={() => {}}
+          onExtendSeatUsage={onExtendSeatUsage}
+          onFinishSeatUsage={onFinishSeatUsage}
+          onMoveSeat={onMoveSeat}
         />
       ) : (
         <EmptySeatModal

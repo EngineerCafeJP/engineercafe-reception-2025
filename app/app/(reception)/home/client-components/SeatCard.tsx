@@ -5,7 +5,7 @@ import ClockIcon from "@/app/components/icons/ClockIcon";
 import SeatIcon from "@/app/components/icons/SeatIcon";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/app/types";
-import formatTime from "@/utils/formatTime";
+import { addHours, formatTimeWithQuarter } from "@/utils/formatTime";
 
 export interface SeatProps {
   seat: Seat;
@@ -37,8 +37,7 @@ const SeatCard: React.FC<SeatProps> = ({
             <div className="flex flex-row items-center gap-[0.25rem]">
               <ClockIcon />
               <div className="text-[0.75rem]">
-                {formatTime(seatUsage.startTime)} -{" "}
-                {formatTime(seatUsage.endTime)}
+                {`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}
               </div>
             </div>
           </>

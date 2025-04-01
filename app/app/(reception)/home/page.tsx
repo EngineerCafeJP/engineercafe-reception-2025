@@ -1,9 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { useGetSeatsWithCategory } from "@/app/(reception)/hooks";
-import { useGetInUseSeatUsages } from "@/app/(reception)/hooks/use-get-in-use-seat-usages";
-import { User } from "@/app/types";
+import {
+  useInUseSeatUsages,
+  useSeatsWithCategory,
+  useSeatUsage,
+} from "@/app/(reception)/hooks";
+import { SeatUsage, User } from "@/app/types";
 import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
 
@@ -46,12 +49,40 @@ export default function HomePage() {
     seats,
     isLoading: seatsLoading,
     error: seatsError,
-  } = useGetSeatsWithCategory();
+  } = useSeatsWithCategory();
+
   const {
     seatUsages,
     isLoading: seatUsagesLoading,
     error: seatUsagesError,
-  } = useGetInUseSeatUsages();
+    fetch: fetchInUseSeatUsage,
+  } = useInUseSeatUsages();
+
+  const {
+    extendSeatUsage,
+    finishSeatUsage,
+    moveSeat,
+    isLoading: seatUsageLoading,
+    error: seatUsageError,
+  } = useSeatUsage();
+
+  const handleExtendSeatUsage = async (seatUsage: SeatUsage) => {
+    await extendSeatUsage(seatUsage);
+    await fetchInUseSeatUsage();
+  };
+
+  const handleFinishSeatUsage = async (seatUsage: SeatUsage) => {
+    await finishSeatUsage(seatUsage);
+    await fetchInUseSeatUsage();
+  };
+
+  const handleMoveSeat = async (
+    prevSeatUsage: SeatUsage,
+    nextSeatUsage: SeatUsage,
+  ) => {
+    await moveSeat(prevSeatUsage, nextSeatUsage);
+    await fetchInUseSeatUsage();
+  };
 
   const onChangeUserCode = (userCode: string) => {
     if (userCode.length === 0) {
@@ -66,13 +97,20 @@ export default function HomePage() {
   };
 
   // TODO ローディングを作成する
-  if (seatsLoading || seatUsagesLoading) {
+  if (seatsLoading || seatUsagesLoading || seatUsageLoading) {
     return <div>Loading...</div>;
   }
 
   // TODO エラー表示を作成する
-  if (seatsError || seatUsagesError) {
-    return <div>Error: {seatsError?.message || seatUsagesError?.message}</div>;
+  if (seatsError || seatUsagesError || seatUsageError) {
+    return (
+      <div>
+        Error:{" "}
+        {seatsError?.message ||
+          seatUsagesError?.message ||
+          seatUsageError?.message}
+      </div>
+    );
   }
 
   return (
@@ -86,7 +124,13 @@ export default function HomePage() {
           onNextButtonClick={() => {}}
         />
       </div>
-      <SeatAreaMap seatUsages={seatUsages} seats={seats} />
+      <SeatAreaMap
+        seatUsages={seatUsages}
+        seats={seats}
+        onExtendSeatUsage={handleExtendSeatUsage}
+        onFinishSeatUsage={handleFinishSeatUsage}
+        onMoveSeat={handleMoveSeat}
+      />
     </div>
   );
 }

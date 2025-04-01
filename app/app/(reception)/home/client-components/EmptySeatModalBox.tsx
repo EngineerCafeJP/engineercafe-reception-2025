@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import ClockIcon from "@/app/components/icons/ClockIcon";
 import SeatIcon from "@/app/components/icons/SeatIcon";

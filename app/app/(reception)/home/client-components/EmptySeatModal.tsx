@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Seat } from "@/app/types";
 import { EmptySeatModalBox } from "./EmptySeatModalBox";

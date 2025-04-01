@@ -5,6 +5,7 @@ export type Seat = {
   categoryId: number;
   createdAt?: string;
   updatedAt?: string;
+  seatCategory?: SeatCategory;
 };
 
 export type SeatWithCategory = Seat & {

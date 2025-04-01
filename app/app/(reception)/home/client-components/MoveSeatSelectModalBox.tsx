@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/app/types";
@@ -15,17 +17,17 @@ export const MoveSeatSelectModalBox: React.FC<MoveSeatSelectModalBoxProps> = ({
   onNextButtonClick,
   seats,
 }) => {
-  const [selectedArea, setSelectedArea] = useState<number | null>(null);
+  const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
 
   const areaList = seats
-    .map((seat: Seat) => seat.categoryId)
+    .map((seat: Seat) => seat.seatCategory.name)
     .filter(
-      (categoryId: number, index: number, self: number[]) =>
-        self.indexOf(categoryId) === index,
+      (seatCategoryName: string, index: number, self: string[]) =>
+        self.indexOf(seatCategoryName) === index,
     );
-  const seatList = (categoryId: number) =>
-    seats.filter((seat: Seat) => seat.categoryId === categoryId);
+  const seatList = (seatCategoryName: string) =>
+    seats.filter((seat: Seat) => seat.seatCategory.name === seatCategoryName);
 
   return (
     <div className="modal-box border-2 border-black p-[0]">
@@ -47,19 +49,19 @@ export const MoveSeatSelectModalBox: React.FC<MoveSeatSelectModalBoxProps> = ({
         <div className="grid h-[280px] grid-cols-2 gap-[2rem]">
           <div className="h-full overflow-y-auto rounded-lg border p-[0.5rem]">
             <ul className="list bg-base-100 rounded-box my-[0] px-[0] shadow-md">
-              {areaList.map((categoryId: number) => (
+              {areaList.map((seatCategoryName: string) => (
                 <li
-                  key={categoryId}
+                  key={seatCategoryName}
                   className="list-row border-base-300 rounded-none border-b py-[0.5rem]"
                   style={{
                     backgroundColor:
-                      selectedArea === categoryId
+                      selectedArea === seatCategoryName
                         ? "var(--color-accent)"
                         : "var(--color-base-100)",
                   }}
-                  onClick={() => setSelectedArea(categoryId)}
+                  onClick={() => setSelectedArea(seatCategoryName)}
                 >
-                  <div>{`${categoryId}`}</div>
+                  <div>{`${seatCategoryName}`}</div>
                 </li>
               ))}
             </ul>

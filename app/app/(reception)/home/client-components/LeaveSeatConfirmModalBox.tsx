@@ -1,9 +1,11 @@
+"use client";
+
 import React from "react";
 import ClockIcon from "@/app/components/icons/ClockIcon";
 import SeatIcon from "@/app/components/icons/SeatIcon";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/app/types";
-import formatTime from "@/utils/formatTime";
+import { addHours, formatTimeWithQuarter } from "@/utils/formatTime";
 
 interface LeaveSeatConfirmModalBoxProps {
   seat: Seat;
@@ -45,7 +47,7 @@ export const LeaveSeatConfirmModalBox: React.FC<
                 <ClockIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${formatTime(seatUsage.startTime)} - ${formatTime(seatUsage.endTime)}`}</div>
+                <div>{`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}</div>
               </div>
             </li>
           </ul>
