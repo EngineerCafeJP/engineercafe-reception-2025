@@ -24,12 +24,14 @@ export const useSeatUsage = () => {
       await fetchInUseSeatUsageLogsBySeatId(seatId);
     if (seatUsageError) {
       setError(seatUsageError);
+      setIsLoading(false);
       return;
     }
 
     const { data, error } = await createSeatUsage(seatId, userId);
     if (error) {
       setError(error);
+      setIsLoading(false);
       return;
     }
     setIsLoading(false);
@@ -45,6 +47,7 @@ export const useSeatUsage = () => {
     const { error: seatUsageError } = await fetchSeatUsageLogById(seatUsage.id);
     if (seatUsageError) {
       setError(seatUsageError);
+      setIsLoading(false);
       return;
     }
 
@@ -54,12 +57,14 @@ export const useSeatUsage = () => {
     );
     if (updateSeatUsageEndtimeError) {
       setError(updateSeatUsageEndtimeError);
+      setIsLoading(false);
       return;
     }
     const { data: nextSeatUsageData, error: createNextSeatUsageError } =
       await createSeatUsage(seatUsage.seatId, seatUsage.userId);
     if (createNextSeatUsageError) {
       setError(createNextSeatUsageError);
+      setIsLoading(false);
       return;
     }
     setIsLoading(false);
@@ -75,6 +80,7 @@ export const useSeatUsage = () => {
     const { error: seatUsageError } = await fetchSeatUsageLogById(seatUsage.id);
     if (seatUsageError) {
       setError(seatUsageError);
+      setIsLoading(false);
       return;
     }
 
@@ -84,6 +90,7 @@ export const useSeatUsage = () => {
     );
     if (error) {
       setError(error);
+      setIsLoading(false);
       return;
     }
     setIsLoading(false);
@@ -105,6 +112,7 @@ export const useSeatUsage = () => {
     );
     if (prevSeatUsageError) {
       setError(prevSeatUsageError);
+      setIsLoading(false);
       return;
     }
 
@@ -114,6 +122,7 @@ export const useSeatUsage = () => {
     );
     if (finishPrevSeatUsageError) {
       setError(finishPrevSeatUsageError);
+      setIsLoading(false);
       return;
     }
 
@@ -121,6 +130,7 @@ export const useSeatUsage = () => {
       await createSeatUsage(nextSeatUsage.seatId, nextSeatUsage.userId);
     if (createNextSeatUsageError) {
       setError(createNextSeatUsageError);
+      setIsLoading(false);
       return;
     }
     setIsLoading(false);
