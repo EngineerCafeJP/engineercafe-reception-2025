@@ -5,7 +5,7 @@ import ClockIcon from "@/app/components/icons/ClockIcon";
 import SeatIcon from "@/app/components/icons/SeatIcon";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/app/types";
-import formatTime from "@/utils/formatTime";
+import { addHours, formatTimeWithQuarter } from "@/utils/formatTime";
 
 export interface SeatProps {
   seat: Seat;
@@ -20,7 +20,7 @@ const SeatCard: React.FC<SeatProps> = ({
 }) => {
   return (
     <div
-      className={`card card-xs card-border ${seatUsage?.userCode ? "border-accent bg-accent/30" : "border-primary"} h-[7rem] w-[7rem]`}
+      className={`card card-xs card-border ${seatUsage?.userId ? "border-accent bg-accent/30" : "border-primary"} h-[7rem] w-[7rem]`}
       onClick={() => onSeatClick(seat, seatUsage)}
     >
       <div className="card-body">
@@ -28,17 +28,16 @@ const SeatCard: React.FC<SeatProps> = ({
           <SeatIcon />
           <div className="text-[0.875rem]">{seat.name}</div>
         </div>
-        {seatUsage?.userCode && (
+        {seatUsage?.userId && (
           <>
             <div className="flex flex-row items-center gap-[0.25rem]">
               <UserIcon />
-              <div className="text-[0.75rem]">{seatUsage.userCode}</div>
+              <div className="text-[0.75rem]">{seatUsage.userId}</div>
             </div>
             <div className="flex flex-row items-center gap-[0.25rem]">
               <ClockIcon />
               <div className="text-[0.75rem]">
-                {formatTime(seatUsage.startTime)} -{" "}
-                {formatTime(seatUsage.endTime)}
+                {`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}
               </div>
             </div>
           </>

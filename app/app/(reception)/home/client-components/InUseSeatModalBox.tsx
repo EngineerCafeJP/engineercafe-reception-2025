@@ -1,8 +1,10 @@
+"use client";
+
 import ClockIcon from "@/app/components/icons/ClockIcon";
 import SeatIcon from "@/app/components/icons/SeatIcon";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/app/types";
-import formatTime from "@/utils/formatTime";
+import { addHours, formatTimeWithQuarter } from "@/utils/formatTime";
 
 interface InUseSeatModalBoxProps {
   seat: Seat;
@@ -34,7 +36,7 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
                 <SeatIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${seat.areaName} ${seat.name}`}</div>
+                <div>{seat.name}</div>
               </div>
               <button className="btn" onClick={onMoveSeatClick}>
                 移動
@@ -45,7 +47,7 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
                 <UserIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{seatUsage.userCode}</div>
+                <div>{seatUsage.userId}</div>
               </div>
               <button className="btn" onClick={onLeaveSeatClick}>
                 退席
@@ -56,9 +58,7 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
                 <ClockIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${formatTime(seatUsage.startTime)} - ${formatTime(
-                  seatUsage.endTime,
-                )}`}</div>
+                <div>{`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}</div>
               </div>
               <button className="btn" onClick={onExtendSeatClick}>
                 延長

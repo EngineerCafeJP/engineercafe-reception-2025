@@ -1,20 +1,22 @@
+"use client";
+
 import React from "react";
 import ClockIcon from "@/app/components/icons/ClockIcon";
 import SeatIcon from "@/app/components/icons/SeatIcon";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/app/types";
-import formatTime from "@/utils/formatTime";
-
+import { addHours, formatTimeWithQuarter } from "@/utils/formatTime";
 interface ExtendSeatConfirmModalBoxProps {
   seat: Seat;
   seatUsage: SeatUsage;
+  nextSeatUsage: SeatUsage;
   onClose: () => void;
   onNextButtonClick: () => void;
 }
 
 export const ExtendSeatConfirmModalBox: React.FC<
   ExtendSeatConfirmModalBoxProps
-> = ({ seat, seatUsage, onClose, onNextButtonClick }) => {
+> = ({ seat, seatUsage, nextSeatUsage, onClose, onNextButtonClick }) => {
   return (
     <div className="modal-box border-accent border-2 p-[0]">
       <div className="bg-accent text-primary-content flex h-[50px] items-center justify-center text-[1.25rem] font-[800]">
@@ -29,7 +31,7 @@ export const ExtendSeatConfirmModalBox: React.FC<
                 <SeatIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${seat.areaName} ${seat.name}`}</div>
+                <div>{seat.name}</div>
               </div>
             </li>
             <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">
@@ -37,7 +39,7 @@ export const ExtendSeatConfirmModalBox: React.FC<
                 <UserIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{seatUsage.userCode}</div>
+                <div>{seatUsage.userId}</div>
               </div>
             </li>
             <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">
@@ -45,7 +47,13 @@ export const ExtendSeatConfirmModalBox: React.FC<
                 <ClockIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${formatTime(seatUsage.startTime)} - ${formatTime(seatUsage.endTime)}`}</div>
+                <div>
+                  {`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}
+                </div>
+                <div className="mx-0.5"> → </div>
+                <div className="text-accent">
+                  {`${formatTimeWithQuarter(nextSeatUsage.startTime)} - ${formatTimeWithQuarter(addHours(nextSeatUsage.startTime, 2))}`}
+                </div>
               </div>
             </li>
           </ul>

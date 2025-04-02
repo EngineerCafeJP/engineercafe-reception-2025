@@ -1,15 +1,26 @@
+"use client";
+
 import { FC, useState } from "react";
-import { Seat, SeatUsage } from "@/app/types";
+import { Seat, SeatUsage, SeatWithCategory } from "@/app/types";
 import { AreaBox } from "./AreaBox";
 import EmptySeatModal from "./EmptySeatModal";
 import InUseSeatModal from "./InUseSeatModal";
 
 type SeatAreaMapProps = {
-  seats: Seat[];
+  seats: SeatWithCategory[];
   seatUsages: SeatUsage[];
+  onExtendSeatUsage: (seatUsage: SeatUsage) => void;
+  onFinishSeatUsage: (seatUsage: SeatUsage) => void;
+  onMoveSeat: (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => void;
 };
 
-export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
+export const SeatAreaMap: FC<SeatAreaMapProps> = ({
+  seats,
+  seatUsages,
+  onExtendSeatUsage,
+  onFinishSeatUsage,
+  onMoveSeat,
+}) => {
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [selectedSeatUsage, setSelectedSeatUsage] = useState<SeatUsage | null>(
     null,
@@ -19,6 +30,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
     setSelectedSeat(seat);
     setSelectedSeatUsage(seatUsage);
   };
+
   return (
     <div className="m-[1rem]">
       <div className="flex justify-between gap-[0.5rem] overflow-x-auto">
@@ -26,14 +38,18 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
           areaName="メインホール"
           maxCol={10}
           seatUsages={seatUsages}
-          seats={seats.filter((seat) => seat.areaName === "メインホール")}
+          seats={seats.filter(
+            (seat) => seat.seatCategory.name === "メインホール",
+          )}
           onSeatClick={handleSeatClick}
         />
         <AreaBox
           areaName="MAKERSスペース"
           maxCol={2}
-          seatUsages={[]}
-          seats={seats.filter((seat) => seat.areaName === "MAKERSスペース")}
+          seatUsages={seatUsages}
+          seats={seats.filter(
+            (seat) => seat.seatCategory.name === "MAKERSスペース",
+          )}
           onSeatClick={handleSeatClick}
         />
       </div>
@@ -41,31 +57,35 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
         <AreaBox
           areaName="集中スペース"
           maxCol={3}
-          seatUsages={[]}
-          seats={seats.filter((seat) => seat.areaName === "集中スペース")}
+          seatUsages={seatUsages}
+          seats={seats.filter(
+            (seat) => seat.seatCategory.name === "集中スペース",
+          )}
           onSeatClick={handleSeatClick}
         />
         <AreaBox
           areaName="ミーティングスペース"
           maxCol={3}
-          seatUsages={[]}
+          seatUsages={seatUsages}
           seats={seats.filter(
-            (seat) => seat.areaName === "ミーティングスペース",
+            (seat) => seat.seatCategory.name === "ミーティングスペース",
           )}
           onSeatClick={handleSeatClick}
         />
         <AreaBox
-          areaName="Underペース"
+          areaName="Underスペース"
           maxCol={3}
-          seatUsages={[]}
-          seats={seats.filter((seat) => seat.areaName === "UNDERスペース")}
+          seatUsages={seatUsages}
+          seats={seats.filter(
+            (seat) => seat.seatCategory.name === "Underスペース",
+          )}
           onSeatClick={handleSeatClick}
         />
         <AreaBox
           areaName="テラス"
           maxCol={2}
-          seatUsages={[]}
-          seats={seats.filter((seat) => seat.areaName === "テラス")}
+          seatUsages={seatUsages}
+          seats={seats.filter((seat) => seat.seatCategory.name === "テラス")}
           onSeatClick={handleSeatClick}
         />
       </div>
@@ -77,10 +97,11 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({ seats, seatUsages }) => {
           seats={seats}
           onClose={() => {
             setSelectedSeat(null);
+            setSelectedSeatUsage(null);
           }}
-          onExtendSeatClick={() => {}}
-          onLeaveSeatClick={() => {}}
-          onMoveSeatClick={() => {}}
+          onExtendSeatUsage={onExtendSeatUsage}
+          onFinishSeatUsage={onFinishSeatUsage}
+          onMoveSeat={onMoveSeat}
         />
       ) : (
         <EmptySeatModal

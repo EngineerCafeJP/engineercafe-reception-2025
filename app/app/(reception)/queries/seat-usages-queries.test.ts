@@ -1,0 +1,213 @@
+import {
+  createSeatUsage,
+  fetchInUseSeatUsageLogs,
+  fetchInUseSeatUsageLogsBySeatId,
+  fetchSeatUsageLogById,
+  updateSeatUsageEndtime,
+} from "@/app/(reception)/queries/seat-usages-queries";
+import supabase from "@/utils/supabase/client";
+
+jest.mock("@/utils/supabase/client");
+
+describe("fetchSeatUsageLogById", () => {
+  const mockSeatUsageLogData = {
+    id: 1,
+    seat_id: 1,
+    user_id: 1,
+    start_time: "2025-03-14 10:00:00",
+    end_time: null,
+  };
+  const mockError = null;
+  const supabaseTableMock = {
+    select: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    single: jest.fn().mockResolvedValue({
+      data: mockSeatUsageLogData,
+      error: mockError,
+    }),
+  };
+
+  beforeEach(() => {
+    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
+  });
+
+  it("should fetch in use seat usage logs by seat id", async () => {
+    const id = 1;
+    const { data, error } = await fetchSeatUsageLogById(id);
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.select).toHaveBeenCalledWith("*");
+    expect(supabaseTableMock.eq).toHaveBeenCalledWith("id", id);
+    expect(supabaseTableMock.single).toHaveBeenCalled();
+  });
+});
+
+describe("fetchInUseSeatUsageLogsBySeatId", () => {
+  const mockSeatUsageLogData = {
+    id: 1,
+    seat_id: 1,
+    user_id: 1,
+    start_time: "2025-03-14 10:00:00",
+    end_time: null,
+  };
+  const mockError = null;
+  const supabaseTableMock = {
+    select: jest.fn().mockReturnThis(),
+    filter: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    is: jest.fn().mockReturnThis(),
+    single: jest.fn().mockResolvedValue({
+      data: mockSeatUsageLogData,
+      error: mockError,
+    }),
+  };
+
+  beforeEach(() => {
+    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
+  });
+
+  it("should fetch in use seat usage logs", async () => {
+    const seatId = 1;
+    const { data, error } = await fetchInUseSeatUsageLogsBySeatId(seatId);
+
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.select).toHaveBeenCalledWith("*");
+    expect(supabaseTableMock.eq).toHaveBeenCalledWith("seat_id", seatId);
+    expect(supabaseTableMock.is).toHaveBeenCalledWith("end_time", null);
+    expect(supabaseTableMock.single).toHaveBeenCalled();
+  });
+});
+
+describe("fetchInUseSeatUsageLogs", () => {
+  const mockSeatUsageLogData = [
+    {
+      id: 1,
+      seat_id: 1,
+      user_id: 1,
+      start_time: "2025-03-14 10:00:00",
+      end_time: null,
+    },
+  ];
+  const mockError = null;
+  const supabaseTableMock = {
+    select: jest.fn().mockReturnThis(),
+    filter: jest.fn().mockResolvedValue({
+      data: mockSeatUsageLogData,
+      error: mockError,
+    }),
+  };
+
+  beforeEach(() => {
+    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
+  });
+
+  it("should fetch in use seat usage logs", async () => {
+    const { data, error } = await fetchInUseSeatUsageLogs();
+
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.select).toHaveBeenCalledWith("*");
+    expect(supabaseTableMock.filter).toHaveBeenCalledWith(
+      "end_time",
+      "is",
+      null,
+    );
+  });
+});
+
+describe("createSeatUsage", () => {
+  const mockSeatUsageLogData = {
+    id: 1,
+    seat_id: 1,
+    user_id: 1,
+    start_time: "2025-03-14 10:00:00",
+    end_time: null,
+  };
+  const mockError = null;
+
+  const supabaseTableMock = {
+    insert: jest.fn().mockResolvedValue({
+      data: mockSeatUsageLogData,
+      error: mockError,
+    }),
+  };
+
+  beforeEach(() => {
+    (supabase.from as jest.Mock).mockReturnValue(supabaseTableMock);
+  });
+
+  it("should create a seat usage", async () => {
+    const seatId = 1;
+    const userId = 1;
+    const startTime = "2025-03-14 10:00:00";
+
+    const { data, error } = await createSeatUsage(seatId, userId, startTime);
+
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.insert).toHaveBeenCalledWith({
+      seat_id: seatId,
+      user_id: userId,
+      start_time: startTime,
+      created_at: expect.any(String),
+    });
+  });
+
+  it("should return a seat usage with startTime is null", async () => {
+    const seatId = 1;
+    const userId = 1;
+
+    const { data, error } = await createSeatUsage(seatId, userId);
+
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.insert).toHaveBeenCalledWith({
+      seat_id: seatId,
+      user_id: userId,
+      start_time: expect.any(String),
+      created_at: expect.any(String),
+    });
+  });
+});
+
+describe("updateSeatUsageEndtime", () => {
+  const mockSeatUsageLogData = {
+    id: 1,
+    seat_id: 1,
+    user_id: 1,
+    start_time: "2025-03-14 10:00:00",
+    end_time: null,
+  };
+  const mockError = null;
+
+  const supabaseTableMock = {
+    update: jest.fn().mockReturnThis(),
+    eq: jest
+      .fn()
+      .mockReturnValue({ data: mockSeatUsageLogData, error: mockError }),
+  };
+
+  beforeEach(() => {
+    (supabase.from as jest.Mock).mockReturnValue(supabaseTableMock);
+  });
+
+  it("should update the seat usage end time", async () => {
+    const seatUsageId = 1;
+    const endTime = "2025-03-14 10:00:00";
+
+    const { data, error } = await updateSeatUsageEndtime(seatUsageId, endTime);
+
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.update).toHaveBeenCalledWith({
+      end_time: endTime,
+    });
+  });
+});
