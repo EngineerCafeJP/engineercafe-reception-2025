@@ -14,7 +14,7 @@ const Header: React.FC = () => {
             alt="Logo"
             className="mx-2 my-auto"
             height={60}
-            src="/images/logo.png"
+            src="/images/EngineerCafe_logo_white_transparent.png"
             width={60}
           />
           <a>
