@@ -36,6 +36,12 @@ describe("useSeatUsage", () => {
   });
 
   describe("create", () => {
+    beforeEach(() => {
+      (fetchInUseSeatUsageLogsBySeatId as jest.Mock).mockResolvedValue({
+        data: null,
+        error: null,
+      });
+    });
     it("should create a seat usage", async () => {
       const { result } = renderHook(() => useSeatUsage());
 
@@ -48,7 +54,7 @@ describe("useSeatUsage", () => {
     describe("when error occurs in fetchSeatUsageLogById", () => {
       beforeEach(() => {
         (fetchInUseSeatUsageLogsBySeatId as jest.Mock).mockResolvedValue({
-          data: null,
+          data: mockSeatUsage,
           error: "Error",
         });
       });
@@ -57,7 +63,7 @@ describe("useSeatUsage", () => {
         await act(async () => {
           await result.current.create(1, 1);
         });
-        expect(result.current.error).toBe("Error");
+        expect(result.current.error).toBeInstanceOf(Error);
       });
     });
 
