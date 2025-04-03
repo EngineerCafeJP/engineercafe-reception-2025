@@ -28,7 +28,7 @@ const HistoryListViewItemForm: React.FC<Props> = ({
         <div className="flex flex-col gap-1">
           {/* // TODO: (KUROKI) use ~/components/icons/ClockIcon.tsx after pull feature-7*/}
           <div className="flex h-[21] flex-row gap-2">
-            <div>
+            <div className="w-[21]">
               <Image
                 alt="Time"
                 height={21}
@@ -39,14 +39,7 @@ const HistoryListViewItemForm: React.FC<Props> = ({
             <div>{item.CheckInTime_YYYY_HH_MM} -</div>
           </div>
           <div className="flex h-[21] flex-row gap-2">
-            <div>
-              <Image
-                alt="Time"
-                height={21}
-                src={"/images/mock.png"}
-                width={21}
-              />
-            </div>
+            <div className="w-[21]"></div>
             <div>{item.CheckOutTime_YYYY_HH_MM}</div>
           </div>
         </div>
