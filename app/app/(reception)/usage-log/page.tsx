@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { useState } from "react";
-import ConfirmDialog from "@/app/(reception)/usage-log/client-components/elements/ConfirmDialog";
+import ConfirmDialog from "@/app/(reception)/usage-log/client-components/ConfirmDialog";
 import { useAuth } from "@/app/contexts/AuthContext";
 import DateSelectorForm from "./client-components/DateSelectorForm";
 import HistoryListViewForm from "./client-components/HistoryListViewForm";

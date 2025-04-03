@@ -1,8 +1,6 @@
 "use client";
 
-import SeatIconLabel from "@/app/(reception)/usage-log/client-components/elements/SeatIconLabel";
-import TimerRangeIconLabel from "@/app/(reception)/usage-log/client-components/elements/TimerRangeIconLabel";
-import UserIconLabel from "@/app/(reception)/usage-log/client-components/elements/UserIconLabel";
+import Image from "next/image";
 import HistoryListViewItemEntity from "@/app/(reception)/usage-log/entities/HistoryListViewItemEntity";
 
 interface Props {
@@ -26,54 +24,55 @@ const HistoryListViewItemForm: React.FC<Props> = ({
           {rowNo}.
         </div>
       </div>
-      <div className="w-3/14 p-2">
-        <div className="flex flex-col">
+      <div className="w-2/14 p-2">
+        <div className="flex flex-col gap-1">
           {/* // TODO: (KUROKI) use ~/components/icons/ClockIcon.tsx after pull feature-7*/}
-          <div className="pt-[0.2em]">
-            <TimerRangeIconLabel
-              iconOpacity={1}
-              iconSize={21}
-              textSize={"1.0em"}
-              timeEndText={null}
-              timeStartText={`${item.CheckInTime_YYYY_HH_MM}`}
-            />
+          <div className="flex h-[21] flex-row gap-2">
+            <div>
+              <Image
+                alt="Time"
+                height={21}
+                src={"/images/mock.png"}
+                width={21}
+              />
+            </div>
+            <div>{item.CheckInTime_YYYY_HH_MM} -</div>
           </div>
-          <div className="h-[1.8em] pt-[0.2em]">
-            <TimerRangeIconLabel
-              iconOpacity={0}
-              iconSize={21}
-              textSize={"1.0em"}
-              timeEndText={`${item.CheckOutTime_YYYY_HH_MM}`}
-              timeStartText={null}
-            />
+          <div className="flex h-[21] flex-row gap-2">
+            <div>
+              <Image
+                alt="Time"
+                height={21}
+                src={"/images/mock.png"}
+                width={21}
+              />
+            </div>
+            <div>{item.CheckOutTime_YYYY_HH_MM}</div>
           </div>
         </div>
       </div>
-      <div className="w-6/14 p-2">
-        <div className="flex flex-col">
-          <div className="pt-[0.2em]">
+      <div className="w-7/14 p-2">
+        <div className="flex flex-col gap-1">
+          <div className="flex h-[21] flex-row gap-2">
             {/* // TODO: (KUROKI) use ~/components/icons/SeatIcon.tsx after pull feature-7 */}
-            {/*
-            {item.AreaName}　{item.SeatName}
-            */}
-            <SeatIconLabel
-              areaText={item.AreaName}
-              iconSize={21}
-              seatText={item.SeatName}
-              textSize={"1.0em"}
-            />
+            <div>
+              <Image
+                alt="Seat"
+                height={21}
+                src={"/images/mock.png"}
+                width={21}
+              />
+            </div>
+            <div>{item.AreaName}</div>
+            <div>{item.SeatName}</div>
           </div>
-          <div className="h-[1.8em] overflow-hidden pt-[0.2em] text-ellipsis whitespace-nowrap">
+          <div className="flex h-[21] flex-row gap-2">
             {/* // TODO: (KUROKI) use ~/components/icons/UserIcon.tsx after pull feature-7 */}
-            {/*
-            {item.MembershipNumber}　{item.UserName}
-            */}
-            <UserIconLabel
-              iconSize={21}
-              membershipNumberText={item.MembershipNumber}
-              textSize={"1.0em"}
-              userNameText={item.UserName}
-            />
+            <Image alt="User" height={21} src={"/images/mock.png"} width={21} />
+            <div>{item.MembershipNumber}</div>
+            <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+              {item.UserName}
+            </div>
           </div>
         </div>
       </div>
