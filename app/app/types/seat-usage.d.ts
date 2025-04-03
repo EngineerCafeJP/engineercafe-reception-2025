@@ -9,4 +9,6 @@ export type SeatUsage = {
   createdAt?: string;
   updatedAt?: string;
   isDeleted?: boolean;
+  seat?: Seat;
+  user?: User;
 };
