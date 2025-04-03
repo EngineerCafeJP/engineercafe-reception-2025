@@ -13,7 +13,7 @@ import HistoryPageEntity from "./entities/HistoryPageEntity";
 
 const historyPageEntity = new HistoryPageEntity();
 historyPageEntity.ScoreOfUsages = 123;
-historyPageEntity.ScoreOfUsers = 987;
+historyPageEntity.ScoreOfUsers = 111;
 historyPageEntity.SelectedDateStr = new Date().toISOString().split("T")[0];
 
 export default function UsageHistory() {
