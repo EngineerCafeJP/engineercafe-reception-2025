@@ -70,7 +70,10 @@ const HistoryListViewItemForm: React.FC<Props> = ({
             {/* // TODO: (KUROKI) use ~/components/icons/UserIcon.tsx after pull feature-7 */}
             <Image alt="User" height={21} src={"/images/mock.png"} width={21} />
             <div>{item.MembershipNumber}</div>
-            <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+            <div
+              className="overflow-hidden text-ellipsis whitespace-nowrap"
+              title={item.UserName}
+            >
               {item.UserName}
             </div>
           </div>
