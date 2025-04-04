@@ -19,8 +19,16 @@ export const fetchUsersBySearchParams = (params?: SearchUserParams) => {
   if (params.id) {
     return query.eq("id", params.id);
   } else {
-    return query.or(
-      `name.like.%${params.name}%,email.like.%${params.email}%,phone.like.%${params.phone}%`,
-    );
+    const conditions = [];
+    if (params.name) {
+      conditions.push(`name.like.%${params.name}%`);
+    }
+    if (params.email) {
+      conditions.push(`email.like.%${params.email}%`);
+    }
+    if (params.phone) {
+      conditions.push(`phone.like.%${params.phone}%`);
+    }
+    return query.or(conditions.join(","));
   }
 };
