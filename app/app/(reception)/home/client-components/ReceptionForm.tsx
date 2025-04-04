@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 import AssignSeatConfirmModal from "@/app/(reception)/home/client-components/AssignSeatConfirmModal";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, User } from "@/app/types";
@@ -20,12 +21,14 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   onClose,
   assignSeat,
 }) => {
-  const [searchWord, setSearchWord] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [userList, setUserList] = useState<User[] | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const debouncedChangeSearchWord = useDebouncedCallback((word: string) => {
+    onChangeSearchWord(word);
+  }, 500);
 
   useEffect(() => {
     setUserList(searchUserList);
@@ -45,11 +48,6 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const seatList = (categoryName: string) =>
     seats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
 
-  const handleChangeSearchWord = (input: string) => {
-    setSearchWord(input);
-    onChangeSearchWord(input);
-  };
-
   const handleSelectArea = (area: string) => {
     setSelectedArea(area);
     setSelectedSeat(null);
@@ -61,7 +59,6 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   };
 
   const handleClose = () => {
-    setSearchWord("");
     setSelectedUser(null);
     setSelectedArea(null);
     setSelectedSeat(null);
@@ -80,8 +77,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
               name="code"
               placeholder="会員番号"
               type="text"
-              value={searchWord}
-              onChange={(e) => handleChangeSearchWord(e.target.value)}
+              onChange={(e) => debouncedChangeSearchWord(e.target.value)}
             />
             <button className="btn btn-outline" onClick={handleClose}>
               X
