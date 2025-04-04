@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import HistoryListViewItemEntity from "@/app/(reception)/usage-log/entities/HistoryListViewItemEntity";
+import HistoryListViewItemEntity from "@/app/(reception)/usage-logs/entities/HistoryListViewItemEntity";
 
 interface Props {
   rowNo: number;
