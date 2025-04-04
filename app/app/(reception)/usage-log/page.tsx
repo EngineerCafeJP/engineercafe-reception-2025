@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { useState } from "react";
-import ConfirmDialog from "@/app/(reception)/usage-log/client-components/ConfirmDialog";
+import ConfirmModal from "@/app/(reception)/usage-log/client-components/ConfirmModal";
 import { useAuth } from "@/app/contexts/AuthContext";
 import DateSelectorForm from "./client-components/DateSelectorForm";
 import HistoryListViewForm from "./client-components/HistoryListViewForm";
@@ -23,10 +23,8 @@ export default function UsageHistory() {
     redirect("/");
   }
 
-  const [
-    isOpenConfirmDeleteHistoryDialog,
-    setIsOpenConfirmDeleteHistoryDialog,
-  ] = useState(false);
+  const [deleteTargetHistoryItem, setIsOpenConfirmDeleteHistoryDialog] =
+    useState<HistoryListViewItemEntity | null>(null);
   const [deleteHistoryConfirmMessage, setDeleteHistoryDialogConfirmMessage] =
     useState(<></>);
 
@@ -56,18 +54,18 @@ export default function UsageHistory() {
       </>,
     );
 
-    setIsOpenConfirmDeleteHistoryDialog(true);
+    setIsOpenConfirmDeleteHistoryDialog(deleteItem);
   };
 
   /** 履歴削除処理を実行 */
   const onAppliedDeleteHistory = () => {
     alert("TODO: DB更新処理を実行！！");
-    setIsOpenConfirmDeleteHistoryDialog(false);
+    setIsOpenConfirmDeleteHistoryDialog(null);
   };
 
   /** 履歴削除処理をキャンセル */
   const onCanceledDeleteHistory = () => {
-    setIsOpenConfirmDeleteHistoryDialog(false);
+    setIsOpenConfirmDeleteHistoryDialog(null);
   };
 
   return (
@@ -90,8 +88,8 @@ export default function UsageHistory() {
       />
 
       {/* 履歴削除の確認ダイアログ */}
-      <ConfirmDialog
-        isOpen={isOpenConfirmDeleteHistoryDialog}
+      <ConfirmModal
+        isOpen={Boolean(deleteTargetHistoryItem)}
         messageContext={deleteHistoryConfirmMessage}
         title="履歴削除"
         onApplied={onAppliedDeleteHistory}

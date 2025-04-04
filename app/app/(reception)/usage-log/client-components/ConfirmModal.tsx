@@ -10,7 +10,7 @@ interface Props {
   onCanceled: () => void;
 }
 
-const ConfirmDialog: React.FC<Props> = ({
+const ConfirmModal: React.FC<Props> = ({
   isOpen,
   title,
   messageContext,
@@ -42,4 +42,4 @@ const ConfirmDialog: React.FC<Props> = ({
   );
 };
 
-export default ConfirmDialog;
+export default ConfirmModal;
