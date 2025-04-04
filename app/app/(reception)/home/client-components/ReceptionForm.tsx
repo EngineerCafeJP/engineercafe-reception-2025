@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { MdClose } from "react-icons/md";
 import { useDebouncedCallback } from "use-debounce";
 import AssignSeatConfirmModal from "@/app/(reception)/home/client-components/AssignSeatConfirmModal";
 import UserIcon from "@/app/components/icons/UserIcon";
@@ -8,7 +9,7 @@ import { Seat, User } from "@/app/types";
 
 interface ReceptionFormProps {
   searchUserList: User[] | null;
-  seats: Seat[];
+  emptySeats: Seat[];
   onChangeSearchWord: (input: string) => void;
   onClose: () => void;
   assignSeat: (seat: Seat, user: User) => void;
@@ -16,11 +17,12 @@ interface ReceptionFormProps {
 
 const ReceptionForm: React.FC<ReceptionFormProps> = ({
   searchUserList,
-  seats,
+  emptySeats,
   onChangeSearchWord,
   onClose,
   assignSeat,
 }) => {
+  const [searchWord, setSearchWord] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
@@ -38,7 +40,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     setSelectedUser(user);
   };
 
-  const areaList = seats
+  const areaList = emptySeats
     .map((seat: Seat) => seat.seatCategory.name)
     .filter(
       (categoryName: string, index: number, self: string[]) =>
@@ -46,7 +48,12 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     );
 
   const seatList = (categoryName: string) =>
-    seats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
+    emptySeats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
+
+  const handleChangeSearchWord = (word: string) => {
+    setSearchWord(word);
+    debouncedChangeSearchWord(word);
+  };
 
   const handleSelectArea = (area: string) => {
     setSelectedArea(area);
@@ -59,6 +66,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   };
 
   const handleClose = () => {
+    setSearchWord("");
     setSelectedUser(null);
     setSelectedArea(null);
     setSelectedSeat(null);
@@ -71,16 +79,17 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     <>
       <div className="absolute right-0 z-[100] flex justify-end">
         <div className="bg-base-200 w-[32rem] px-[1rem] py-2">
-          <div className="mb-2 flex justify-between gap-[1rem]">
+          <div className="mb-2 flex items-center">
             <input
-              className="input w-full"
+              className="input w-full pr-10"
               name="code"
               placeholder="会員番号"
               type="text"
-              onChange={(e) => debouncedChangeSearchWord(e.target.value)}
+              value={searchWord}
+              onChange={(e) => handleChangeSearchWord(e.target.value)}
             />
-            <button className="btn btn-outline" onClick={handleClose}>
-              X
+            <button className="absolute right-6" onClick={handleClose}>
+              <MdClose size={24} />
             </button>
           </div>
           {userList && selectedUser === null && (

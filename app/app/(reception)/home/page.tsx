@@ -78,7 +78,8 @@ export default function HomePage() {
         Error:
         {seatsError?.message ||
           seatUsagesError?.message ||
-          seatUsageError?.message}
+          seatUsageError?.message ||
+          usersError?.message}
       </div>
     );
   }
@@ -88,8 +89,10 @@ export default function HomePage() {
       <div className="mx-auto max-w-full">
         <ReceptionForm
           assignSeat={handleAssignSeat}
+          emptySeats={seats.filter(
+            (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
+          )}
           searchUserList={users}
-          seats={seats}
           onChangeSearchWord={onChangeSearch}
           onClose={() => {}}
         />
