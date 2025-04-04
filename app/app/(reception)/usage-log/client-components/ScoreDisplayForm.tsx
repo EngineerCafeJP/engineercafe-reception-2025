@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-//import { createClient } from "@supabase/supabase-js";
 
 interface Props {
   socoreOfUsages: number;

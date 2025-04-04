@@ -38,7 +38,6 @@ export default class HistoryPageEntity {
     this.HistoryListViewItemEntities.push(item);
   }
 
-  //public SelectedDate!: Date;
   public SelectedDateStr!: string;
 
   public ScoreOfUsages!: number;
