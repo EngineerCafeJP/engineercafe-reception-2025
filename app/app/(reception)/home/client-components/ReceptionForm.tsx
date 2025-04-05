@@ -1,28 +1,36 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { MdClose } from "react-icons/md";
+import { useDebouncedCallback } from "use-debounce";
+import AssignSeatConfirmModal from "@/app/(reception)/home/client-components/AssignSeatConfirmModal";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, User } from "@/app/types";
 
 interface ReceptionFormProps {
   searchUserList: User[] | null;
-  seats: Seat[];
-  onChangeUserCode: (userCode: string) => void;
+  emptySeats: Seat[];
+  onChangeSearchWord: (input: string) => void;
   onClose: () => void;
-  onNextButtonClick: (seat: Seat) => void;
+  assignSeat: (seat: Seat, user: User) => void;
 }
 
 const ReceptionForm: React.FC<ReceptionFormProps> = ({
   searchUserList,
-  seats,
-  onChangeUserCode,
+  emptySeats,
+  onChangeSearchWord,
   onClose,
-  onNextButtonClick,
+  assignSeat,
 }) => {
+  const [searchWord, setSearchWord] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [selectedArea, setSelectedArea] = useState<number | null>(null);
+  const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [userList, setUserList] = useState<User[] | null>(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const debouncedChangeSearchWord = useDebouncedCallback((word: string) => {
+    onChangeSearchWord(word);
+  }, 500);
 
   useEffect(() => {
     setUserList(searchUserList);
@@ -32,123 +40,166 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     setSelectedUser(user);
   };
 
-  const areaList = seats
-    .map((seat: Seat) => seat.categoryId)
+  const areaList = emptySeats
+    .map((seat: Seat) => seat.seatCategory.name)
     .filter(
-      (categoryId: number, index: number, self: number[]) =>
-        self.indexOf(categoryId) === index,
+      (categoryName: string, index: number, self: string[]) =>
+        self.indexOf(categoryName) === index,
     );
 
-  const seatList = (categoryId: number) =>
-    seats.filter((seat: Seat) => seat.categoryId === categoryId);
+  const seatList = (categoryName: string) =>
+    emptySeats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
+
+  const handleChangeSearchWord = (word: string) => {
+    setSearchWord(word);
+    debouncedChangeSearchWord(word);
+  };
+
+  const handleSelectArea = (area: string) => {
+    setSelectedArea(area);
+    setSelectedSeat(null);
+  };
+
+  const handleAssignSeat = async () => {
+    await assignSeat(selectedSeat!, selectedUser!);
+    handleClose();
+  };
 
   const handleClose = () => {
+    setSearchWord("");
     setSelectedUser(null);
     setSelectedArea(null);
     setSelectedSeat(null);
     setUserList(null);
+    setIsConfirmModalOpen(false);
     onClose();
   };
 
   return (
     <>
-      <div className="absolute z-[100] w-[28rem] bg-[white]">
-        <input
-          className="input w-full"
-          name="code"
-          placeholder="会員番号"
-          type="text"
-          onChange={(e) => onChangeUserCode(e.target.value)}
-        />
-        {userList && selectedUser === null && (
-          <ul className="list bg-base-100 rounded-box my-[0] px-[0] shadow-md">
-            {userList.map((user) => (
-              <li
-                key={user.id}
-                className="list-row border-base-300 hover:bg-primary/30 rounded-none border-b p-[0.5rem]"
-                onClick={() => handleSelectUser(user)}
-              >
-                {user.name}
-              </li>
-            ))}
-          </ul>
-        )}
-        {selectedUser && (
-          <div className="flex flex-col gap-[1rem] p-[1rem] p-[2rem]">
-            <ul className="list bg-base-100 rounded-box px-[0] shadow-md">
-              <li className="list-row border-base-300 rounded-none border-b p-[0]">
-                <div>
-                  <UserIcon size={40} />
-                </div>
-                <div className="flex items-center align-[middle] text-[1.25rem]">
-                  <div>{`${selectedUser.code}`}</div>
-                </div>
-              </li>
+      <div className="absolute right-0 z-[100] flex justify-end">
+        <div className="bg-base-200 w-[32rem] px-[1rem] py-2">
+          <div className="mb-2 flex items-center">
+            <input
+              className="input w-full pr-10"
+              name="code"
+              placeholder="会員番号"
+              type="text"
+              value={searchWord}
+              onChange={(e) => handleChangeSearchWord(e.target.value)}
+            />
+            <button className="absolute right-6" onClick={handleClose}>
+              <MdClose size={24} />
+            </button>
+          </div>
+          {userList && selectedUser === null && (
+            <ul className="list bg-base-100 my-1 rounded-none px-1">
+              {userList.map((user) => (
+                <li
+                  key={user.id}
+                  className="list-row border-base-300 hover:bg-primary/30 rounded-none border-b p-[0.5rem]"
+                  onClick={() => handleSelectUser(user)}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-16 text-sm font-bold">{user.id}</div>
+                    <div className="text-sm">{user.name}</div>
+                  </div>
+                </li>
+              ))}
             </ul>
+          )}
+          {selectedUser && (
+            <div className="mt-8 flex flex-col gap-[1rem]">
+              <ul className="list bg-base-100 rounded-box px-1">
+                <li className="list-row rounded-4 border p-[0]">
+                  <div className="m-auto">
+                    <UserIcon size={40} />
+                  </div>
+                  <div className="items-center align-[middle] text-[1.25rem]">
+                    <div>id: {`${selectedUser.id}`}</div>
+                    <div>name: {`${selectedUser.name}`}</div>
+                  </div>
+                </li>
+              </ul>
 
-            <div className="grid h-[280px] grid-cols-2 gap-[2rem]">
-              <div className="h-full overflow-y-auto rounded-lg border p-[0.5rem]">
-                <ul className="list bg-base-100 rounded-box my-[0] px-[0] shadow-md">
-                  {areaList.map((categoryId: number) => (
-                    <li
-                      key={categoryId}
-                      className="list-row border-base-300 rounded-none border-b py-[0.5rem]"
-                      style={{
-                        backgroundColor:
-                          selectedArea === categoryId
-                            ? "var(--color-accent)"
-                            : "var(--color-base-100)",
-                      }}
-                      onClick={() => setSelectedArea(categoryId)}
-                    >
-                      <div>{`${categoryId}`}</div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="h-full overflow-y-auto rounded-lg border p-[0.5rem]">
-                <div className="space-y-2 overflow-y-auto">
-                  <ul className="list bg-base-100 rounded-box my-[0] px-[0] shadow-md">
-                    {selectedArea &&
-                      seatList(selectedArea).map((seat: Seat) => (
+              <div className="grid grid-cols-2 gap-[2rem]">
+                <div className="flex h-120 flex-col gap-[1rem]">
+                  <div className="text-sm font-bold">エリア</div>
+                  <div className="h-full overflow-y-auto rounded-lg border bg-white p-[0.5rem]">
+                    <ul className="list bg-base-100 rounded-box my-[0] px-[0]">
+                      {areaList.map((categoryName: string) => (
                         <li
-                          key={seat.id}
-                          className="list-row border-base-300 rounded-none border-b py-[0.5rem]"
+                          key={categoryName}
+                          className="list-row border-base-300 rounded-none border-b px-2 py-3"
                           style={{
                             backgroundColor:
-                              selectedSeat?.id === seat.id
+                              selectedArea === categoryName
                                 ? "var(--color-accent)"
                                 : "var(--color-base-100)",
                           }}
-                          onClick={() => setSelectedSeat(seat)}
+                          onClick={() => handleSelectArea(categoryName)}
                         >
-                          <div key={seat.id} className="p-2">
-                            {seat.name}
-                          </div>
+                          <div>{`${categoryName}`}</div>
                         </li>
                       ))}
-                  </ul>
+                    </ul>
+                  </div>
+                </div>
+                <div className="flex h-120 flex-col gap-[1rem]">
+                  <div className="text-sm font-bold">座席</div>
+                  <div className="h-full overflow-y-auto rounded-lg border bg-white p-1">
+                    <ul className="list bg-base-100 rounded-box my-[0] px-[0]">
+                      {selectedArea &&
+                        seatList(selectedArea).map((seat: Seat) => (
+                          <li
+                            key={seat.id}
+                            className="list-row border-base-300 rounded-none border-b px-2 py-3"
+                            style={{
+                              backgroundColor:
+                                selectedSeat?.id === seat.id
+                                  ? "var(--color-accent)"
+                                  : "var(--color-base-100)",
+                            }}
+                            onClick={() => setSelectedSeat(seat)}
+                          >
+                            <div key={seat.id}>{seat.name}</div>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
+              <div className="flex justify-around">
+                <button className="btn btn-secondary" onClick={handleClose}>
+                  閉じる
+                </button>
+                <button
+                  className="btn btn-primary"
+                  disabled={selectedSeat === null}
+                  onClick={() => setIsConfirmModalOpen(true)}
+                >
+                  受付する
+                </button>
+              </div>
             </div>
-            <div className="flex justify-around">
-              <button className="btn btn-secondary" onClick={handleClose}>
-                閉じる
-              </button>
-              <button
-                className="btn btn-primary"
-                disabled={selectedSeat === null}
-                onClick={() => onNextButtonClick(selectedSeat!)}
-              >
-                はい
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
+
+      {selectedSeat && selectedUser && (
+        <AssignSeatConfirmModal
+          isOpen={isConfirmModalOpen}
+          seat={selectedSeat}
+          user={selectedUser}
+          onAssignSeat={handleAssignSeat}
+          onClose={() => setIsConfirmModalOpen(false)}
+        />
+      )}
       {(userList || selectedUser) && (
-        <div className="modal-backdrop" onClick={handleClose}></div>
+        <div
+          className="modal-backdrop fixed inset-0 z-[1] h-screen w-screen"
+          onClick={handleClose}
+        ></div>
       )}
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import SeatCardSkeleton from "@/app/(reception)/home/client-components/SeatCardSkeleton";
 import { Seat, SeatUsage } from "@/app/types";
 import SeatCard from "./SeatCard";
 
@@ -27,16 +28,20 @@ export const AreaBox: React.FC<AreaBoxProps> = ({
         className={`grid gap-[0.5rem]`}
         style={{ gridTemplateColumns: `repeat(${maxCol}, 1fr)` }}
       >
-        {seats.map((seat, index) => (
-          <SeatCard
-            key={index}
-            seat={seat}
-            seatUsage={
-              seatUsages.find((usage) => usage.seatId === seat.id) || null
-            }
-            onSeatClick={onSeatClick}
-          />
-        ))}
+        {seats.length === 0
+          ? Array.from({ length: maxCol + 1 }).map((_, index) => (
+              <SeatCardSkeleton key={index} />
+            ))
+          : seats.map((seat, index) => (
+              <SeatCard
+                key={index}
+                seat={seat}
+                seatUsage={
+                  seatUsages.find((usage) => usage.seatId === seat.id) || null
+                }
+                onSeatClick={onSeatClick}
+              />
+            ))}
       </div>
     </div>
   );

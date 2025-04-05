@@ -26,7 +26,7 @@ const SeatCard: React.FC<SeatProps> = ({
       <div className="card-body">
         <div className="flex flex-row items-center gap-[0.25rem]">
           <SeatIcon />
-          <div className="text-[0.875rem]">{seat.name}</div>
+          <div className="text-[0.75rem]">{seat.name}</div>
         </div>
         {seatUsage?.userId && (
           <>

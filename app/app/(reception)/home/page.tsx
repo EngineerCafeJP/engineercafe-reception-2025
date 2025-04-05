@@ -6,45 +6,13 @@ import {
   useSeatsWithCategory,
   useSeatUsage,
 } from "@/app/(reception)/hooks";
-import { SeatUsage, User } from "@/app/types";
+import { useSearchUsers } from "@/app/(reception)/hooks/use-search-users";
+import { Seat, SeatUsage, User } from "@/app/types";
 import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
 
-// ダミーデータ
-const dummyUserList = [
-  {
-    id: 1,
-    code: "001234",
-    name: "山田太郎",
-    createdAt: "2025-03-14 10:00:00",
-    updatedAt: "2025-03-14 10:00:00",
-  },
-  {
-    id: 2,
-    code: "001235",
-    name: "山田次郎",
-    createdAt: "2025-03-14 10:00:00",
-    updatedAt: "2025-03-14 10:00:00",
-  },
-  {
-    id: 3,
-    code: "001236",
-    name: "山田三郎",
-    createdAt: "2025-03-14 10:00:00",
-    updatedAt: "2025-03-14 10:00:00",
-  },
-  {
-    id: 4,
-    code: "001237",
-    name: "山田四郎",
-    createdAt: "2025-03-14 10:00:00",
-    updatedAt: "2025-03-14 10:00:00",
-  },
-];
-
 export default function HomePage() {
-  const [userList, setUserList] = useState<User[] | null>(null);
-
+  const [searchUserKeyword, setSearchUserKeyword] = useState<string>();
   const {
     seats,
     isLoading: seatsLoading,
@@ -62,9 +30,16 @@ export default function HomePage() {
     extendSeatUsage,
     finishSeatUsage,
     moveSeat,
+    create,
     isLoading: seatUsageLoading,
     error: seatUsageError,
   } = useSeatUsage();
+
+  const {
+    users,
+    isLoading: usersLoading,
+    error: usersError,
+  } = useSearchUsers(searchUserKeyword);
 
   const handleExtendSeatUsage = async (seatUsage: SeatUsage) => {
     await extendSeatUsage(seatUsage);
@@ -84,53 +59,56 @@ export default function HomePage() {
     await fetchInUseSeatUsage();
   };
 
-  const onChangeUserCode = (userCode: string) => {
-    if (userCode.length === 0) {
-      setUserList(null);
-      return;
-    }
-
-    const users = dummyUserList.filter((user) =>
-      user.code.startsWith(userCode),
-    );
-    setUserList(users);
+  const handleAssignSeat = async (seat: Seat, user: User) => {
+    await create(seat.id, user.id);
+    await fetchInUseSeatUsage();
   };
 
-  // TODO ローディングを作成する
-  if (seatsLoading || seatUsagesLoading || seatUsageLoading) {
-    return <div>Loading...</div>;
-  }
+  const onChangeSearch = (searchWord: string) => {
+    setSearchUserKeyword(searchWord);
+  };
+
+  const isLoading =
+    seatsLoading || seatUsagesLoading || seatUsageLoading || usersLoading;
 
   // TODO エラー表示を作成する
-  if (seatsError || seatUsagesError || seatUsageError) {
+  if (seatsError || seatUsagesError || seatUsageError || usersError) {
     return (
       <div>
-        Error:{" "}
+        Error:
         {seatsError?.message ||
           seatUsagesError?.message ||
-          seatUsageError?.message}
+          seatUsageError?.message ||
+          usersError?.message}
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-full">
-      <div className="flex justify-end py-[1rem]">
+    <>
+      <div className="mx-auto max-w-full">
         <ReceptionForm
-          searchUserList={userList}
-          seats={seats}
-          onChangeUserCode={onChangeUserCode}
+          assignSeat={handleAssignSeat}
+          emptySeats={seats.filter(
+            (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
+          )}
+          searchUserList={users}
+          onChangeSearchWord={onChangeSearch}
           onClose={() => {}}
-          onNextButtonClick={() => {}}
+        />
+
+        <div className="h-12"></div>
+        <SeatAreaMap
+          seatUsages={seatUsages}
+          seats={seats}
+          onExtendSeatUsage={handleExtendSeatUsage}
+          onFinishSeatUsage={handleFinishSeatUsage}
+          onMoveSeat={handleMoveSeat}
         />
       </div>
-      <SeatAreaMap
-        seatUsages={seatUsages}
-        seats={seats}
-        onExtendSeatUsage={handleExtendSeatUsage}
-        onFinishSeatUsage={handleFinishSeatUsage}
-        onMoveSeat={handleMoveSeat}
-      />
-    </div>
+      {isLoading && (
+        <span className="z-index-1000 loading loading-spinner loading-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></span>
+      )}
+    </>
   );
 }

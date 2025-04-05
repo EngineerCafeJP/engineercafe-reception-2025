@@ -36,7 +36,9 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.55.0",
+    "react-icons": "^5.5.0",
     "type-fest": "^4.39.0",
+    "use-debounce": "^10.0.4",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -49,12 +51,12 @@
     "@tanstack/react-query-devtools": "^5.71.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
+    "@types/humps": "^2.0.6",
     "@types/jest": "^29.5.14",
     "@types/mdx": "^2.0.13",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/humps": "^2.0.6",
     "commitizen": "^4.3.1",
     "daisyui": "^5.0.0",
     "eslint": "^9",

@@ -20,10 +20,10 @@ export const useSeatUsage = () => {
     setIsLoading(true);
 
     // validate duplicate
-    const { error: seatUsageError } =
+    const { data: seatUsageData } =
       await fetchInUseSeatUsageLogsBySeatId(seatId);
-    if (seatUsageError) {
-      setError(seatUsageError);
+    if (seatUsageData) {
+      setError(new Error("座席が使用中です"));
       setIsLoading(false);
       return;
     }
