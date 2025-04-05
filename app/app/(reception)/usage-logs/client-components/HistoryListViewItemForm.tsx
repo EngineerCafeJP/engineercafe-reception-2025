@@ -4,16 +4,16 @@ import Image from "next/image";
 import HistoryListViewItemEntity from "@/app/(reception)/usage-logs/entities/HistoryListViewItemEntity";
 
 interface Props {
-  rowNo: number;
+  displayRowNo: number;
   item: HistoryListViewItemEntity;
   onDeleteHistory: (
-    rowNo: number,
+    displayRowNo: number,
     deleteItem: HistoryListViewItemEntity,
   ) => void;
 }
 
 const HistoryListViewItemForm: React.FC<Props> = ({
-  rowNo,
+  displayRowNo,
   item,
   onDeleteHistory,
 }) => {
@@ -21,7 +21,7 @@ const HistoryListViewItemForm: React.FC<Props> = ({
     <div className="flex items-center justify-between border-b border-gray-200">
       <div className="w-1/14 p-2">
         <div className="h-full w-full pl-[3] text-left text-[0.75em] text-gray-500">
-          {rowNo}.
+          {displayRowNo}.
         </div>
       </div>
       <div className="w-2/14 p-2">
@@ -82,7 +82,7 @@ const HistoryListViewItemForm: React.FC<Props> = ({
           {/* // TODO: (KUROKI) add ~/components/icons/trashCanIcon.tsx */}
           <button
             className="rounded-full bg-blue-200 px-2 py-2 text-[0.75em] font-bold text-white hover:bg-red-200"
-            onClick={() => onDeleteHistory(rowNo, item)}
+            onClick={() => onDeleteHistory(displayRowNo, item)}
           >
             <img className="h-[19px] w-[19px]" src="/images/trashCan.png" />
           </button>

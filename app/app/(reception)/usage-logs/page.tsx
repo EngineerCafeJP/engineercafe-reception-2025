@@ -1,9 +1,9 @@
 "use client";
 
-import { redirect } from "next/navigation";
+//import { redirect } from "next/navigation";
+//import { useAuth } from "@/app/contexts/AuthContext";
 import { useState } from "react";
-import ConfirmModal from "@/app/(reception)/usage-logs/client-components/ConfirmModal";
-import { useAuth } from "@/app/contexts/AuthContext";
+import DeleteHistoryItemConfirmModal from "@/app/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
 import DateSelectorForm from "./client-components/DateSelectorForm";
 import HistoryListViewForm from "./client-components/HistoryListViewForm";
 import PageTitleForm from "./client-components/PageTitleForm";
@@ -12,60 +12,56 @@ import HistoryListViewItemEntity from "./entities/HistoryListViewItemEntity";
 import HistoryPageEntity from "./entities/HistoryPageEntity";
 
 const historyPageEntity = new HistoryPageEntity();
-historyPageEntity.ScoreOfUsages = 123;
-historyPageEntity.ScoreOfUsers = 111;
+historyPageEntity.TotalUsagesNum = 123;
+historyPageEntity.TotalUsersNum = 111;
 historyPageEntity.SelectedDateStr = new Date().toISOString().split("T")[0];
 
 export default function UsageHistory() {
-  const { session, signIn } = useAuth();
-
-  if (session) {
+  // TODO: (KUROKI) ログイン状態を判定してリダイレクト。
+  // 共通のヘッダー等で行えば、個別画面でやる必要ない？
+  /*
+  const { session } = useAuth();
+  if (session == null) {
     redirect("/");
   }
+  */
 
-  const [deleteTargetHistoryItem, setIsOpenConfirmDeleteHistoryDialog] =
+  // 削除対象アイテム 及び その行番号
+  const [deleteHistoryItem, setDeleteHistoryItem] =
     useState<HistoryListViewItemEntity | null>(null);
-  const [deleteHistoryConfirmMessage, setDeleteHistoryDialogConfirmMessage] =
-    useState(<></>);
+  const [deleteHistoryItemDisplayRowNo, setDeleteHistoryItemDisplayRowNo] =
+    useState<number | null>(null);
 
   const onHistoryDateChanged = (dateStr: string) => {
     historyPageEntity.SelectedDateStr = dateStr;
-    historyPageEntity.ScoreOfUsages += 1;
+
+    // TODO: (KUROKI) DB検索して資料数・利用者数をリフレッシュ
+    //historyPageEntity.TotalUsagesNum += 1;
   };
 
   /** 履歴レコードの削除ボタンクリック処理 */
   const onDeleteHistory = (
-    rowNo: number,
+    displayRowNo: number,
     deleteItem: HistoryListViewItemEntity,
   ) => {
-    setDeleteHistoryDialogConfirmMessage(
-      <>
-        <div>利用履歴を削除しますか？</div>
-        <div>行番号：{rowNo}</div>
-        <div className="m-4 border-1 border-gray-300 p-2">
-          <div>
-            {deleteItem.AreaName}　{deleteItem.SeatName}
-          </div>
-          <div>
-            {deleteItem.MembershipNumber}　{deleteItem.UserName}
-          </div>
-          <div>{deleteItem.Status}</div>
-        </div>
-      </>,
-    );
+    if (!displayRowNo || !deleteItem) return;
 
-    setIsOpenConfirmDeleteHistoryDialog(deleteItem);
+    setDeleteHistoryItemDisplayRowNo(displayRowNo);
+    setDeleteHistoryItem(deleteItem);
   };
 
   /** 履歴削除処理を実行 */
   const onAppliedDeleteHistory = () => {
     alert("TODO: DB更新処理を実行！！");
-    setIsOpenConfirmDeleteHistoryDialog(null);
+
+    setDeleteHistoryItemDisplayRowNo(null);
+    setDeleteHistoryItem(null);
   };
 
   /** 履歴削除処理をキャンセル */
   const onCanceledDeleteHistory = () => {
-    setIsOpenConfirmDeleteHistoryDialog(null);
+    setDeleteHistoryItemDisplayRowNo(null);
+    setDeleteHistoryItem(null);
   };
 
   return (
@@ -78,8 +74,8 @@ export default function UsageHistory() {
       />
 
       <ScoreDisplayForm
-        socoreOfUsages={historyPageEntity.ScoreOfUsages}
-        socoreOfUsers={historyPageEntity.ScoreOfUsers}
+        totalUsagesNum={historyPageEntity.TotalUsagesNum}
+        totalUserssNum={historyPageEntity.TotalUsersNum}
       />
 
       <HistoryListViewForm
@@ -88,13 +84,17 @@ export default function UsageHistory() {
       />
 
       {/* 履歴削除の確認ダイアログ */}
-      <ConfirmModal
-        isOpen={Boolean(deleteTargetHistoryItem)}
-        messageContext={deleteHistoryConfirmMessage}
-        title="履歴削除"
-        onApplied={onAppliedDeleteHistory}
-        onCanceled={onCanceledDeleteHistory}
-      />
+      {deleteHistoryItem && deleteHistoryItemDisplayRowNo && (
+        <DeleteHistoryItemConfirmModal
+          displayRowNo={deleteHistoryItemDisplayRowNo}
+          historyListViewItemEntity={deleteHistoryItem}
+          isOpen={
+            Boolean(deleteHistoryItem) && Boolean(deleteHistoryItemDisplayRowNo)
+          }
+          onApplied={onAppliedDeleteHistory}
+          onCanceled={onCanceledDeleteHistory}
+        />
+      )}
     </div>
   );
 }

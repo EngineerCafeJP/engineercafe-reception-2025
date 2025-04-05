@@ -40,9 +40,9 @@ export default class HistoryPageEntity {
 
   public SelectedDateStr!: string;
 
-  public ScoreOfUsages!: number;
+  public TotalUsagesNum!: number;
 
-  public ScoreOfUsers!: number;
+  public TotalUsersNum!: number;
 
   public HistoryListViewItemEntities!: HistoryListViewItemEntity[];
 }
