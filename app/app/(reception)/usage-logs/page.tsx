@@ -75,7 +75,7 @@ export default function UsageHistory() {
 
       <ScoreDisplayForm
         totalUsagesNum={historyPageEntity.TotalUsagesNum}
-        totalUserssNum={historyPageEntity.TotalUsersNum}
+        totalUsersNum={historyPageEntity.TotalUsersNum}
       />
 
       <HistoryListViewForm

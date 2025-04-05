@@ -4,12 +4,12 @@ import React from "react";
 
 interface Props {
   totalUsagesNum: number;
-  totalUserssNum: number;
+  totalUsersNum: number;
 }
 
 const ScoreDisplayForm: React.FC<Props> = ({
   totalUsagesNum,
-  totalUserssNum,
+  totalUsersNum,
 }) => {
   return (
     <div className="border-neutral-content mx-auto mt-[1.5em] max-w-[450px] border-1 py-[15px]">
@@ -18,7 +18,7 @@ const ScoreDisplayForm: React.FC<Props> = ({
           利用数：<b className="text-[1.5em]">{totalUsagesNum}</b>
         </div>
         <div className="w-full">
-          利用者数：<b className="text-[1.5em]">{totalUserssNum}</b>
+          利用者数：<b className="text-[1.5em]">{totalUsersNum}</b>
         </div>
       </div>
     </div>
