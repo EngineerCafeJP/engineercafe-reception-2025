@@ -31,7 +31,7 @@ export default function SurveyForm({ methods, founds }: SurveyFormProps) {
                       type="radio"
                       value={found.foundId}
                       onChange={(e) => {
-                        methods.setValue("survey.foundOther", "");
+                        methods.resetField("survey.foundOther");
                         methods.clearErrors("survey.foundOther");
                         methods.register("survey.foundId").onChange(e);
                       }}

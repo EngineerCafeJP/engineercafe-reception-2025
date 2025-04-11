@@ -22,7 +22,7 @@ export const registrationSchema = z.object({
       postalCode: z.string().optional(),
       prefectureId: z
         .string()
-        .nonempty({ message: "都道府県を1つ選択して下さい。" }),
+        .regex(/^\d+$/, { message: "都道府県を1つ選択して下さい。" }),
       prefectureOther: z.string().optional(),
       city: z.string().optional(),
       address: z.string().optional(),
@@ -60,10 +60,14 @@ export const registrationSchema = z.object({
         .string()
         .nonempty({ message: "メールアドレスを入力して下さい。" })
         .email({ message: "メールアドレスの形式が正しくありません。" }),
-      belongId: z.string({ message: "所属を1つ選択して下さい。" }),
+      belongId: z
+        .string({ message: "所属を1つ選択して下さい。" })
+        .regex(/^\d+$/, { message: "所属を1つ選択して下さい。" }),
       belongOther: z.string().optional(),
       belongDetail: z.string().optional(),
-      jobId: z.string().nonempty({ message: "職業を1つ選択して下さい。" }),
+      jobId: z
+        .string()
+        .regex(/^\d+$/, { message: "職業を1つ選択して下さい。" }),
       jobOther: z.string().optional(),
     })
     .superRefine(({ belongId, belongOther, jobId, jobOther }, ctx) => {
@@ -89,9 +93,13 @@ export const registrationSchema = z.object({
     }),
   survey: z
     .object({
-      foundId: z.string({
-        message: "エンジニアカフェをどこで知ったかを1つ選択して下さい。",
-      }),
+      foundId: z
+        .string({
+          message: "エンジニアカフェをどこで知ったかを1つ選択して下さい。",
+        })
+        .regex(/^\d+$/, {
+          message: "エンジニアカフェをどこで知ったかを1つ選択して下さい。",
+        }),
       foundOther: z.string().optional(),
     })
     .superRefine(({ foundId, foundOther }, ctx) => {

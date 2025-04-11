@@ -9,14 +9,14 @@ type NameAddressFormProps = {
   methods: UseFormReturn<RegistrationSchema>;
   prefectures?: Prefecture[] | null;
   isPendingSearchAddress: boolean;
-  onAddressSerch: (postalCode?: string) => void;
+  onAddressSearch: (postalCode?: string) => void;
 };
 
 export default function NameAddressForm({
   methods,
   prefectures,
   isPendingSearchAddress,
-  onAddressSerch,
+  onAddressSearch,
 }: NameAddressFormProps) {
   const prefectureId = methods.watch("nameAddress.prefectureId");
 
@@ -96,7 +96,7 @@ export default function NameAddressForm({
             <button
               className="btn btn-primary"
               onClick={() => {
-                onAddressSerch(methods.getValues("nameAddress.postalCode"));
+                onAddressSearch(methods.getValues("nameAddress.postalCode"));
               }}
             >
               {isPendingSearchAddress && (
@@ -138,8 +138,8 @@ export default function NameAddressForm({
               methods.register("nameAddress.prefectureId").onChange(e);
 
               if (Number(value) === PREFECTURE_OTHER_ID) {
-                methods.setValue("nameAddress.city", "");
-                methods.setValue("nameAddress.address", "");
+                methods.resetField("nameAddress.city");
+                methods.resetField("nameAddress.address");
               }
             }}
           >
