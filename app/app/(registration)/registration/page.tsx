@@ -1,7 +1,6 @@
 "use client";
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import camelcaseKeys from "camelcase-keys";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdErrorOutline } from "react-icons/md";
@@ -28,7 +27,7 @@ export default function Registration() {
     resolver: standardSchemaResolver(registrationSchema),
   });
   const {
-    isPending: isRegistrationOptionsPending,
+    isLoading: isRegistrationOptionsLoading,
     isError: isRegistrationOptionsError,
     prefectures,
     belongs,
@@ -49,7 +48,7 @@ export default function Registration() {
   const { isPending: isAddressSearchPending, searchAddress } =
     useAddressSearch();
 
-  if (isRegistrationOptionsPending) {
+  if (isRegistrationOptionsLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <span className="loading loading-spinner loading-xl" />
@@ -101,15 +100,25 @@ export default function Registration() {
   };
 
   const handleGoToStep = (stepIndex: number) => {
+    if (stepIndex < 0 || stepIndex >= steps.length) {
+      return;
+    }
+
     const parse = registrationSchema.safeParse(methods.getValues());
     const error = parse.error?.issues.find(
       (issue) => issue.path[0] === steps[currentStepIndex].schemaName,
     );
 
-    if (stepIndex >= 0 && stepIndex < steps.length && !error) {
-      setCurrentStepIndex(stepIndex);
+    if (error) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+
+      return;
     }
 
+    setCurrentStepIndex(stepIndex);
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -127,29 +136,18 @@ export default function Registration() {
         <NameAddressForm
           isPendingSearchAddress={isAddressSearchPending}
           methods={methods}
-          prefectures={prefectures ? camelcaseKeys(prefectures) : null}
+          prefectures={prefectures}
           onAddressSearch={handleAddressSearch}
         />
       ),
     },
     {
       schemaName: "contact",
-      children: (
-        <ContactForm
-          belongs={belongs ? camelcaseKeys(belongs) : null}
-          jobs={jobs ? camelcaseKeys(jobs) : null}
-          methods={methods}
-        />
-      ),
+      children: <ContactForm belongs={belongs} jobs={jobs} methods={methods} />,
     },
     {
       schemaName: "survey",
-      children: (
-        <SurveyForm
-          founds={founds ? camelcaseKeys(founds) : null}
-          methods={methods}
-        />
-      ),
+      children: <SurveyForm founds={founds} methods={methods} />,
     },
   ];
 
@@ -166,11 +164,11 @@ export default function Registration() {
         <MultiStepForm<typeof registrationSchema>
           confirmationStep={
             <RegistrationConfirmation
-              belongs={belongs ? camelcaseKeys(belongs) : null}
-              founds={founds ? camelcaseKeys(founds) : null}
-              jobs={jobs ? camelcaseKeys(jobs) : null}
+              belongs={belongs}
+              founds={founds}
+              jobs={jobs}
               methods={methods}
-              prefectures={prefectures ? camelcaseKeys(prefectures) : null}
+              prefectures={prefectures}
               steps={steps}
               onStepChange={handleGoToStep}
             />

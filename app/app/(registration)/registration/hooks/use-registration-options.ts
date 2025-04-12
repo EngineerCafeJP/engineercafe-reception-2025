@@ -1,4 +1,5 @@
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import camelcaseKeys from "camelcase-keys";
 import { fetchBelongTranslationsByLocale } from "@/app/queries/belong-translations-queries";
 import { fetchFoundTranslationsByLocale } from "@/app/queries/found-translations-queries";
 import { fetchJobTranslationsByLocale } from "@/app/queries/job-translations-queries";
@@ -7,40 +8,40 @@ import supabase from "@/utils/supabase/client";
 
 export function useRegistrationOptions(locale: string) {
   const {
-    isPending: isFetchPrefecturesPending,
+    isLoading: isFetchPrefecturesLoading,
     isError: isFetchPrefecturesError,
     data: prefectures,
   } = useQuery(fetchPrefectureTranslationsByLocale(supabase, locale));
   const {
-    isPending: isFetchBelongsPending,
+    isLoading: isFetchBelongsLoading,
     isError: isFetchBelongsError,
     data: belongs,
   } = useQuery(fetchBelongTranslationsByLocale(supabase, locale));
   const {
-    isPending: isFetchJobsPending,
+    isLoading: isFetchJobsLoading,
     isError: isFetchJobsError,
     data: jobs,
   } = useQuery(fetchJobTranslationsByLocale(supabase, locale));
   const {
-    isPending: isFetchFoundsPending,
+    isLoading: isFetchFoundsLoading,
     isError: isFetchFoundsError,
     data: founds,
   } = useQuery(fetchFoundTranslationsByLocale(supabase, locale));
 
   return {
-    isPending:
-      isFetchPrefecturesPending ||
-      isFetchBelongsPending ||
-      isFetchJobsPending ||
-      isFetchFoundsPending,
+    isLoading:
+      isFetchPrefecturesLoading ||
+      isFetchBelongsLoading ||
+      isFetchJobsLoading ||
+      isFetchFoundsLoading,
     isError:
       isFetchPrefecturesError ||
       isFetchBelongsError ||
       isFetchJobsError ||
       isFetchFoundsError,
-    prefectures,
-    belongs,
-    jobs,
-    founds,
+    prefectures: prefectures ? camelcaseKeys(prefectures) : null,
+    belongs: belongs ? camelcaseKeys(belongs) : null,
+    jobs: jobs ? camelcaseKeys(jobs) : null,
+    founds: founds ? camelcaseKeys(founds) : null,
   };
 }
