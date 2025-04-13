@@ -28,17 +28,8 @@ const HistoryListViewItemForm: React.FC<Props> = ({
       </div>
       <div className="w-2/14 p-2">
         <div className="flex flex-col gap-1">
-          {/* // TODO: (KUROKI) use ~/components/icons/ClockIcon.tsx after pull feature-7*/}
           <div className="flex h-[21] flex-row gap-2">
             <div className="w-[21]">
-              {/*
-              <Image
-                alt="Time"
-                height={21}
-                src={"/images/mock.png"}
-                width={21}
-              />
-              */}
               <ClockIcon size={21} />
             </div>
             <div>{formatTimeWithQuarter(item.startTime as string)} -</div>
@@ -52,28 +43,12 @@ const HistoryListViewItemForm: React.FC<Props> = ({
       <div className="w-7/14 p-2">
         <div className="flex flex-col gap-1">
           <div className="flex h-[21] flex-row gap-2">
-            {/* // TODO: (KUROKI) use ~/components/icons/SeatIcon.tsx after pull feature-7 */}
             <div>
-              {/*
-              <Image
-                alt="Seat"
-                height={21}
-                src={"/images/mock.png"}
-                width={21}
-              />
-              */}
               <SeatIcon size={21} />
             </div>
-            {/*
-            <div>{item.seats.seatCategories.name}</div>
-            */}
             <div>{item.seats.name}</div>
           </div>
           <div className="flex h-[21] flex-row gap-2">
-            {/* // TODO: (KUROKI) use ~/components/icons/UserIcon.tsx after pull feature-7 */}
-            {/*
-            <Image alt="User" height={21} src={"/images/mock.png"} width={21} />
-            */}
             <UserIcon size={21} />
             <div>{getFormatedUserId(item.users.id)}</div>
             <div
@@ -94,7 +69,6 @@ const HistoryListViewItemForm: React.FC<Props> = ({
       </div>
       <div className="w-2/14 p-2">
         <div className="h-full text-center">
-          {/* // TODO: (KUROKI) add ~/components/icons/trashCanIcon.tsx */}
           <button
             className="rounded-full bg-blue-200 px-2 py-2 text-[0.75em] font-bold text-white hover:bg-red-200"
             onClick={() => onDeleteHistory(displayRowNo, item)}

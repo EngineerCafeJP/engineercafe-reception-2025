@@ -1,11 +1,13 @@
 "use client";
 
 import { SeatUsage } from "@/app/types";
+import { getUsageStatus } from "@/utils/seatStatusUtility";
+import { getFormatedUserId } from "@/utils/userUtility";
 
 interface Props {
   isOpen: boolean;
   displayRowNo: number;
-  historyListViewItemEntity: SeatUsage;
+  seatUsage: SeatUsage;
   onApplied: () => void;
   onCanceled: () => void;
 }
@@ -13,7 +15,7 @@ interface Props {
 const DeleteHistoryItemConfirmModal: React.FC<Props> = ({
   isOpen,
   displayRowNo,
-  historyListViewItemEntity,
+  seatUsage,
   onApplied,
   onCanceled,
 }) => {
@@ -28,14 +30,17 @@ const DeleteHistoryItemConfirmModal: React.FC<Props> = ({
           <div>行番号：{displayRowNo}</div>
           <div className="m-4 border-1 border-gray-300 p-2">
             <div>
-              {/*historyListViewItemEntity.AreaName*/}　
-              {/*historyListViewItemEntity.SeatName*/}
+              {/*seatUsage.AreaName*/}　{seatUsage.seats.name}
             </div>
             <div>
-              {/*historyListViewItemEntity.MembershipNumber*/}　
-              {/*historyListViewItemEntity.UserName*/}
+              {getFormatedUserId(seatUsage.users.id)}　{seatUsage.users.name}
             </div>
-            <div>{/*historyListViewItemEntity.Status*/}</div>
+            <div>
+              {getUsageStatus(
+                seatUsage.startTime as string,
+                seatUsage.endTime as string,
+              )}
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-[1rem] p-[1rem] p-[2rem]">

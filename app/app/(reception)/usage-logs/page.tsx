@@ -21,20 +21,31 @@ export default function UsageHistory() {
 
   // 履歴の標示対象日付
   const [targetDate, setTargetDate] = useState(new Date());
+  //const [seatUsages, setSeatUsages] = useState<SeatUsage[]>([]);
 
   // 利用数・利用者数
   const [totalUsagesNum, setTotalUsagesNum] = useState(222);
   const [totalUsersNum, setTotalUsersNum] = useState(111);
 
   // 削除対象アイテム 及び その行番号
+  const [deleteHistoryItemDisplayRowNo, setDeleteHistoryItemDisplayRowNo] =
+    useState<number | null>(null);
   const [deleteHistoryItem, setDeleteHistoryItem] = useState<SeatUsage | null>(
     null,
   );
-  const [deleteHistoryItemDisplayRowNo, setDeleteHistoryItemDisplayRowNo] =
-    useState<number | null>(null);
 
   const onHistoryDateChanged = (date: Date) => {
     setTargetDate(date);
+  };
+
+  /** 履歴リフレッシュ時処理 */
+  const onHistoryRefreshed = (logs: SeatUsage[]) => {
+    // 利用数
+    setTotalUsagesNum(logs.length);
+    // 利用者数
+    const distinctIds = new Set(logs.map((item) => item.users.id));
+    setTotalUsersNum(distinctIds.size);
+    //setSeatUsages(logs);
   };
 
   /** 履歴レコードの削除ボタンクリック処理 */
@@ -75,16 +86,17 @@ export default function UsageHistory() {
       <HistoryListViewForm
         targetDate={targetDate}
         onDeleteHistory={onDeleteHistory}
+        onHistoryRefreshed={onHistoryRefreshed}
       />
 
       {/* 履歴削除の確認ダイアログ */}
       {deleteHistoryItem && deleteHistoryItemDisplayRowNo && (
         <DeleteHistoryItemConfirmModal
           displayRowNo={deleteHistoryItemDisplayRowNo}
-          historyListViewItemEntity={deleteHistoryItem}
           isOpen={
             Boolean(deleteHistoryItem) && Boolean(deleteHistoryItemDisplayRowNo)
           }
+          seatUsage={deleteHistoryItem}
           onApplied={onAppliedDeleteHistory}
           onCanceled={onCanceledDeleteHistory}
         />

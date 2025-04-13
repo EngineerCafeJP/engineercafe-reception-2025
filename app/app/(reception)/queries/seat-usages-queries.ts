@@ -36,14 +36,15 @@ export const fetchSeatUsageLogsByStartTime = async (
           id,
           name
         )
-      )
-    `,
+      )`,
     )
     // 当日のみ（＝当日の0時以降 ～ 翌日の0時未満）を抽出対象とする
     .gte("start_time", startTime)
     .lt("start_time", endTime)
     // 未削除の履歴のみを対象とする
     .eq("is_delete", isDelete);
+  // TODO KUROKI　Jest実装
+  //.order("id", { ascending: true });
 
   return await query;
 };
