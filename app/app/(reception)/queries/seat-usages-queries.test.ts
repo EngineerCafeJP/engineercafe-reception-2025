@@ -1,8 +1,10 @@
+import { format } from "date-fns";
 import {
   createSeatUsage,
   fetchInUseSeatUsageLogs,
   fetchInUseSeatUsageLogsBySeatId,
   fetchSeatUsageLogById,
+  fetchSeatUsageLogsByStartTime,
   updateSeatUsageEndtime,
 } from "@/app/(reception)/queries/seat-usages-queries";
 import supabase from "@/utils/supabase/client";
@@ -40,6 +42,68 @@ describe("fetchSeatUsageLogById", () => {
     expect(supabaseTableMock.select).toHaveBeenCalledWith("*");
     expect(supabaseTableMock.eq).toHaveBeenCalledWith("id", id);
     expect(supabaseTableMock.single).toHaveBeenCalled();
+  });
+});
+
+describe("fetchSeatUsageLogsByStartTime", () => {
+  const mockSeatUsageLogData = [
+    {
+      id: 1,
+      seat_id: "101",
+      user_id: "00001",
+      start_time: "2025-01-01",
+      end_time: "2025-01-01",
+      is_deleted: false,
+      user: {
+        id: "00001",
+        name: "hoge",
+      },
+      seat: {
+        id: "101",
+        name: "101",
+        category_id: "1",
+        seatCategory: {
+          id: "1",
+          name: "101",
+        },
+      },
+    },
+  ];
+  const mockError = null;
+  const supabaseTableMock = {
+    select: jest.fn().mockReturnThis(),
+    gte: jest.fn().mockReturnThis(),
+    lt: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockResolvedValue({
+      data: mockSeatUsageLogData,
+      error: mockError,
+    }),
+  };
+
+  beforeEach(() => {
+    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
+  });
+
+  it("should fetch seat usage logs by seat startTime", async () => {
+    const startDate = new Date(2025, 3, 13);
+    const endDate = new Date(2025, 3, 14);
+    const isDeleted = false;
+    const { data, error } = await fetchSeatUsageLogsByStartTime(
+      isDeleted,
+      startDate,
+    );
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.gte).toHaveBeenCalledWith(
+      "start_time",
+      format(startDate, "yyyy-MM-dd"),
+    );
+    expect(supabaseTableMock.lt).toHaveBeenCalledWith(
+      "start_time",
+      format(endDate, "yyyy-MM-dd"),
+    );
+    expect(supabaseTableMock.eq).toHaveBeenCalledWith("is_delete", isDeleted);
   });
 });
 

@@ -1,11 +1,11 @@
 "use client";
 
-import HistoryListViewItemEntity from "@/app/(reception)/usage-logs/entities/HistoryListViewItemEntity";
+import { SeatUsage } from "@/app/types";
 
 interface Props {
   isOpen: boolean;
   displayRowNo: number;
-  historyListViewItemEntity: HistoryListViewItemEntity;
+  historyListViewItemEntity: SeatUsage;
   onApplied: () => void;
   onCanceled: () => void;
 }
@@ -28,14 +28,14 @@ const DeleteHistoryItemConfirmModal: React.FC<Props> = ({
           <div>行番号：{displayRowNo}</div>
           <div className="m-4 border-1 border-gray-300 p-2">
             <div>
-              {historyListViewItemEntity.AreaName}　
-              {historyListViewItemEntity.SeatName}
+              {/*historyListViewItemEntity.AreaName*/}　
+              {/*historyListViewItemEntity.SeatName*/}
             </div>
             <div>
-              {historyListViewItemEntity.MembershipNumber}　
-              {historyListViewItemEntity.UserName}
+              {/*historyListViewItemEntity.MembershipNumber*/}　
+              {/*historyListViewItemEntity.UserName*/}
             </div>
-            <div>{historyListViewItemEntity.Status}</div>
+            <div>{/*historyListViewItemEntity.Status*/}</div>
           </div>
         </div>
         <div className="flex flex-col gap-[1rem] p-[1rem] p-[2rem]">

@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 interface Props {
   systemDate: string;
-  onHistoryDateChanged: (dateStr: string) => void;
+  onHistoryDateChanged: (date: Date) => void;
 }
 
 const DateSelectorForm: React.FC<Props> = ({
@@ -14,12 +14,15 @@ const DateSelectorForm: React.FC<Props> = ({
   const [inputedDate, setTargetDate] = useState(systemDate);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTargetDate(event.target.value);
-  };
+    //const parsedDate = parse(event.target.value, 'yyyy-MM-dd', new Date());
+    //if (parsedDate == new Date("x"))
+    //  return;
 
-  useEffect(() => {
-    onHistoryDateChanged(inputedDate);
-  }, [inputedDate]);
+    setTargetDate(event.target.value);
+
+    const parsedDate = new Date(event.target.value);
+    onHistoryDateChanged(parsedDate);
+  };
 
   return (
     <div className="mt-[1.5em] flex items-center justify-center">
