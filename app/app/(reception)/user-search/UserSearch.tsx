@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import SearchFilters from "./SearchFilters";
 import SearchInput from "./SearchInput";
 import UserList from "./UserList";
@@ -8,11 +9,20 @@ export default function UserSearch() {
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [filters, setFilters] = useState({
-    id: false,
-    email: false,
-    phone: false,
+  const { register, watch } = useForm<Filters>({
+    defaultValues: {
+      id: false,
+      email: false,
+      phone: false,
+    },
   });
+  const filters = watch();
+
+  //const [filters, setFilters] = useState({
+  //  id: false,
+  //  email: false,
+  //  phone: false,
+  //});
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -41,7 +51,7 @@ export default function UserSearch() {
       <div className="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-lg">
         <h1 className="mb-6 text-3xl font-bold">ユーザ検索</h1>
 
-        <SearchFilters filters={filters} setFilters={setFilters} />
+        <SearchFilters register={register} />
         <SearchInput
           searchText={searchText}
           setSearchText={setSearchText}

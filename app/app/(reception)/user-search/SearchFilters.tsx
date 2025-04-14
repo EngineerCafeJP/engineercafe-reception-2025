@@ -1,3 +1,5 @@
+import { UseFormRegister } from "react-hook-form";
+
 type Filters = {
   id: boolean;
   email: boolean;
@@ -5,29 +7,18 @@ type Filters = {
 };
 
 type Props = {
-  filters: { id: boolean; email: boolean; phone: boolean };
-  setFilters: React.Dispatch<React.SetStateAction<Filters>>;
+  register: UseFormRegister<Filters>;
 };
 
-export default function SearchFilters({ filters, setFilters }: Props) {
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFilters((prev: Filters) => ({
-      ...prev,
-      [name]: checked,
-    }));
-  };
-
+export default function SearchFilters({ register }: Props) {
   return (
     <div className="mb-4 flex items-center gap-4">
       {["id", "email", "phone"].map((key) => (
         <label key={key} className="flex items-center">
           <input
-            checked={filters[key as keyof typeof filters]}
             className="mr-2"
-            name={key}
             type="checkbox"
-            onChange={handleCheckboxChange}
+            {...register(key as keyof Filters)}
           />
           {key === "id" ? "会員番号" : key === "email" ? "Email" : "電話番号"}
         </label>
