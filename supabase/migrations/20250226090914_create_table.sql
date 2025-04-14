@@ -363,7 +363,7 @@ WHERE name = 'その他';
 
 CREATE TABLE
   IF NOT EXISTS users (
-    id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id bigint PRIMARY KEY,
     name text,
     pronunciation text,
     email text,
