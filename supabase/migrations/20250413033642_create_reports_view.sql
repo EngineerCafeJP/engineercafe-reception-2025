@@ -1,4 +1,4 @@
-CREATE VIEW public.seat_usage_daily_reports_view AS
+CREATE VIEW public.seat_usage_daily_reports_view with(security_invoker=true) AS
   SELECT
     DATE(usages.created_at) AS date,
 
@@ -29,7 +29,7 @@ CREATE VIEW public.seat_usage_daily_reports_view AS
     DATE(usages.created_at);
 
 
-CREATE VIEW public.seat_usage_monthly_reports_view AS
+CREATE VIEW public.seat_usage_monthly_reports_view with(security_invoker=true) AS
   SELECT
     TO_CHAR(DATE_TRUNC('month', usages.created_at), 'YYYY-MM') AS month,
 
@@ -59,7 +59,7 @@ CREATE VIEW public.seat_usage_monthly_reports_view AS
   GROUP BY
     DATE_TRUNC('month', usages.created_at);
 
-CREATE VIEW public.seat_usage_yearly_reports_view AS
+CREATE VIEW public.seat_usage_yearly_reports_view with(security_invoker=true) AS
   SELECT
     TO_CHAR(DATE_TRUNC('year', usages.created_at), 'YYYY') AS year,
 
