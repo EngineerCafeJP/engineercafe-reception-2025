@@ -7,22 +7,16 @@ import UserList from "./UserList";
 
 export default function UserSearch() {
   const [users, setUsers] = useState([]);
-  const [searchText, setSearchText] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const { register, watch } = useForm<Filters>({
+  const { register, watch, getValues } = useForm<Filters>({
     defaultValues: {
+      searchText: "",
       id: false,
       email: false,
       phone: false,
     },
   });
   const filters = watch();
-
-  //const [filters, setFilters] = useState({
-  //  id: false,
-  //  email: false,
-  //  phone: false,
-  //});
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -35,14 +29,16 @@ export default function UserSearch() {
   }, []);
 
   const handleSearch = () => {
+    const { searchText, id, email, phone } = getValues();
     const keyword = searchText.toLowerCase();
+
     const filtered = users.filter((user) => {
-      const matchId = filters.id && user.id.toString().includes(keyword);
-      const matchEmail =
-        filters.email && user.email.toLowerCase().includes(keyword);
-      const matchPhone = filters.phone && user.phone.includes(keyword);
+      const matchId = id && user.id.toString().includes(keyword);
+      const matchEmail = email && user.email.toLowerCase().includes(keyword);
+      const matchPhone = phone && user.phone.includes(keyword);
       return matchId || matchEmail || matchPhone;
     });
+
     setFilteredUsers(filtered);
   };
 
@@ -52,11 +48,7 @@ export default function UserSearch() {
         <h1 className="mb-6 text-3xl font-bold">ユーザ検索</h1>
 
         <SearchFilters register={register} />
-        <SearchInput
-          searchText={searchText}
-          setSearchText={setSearchText}
-          onSearch={handleSearch}
-        />
+        <SearchInput register={register} onSubmit={handleSearch} />
         <UserList users={filteredUsers} />
       </div>
     </div>

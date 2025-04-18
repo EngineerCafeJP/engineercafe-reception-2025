@@ -4,6 +4,7 @@ type Filters = {
   id: boolean;
   email: boolean;
   phone: boolean;
+  searchText: string;
 };
 
 type Props = {
