@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS job_translations (
 INSERT INTO job_translations (job_id, locale, name)
 VALUES
   (1, 'ja', '学生'),
-  (1, 'en', 'Student'),  
+  (1, 'en', 'Student'),
   (2, 'ja', 'ネットワークエンジニア'),
   (2, 'en', 'Network Engineer'),
   (3, 'ja', '組み込みエンジニア'),
