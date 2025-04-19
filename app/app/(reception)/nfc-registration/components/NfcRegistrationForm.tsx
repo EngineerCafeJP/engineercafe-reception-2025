@@ -1,0 +1,120 @@
+import { ErrorMessage } from "@hookform/error-message";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import clsx from "clsx";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import LatestUserId from "@/app/(reception)/nfc-registration/components/LatestUserId";
+import { nfcRegistrationSchema } from "@/app/(reception)/nfc-registration/schemas/nfc-registration-schema";
+import {
+  LatestUser,
+  NfcRegistrationSchema,
+} from "@/app/(reception)/nfc-registration/types";
+import CardReaderControlButton from "@/app/components/CardReaderControlButton";
+
+type NfcRegistrationFormProps = {
+  isCreateNfcPending: boolean;
+  isLatestUserLoading: boolean;
+  latestUser: LatestUser;
+  onSubmit: (data: NfcRegistrationSchema) => void;
+};
+
+export default function NfcRegistrationForm({
+  isCreateNfcPending,
+  isLatestUserLoading,
+  latestUser,
+  onSubmit,
+}: NfcRegistrationFormProps) {
+  const {
+    register,
+    formState: { errors, isSubmitSuccessful },
+    handleSubmit,
+    reset,
+    setValue,
+    getFieldState,
+  } = useForm<NfcRegistrationSchema>({
+    resolver: standardSchemaResolver(nfcRegistrationSchema),
+  });
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
+
+  return (
+    <form className="card-body gap-6" onSubmit={handleSubmit(onSubmit)}>
+      <div className="grid grid-cols-1 gap-x-8 gap-y-6 p-4 sm:grid-cols-2">
+        <fieldset className="fieldset sm:col-span-1">
+          <label className="fieldset-label" htmlFor={register("cardId").name}>
+            カードID<span className="ml-1 text-xs text-red-400">必須</span>
+          </label>
+          <input
+            {...register("cardId")}
+            autoComplete="off"
+            className={clsx("input w-full", {
+              "input-error": getFieldState("cardId").invalid,
+            })}
+            id={register("cardId").name}
+            type="text"
+          />
+          <ErrorMessage
+            errors={errors}
+            name={register("cardId").name}
+            render={({ message }) => (
+              <span className="text-error text-xs">{message}</span>
+            )}
+          />
+        </fieldset>
+        <CardReaderControlButton
+          className="sm:col-span-1"
+          onDetectCard={(cardId) => setValue("cardId", cardId)}
+        />
+        <fieldset className="fieldset sm:col-span-1">
+          <label className="fieldset-label" htmlFor={register("userId").name}>
+            ユーザーID
+            <span className="ml-1 text-xs text-red-400">必須</span>
+          </label>
+          <input
+            {...register("userId", { valueAsNumber: true })}
+            autoComplete="off"
+            className={clsx("input w-full", {
+              "input-error": getFieldState("userId").invalid,
+            })}
+            id={register("userId").name}
+            inputMode="numeric"
+            type="text"
+          />
+          <ErrorMessage
+            errors={errors}
+            name={register("userId").name}
+            render={({ message }) => (
+              <span className="text-error text-xs">{message}</span>
+            )}
+          />
+        </fieldset>
+        <LatestUserId
+          className="sm:col-span-1"
+          isLoading={isLatestUserLoading}
+          latestUser={latestUser}
+          onUserIdCopy={(userId) => {
+            setValue("userId", userId);
+          }}
+        />
+      </div>
+      <div className="card-actions grid grid-cols-2">
+        <button
+          className="btn"
+          disabled={isCreateNfcPending}
+          type="button"
+          onClick={() => reset()}
+        >
+          クリア
+        </button>
+        <button className="btn btn-primary" type="submit">
+          {isCreateNfcPending && <span className="loading loading-spinner" />}
+          登録
+        </button>
+      </div>
+    </form>
+  );
+}

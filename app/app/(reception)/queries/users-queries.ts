@@ -32,3 +32,11 @@ export const fetchUsersBySearchParams = (params?: SearchUserParams) => {
     return query.or(conditions.join(","));
   }
 };
+
+export const fetchLatestUserId = () => {
+  return client
+    .from("users")
+    .select("id, created_at")
+    .order("id", { ascending: false })
+    .limit(1);
+};
