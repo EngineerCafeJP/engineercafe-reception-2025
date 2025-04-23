@@ -11,7 +11,7 @@ type Props = {
   register: UseFormRegister<Filters>;
 };
 
-const filterItems = [
+const filterItems: { name: keyof Filters; text: string }[] = [
   { name: "id", text: "会員番号" },
   { name: "email", text: "Email" },
   { name: "phone", text: "電話番号" },
@@ -39,7 +39,7 @@ export default function SearchFilters({ register }: Props) {
       {filterItems.map((filterItem) => (
         <FilterLabel
           key={filterItem.name}
-          filterItem={filterItem as { name: keyof Filters; text: string }}
+          filterItem={filterItem}
           register={register}
         />
       ))}
