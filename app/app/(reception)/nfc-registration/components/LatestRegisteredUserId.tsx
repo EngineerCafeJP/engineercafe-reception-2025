@@ -1,22 +1,22 @@
 import clsx from "clsx";
 import { LuClipboardCopy } from "react-icons/lu";
-import { LatestUser } from "@/app/(reception)/nfc-registration/types";
+import { User } from "@/app/types";
 import { formatDateTime } from "@/app/utils/format-date-time";
 
-type LatestUserIdProps = {
+type LatestRegisteredUserIdProps = {
   className?: string;
   isLoading: boolean;
-  latestUser: LatestUser;
+  latestRegisteredUser: Pick<User, "id" | "createdAt">;
   onUserIdCopy: (userId: number) => void;
 };
 
-export default function LatestUserId({
+export default function LatestRegisteredUserId({
   className,
   isLoading,
-  latestUser,
+  latestRegisteredUser,
   onUserIdCopy,
-}: LatestUserIdProps) {
-  const LoadingSpinner = (
+}: LatestRegisteredUserIdProps) {
+  const loadingSpinner = (
     <span className="loading loading-spinner loading-md" />
   );
 
@@ -26,17 +26,20 @@ export default function LatestUserId({
         最新のユーザーID
         <br />
         (登録日時:{" "}
-        {isLoading ? LoadingSpinner : formatDateTime(latestUser.createdAt)})
+        {isLoading
+          ? loadingSpinner
+          : formatDateTime(latestRegisteredUser.createdAt)}
+        )
       </div>
       <div className="stat-value">
-        {isLoading ? LoadingSpinner : latestUser.id}
+        {isLoading ? loadingSpinner : latestRegisteredUser.id}
       </div>
       <div className="stat-actions">
         <button
           className="btn btn-xs"
           disabled={isLoading}
           type="button"
-          onClick={() => onUserIdCopy(latestUser.id)}
+          onClick={() => onUserIdCopy(latestRegisteredUser.id)}
         >
           <LuClipboardCopy />
           このユーザーIDを使用する

@@ -2,13 +2,11 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { MdErrorOutline } from "react-icons/md";
 
 type NfcRegistrationErrorProps = {
-  latestUserError: PostgrestError | null;
-  createNfcError: PostgrestError | null;
+  error: PostgrestError | null;
 };
 
-export function NfcRegistrationError({
-  latestUserError,
-  createNfcError,
+export default function NfcRegistrationError({
+  error,
 }: NfcRegistrationErrorProps) {
   return (
     <div className="flex items-center justify-center">
@@ -19,12 +17,7 @@ export function NfcRegistrationError({
         <MdErrorOutline size="1.5rem" />
         <div>
           <h3 className="font-bold">エラーが発生しました</h3>
-          {latestUserError && (
-            <div className="text-xs">{latestUserError.message}</div>
-          )}
-          {createNfcError && (
-            <div className="text-xs">{createNfcError.message}</div>
-          )}
+          {error && <div className="text-xs">{error.message}</div>}
           <div className="text-xs">画面を更新して下さい。</div>
         </div>
       </div>

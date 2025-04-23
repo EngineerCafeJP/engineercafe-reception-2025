@@ -2,19 +2,18 @@
 
 import { useState } from "react";
 import { LuIdCard } from "react-icons/lu";
-import { MdInfoOutline } from "react-icons/md";
-import { NfcRegistrationError } from "@/app/(reception)/nfc-registration/components/NfcRegistrationError";
+import NfcRegistrationError from "@/app/(reception)/nfc-registration/components/NfcRegistrationError";
 import NfcRegistrationForm from "@/app/(reception)/nfc-registration/components/NfcRegistrationForm";
-import { useLatestUser } from "@/app/(reception)/nfc-registration/hooks/use-latest-user";
+import { useLatestRegisteredUser } from "@/app/(reception)/nfc-registration/hooks/use-latest-user";
 import { useSubmitNfcRegistration } from "@/app/(reception)/nfc-registration/hooks/use-submit-nfc-registration";
 
 export default function NfcRegistration() {
   const {
-    isLoading: isLatestUserLoading,
-    isError: isLatestUserError,
-    error: latestUserError,
-    data: latestUser,
-  } = useLatestUser();
+    isLoading: isLatestRegisteredUserLoading,
+    isError: isLatestRegisteredUserError,
+    error: latestRegisteredUserError,
+    data: latestRegisteredUser,
+  } = useLatestRegisteredUser();
   const {
     isPending: isCreateNfcPending,
     isError: isCreateNfcError,
@@ -28,7 +27,7 @@ export default function NfcRegistration() {
   });
   const [showToast, setShowToast] = useState(false);
 
-  if (isLatestUserLoading) {
+  if (isLatestRegisteredUserLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <span className="loading loading-spinner loading-xl" />
@@ -36,11 +35,10 @@ export default function NfcRegistration() {
     );
   }
 
-  if (isLatestUserError || isCreateNfcError) {
+  if (isLatestRegisteredUserError || isCreateNfcError) {
     return (
       <NfcRegistrationError
-        createNfcError={createNfcError}
-        latestUserError={latestUserError}
+        error={createNfcError || latestRegisteredUserError}
       />
     );
   }
@@ -67,24 +65,16 @@ export default function NfcRegistration() {
                 </div>
               </div>
             </div>
-            {latestUser?.[0] && (
+            {latestRegisteredUser && (
               <NfcRegistrationForm
                 isCreateNfcPending={isCreateNfcPending}
-                isLatestUserLoading={isLatestUserLoading}
-                latestUser={{
-                  id: latestUser[0].id,
-                  createdAt: latestUser[0].createdAt,
+                isLatestRegisteredUserLoading={isLatestRegisteredUserLoading}
+                latestRegisteredUser={{
+                  id: latestRegisteredUser.id,
+                  createdAt: latestRegisteredUser.createdAt,
                 }}
                 onSubmit={insertNfc}
               />
-            )}
-            {!latestUser?.[0] && (
-              <div className="card-body">
-                <div className="alert alert-info alert-soft" role="alert">
-                  <MdInfoOutline size="1.5rem" />
-                  <span>登録されているユーザーがありません。</span>
-                </div>
-              </div>
             )}
           </div>
         </div>

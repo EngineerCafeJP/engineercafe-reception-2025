@@ -3,25 +3,23 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import clsx from "clsx";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import LatestUserId from "@/app/(reception)/nfc-registration/components/LatestUserId";
+import LatestRegisteredUserId from "@/app/(reception)/nfc-registration/components/LatestRegisteredUserId";
 import { nfcRegistrationSchema } from "@/app/(reception)/nfc-registration/schemas/nfc-registration-schema";
-import {
-  LatestUser,
-  NfcRegistrationSchema,
-} from "@/app/(reception)/nfc-registration/types";
+import { NfcRegistrationSchema } from "@/app/(reception)/nfc-registration/types";
 import CardReaderControlButton from "@/app/components/CardReaderControlButton";
+import { User } from "@/app/types";
 
 type NfcRegistrationFormProps = {
   isCreateNfcPending: boolean;
-  isLatestUserLoading: boolean;
-  latestUser: LatestUser;
+  isLatestRegisteredUserLoading: boolean;
+  latestRegisteredUser: Pick<User, "id" | "createdAt">;
   onSubmit: (data: NfcRegistrationSchema) => void;
 };
 
 export default function NfcRegistrationForm({
   isCreateNfcPending,
-  isLatestUserLoading,
-  latestUser,
+  isLatestRegisteredUserLoading,
+  latestRegisteredUser,
   onSubmit,
 }: NfcRegistrationFormProps) {
   const {
@@ -92,10 +90,10 @@ export default function NfcRegistrationForm({
             )}
           />
         </fieldset>
-        <LatestUserId
+        <LatestRegisteredUserId
           className="sm:col-span-1"
-          isLoading={isLatestUserLoading}
-          latestUser={latestUser}
+          isLoading={isLatestRegisteredUserLoading}
+          latestRegisteredUser={latestRegisteredUser}
           onUserIdCopy={(userId) => {
             setValue("userId", userId);
           }}
