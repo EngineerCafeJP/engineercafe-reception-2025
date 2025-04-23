@@ -1,39 +1,41 @@
-import { PostgrestError } from "@supabase/supabase-js";
 import camelcaseKeys from "camelcase-keys";
-import { useTransition } from "react";
-import { CamelCasedPropertiesDeep } from "type-fest";
+import { useState } from "react";
 import { fetchUserIdByNfcId } from "@/app/(reception)/queries/nfcs-queries";
-import { Database } from "@/utils/supabase/database.types";
+import { Nfc } from "@/app/types";
 
 export const useSearchNfc = () => {
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
+  const [userId, setUserId] = useState<Nfc["userId"] | null>(null);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
-  const search = async (
-    cardId: string,
-    options?: {
-      onSuccess?: (
-        data?: CamelCasedPropertiesDeep<
-          Pick<Database["public"]["Tables"]["nfcs"]["Row"], "user_id">
-        >,
-      ) => void;
-      onError?: (error: PostgrestError | string) => void;
-    },
-  ) => {
-    startTransition(async () => {
-      try {
-        const { data, error } = await fetchUserIdByNfcId(cardId);
+  const search = async (cardId: string) => {
+    try {
+      setIsLoading(true);
+      setUserId(null);
+      setSearchError(null);
 
-        if (error) {
-          options?.onError?.(error);
-          return;
-        }
+      const { data, error } = await fetchUserIdByNfcId(cardId);
 
-        options?.onSuccess?.(camelcaseKeys(data[0]));
-      } catch {
-        options?.onError?.("エラーが発生しました。");
+      if (error) {
+        setSearchError(error.message);
+        return { data, error: error.message };
       }
-    });
+
+      const userId = data ? camelcaseKeys(data).userId : data;
+      setUserId(userId);
+      return { data: userId, error };
+    } catch (e) {
+      setSearchError("エラーが発生しました。");
+      throw e;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  return { isPending, search };
+  return {
+    isLoading,
+    data: userId,
+    error: searchError,
+    search,
+  };
 };

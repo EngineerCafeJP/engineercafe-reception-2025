@@ -1,41 +1,40 @@
 "use client";
 
-import { PostgrestError } from "@supabase/supabase-js";
 import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
-import { useDebouncedCallback } from "use-debounce";
 import AssignSeatConfirmModal from "@/app/(reception)/home/client-components/AssignSeatConfirmModal";
-import { useSearchNfc } from "@/app/(reception)/hooks";
 import CardReaderControlButton from "@/app/components/CardReaderControlButton";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, User } from "@/app/types";
 
 interface ReceptionFormProps {
+  searchWord: string;
   searchUserList: User[] | null;
+  searchNfcError: string | null;
   emptySeats: Seat[];
   onChangeSearchWord: (input: string) => void;
   onClose: () => void;
+  onDetectCard: (cardId: string) => void;
+  onDisconnectUsbDevice: () => void;
   assignSeat: (seat: Seat, user: User) => void;
 }
 
 const ReceptionForm: React.FC<ReceptionFormProps> = ({
+  searchWord,
   searchUserList,
+  searchNfcError,
   emptySeats,
   onChangeSearchWord,
   onClose,
+  onDetectCard,
+  onDisconnectUsbDevice,
   assignSeat,
 }) => {
-  const [searchWord, setSearchWord] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [userList, setUserList] = useState<User[] | null>(null);
-  const [searchNfcError, setSearchNfcError] = useState<string | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const debouncedChangeSearchWord = useDebouncedCallback((word: string) => {
-    onChangeSearchWord(word);
-  }, 500);
-  const { search: searchNfc } = useSearchNfc();
 
   useEffect(() => {
     setUserList(searchUserList);
@@ -56,8 +55,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     emptySeats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
 
   const handleChangeSearchWord = (word: string) => {
-    setSearchWord(word);
-    debouncedChangeSearchWord(word);
+    onChangeSearchWord(word);
   };
 
   const handleSelectArea = (area: string) => {
@@ -80,28 +78,12 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     onClose();
   };
 
-  const handleDetectCard = async (cardId: string) => {
-    await searchNfc(cardId, {
-      onSuccess: (data) => {
-        if (!data) {
-          handleChangeSearchWord("");
-          setSearchNfcError("このカードを登録しているユーザーは存在しません。");
-          return;
-        }
+  const handleDetectCard = (cardId: string) => {
+    onDetectCard(cardId);
+  };
 
-        setSearchNfcError(null);
-        handleChangeSearchWord(data.userId.toString());
-      },
-      onError: (error) => {
-        handleChangeSearchWord("");
-
-        if (error instanceof PostgrestError) {
-          setSearchNfcError(error.message);
-        } else {
-          setSearchNfcError(error);
-        }
-      },
-    });
+  const handleDisconnectUsbDevice = () => {
+    onDisconnectUsbDevice();
   };
 
   return (
@@ -111,7 +93,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           <div className="flex justify-between">
             <CardReaderControlButton
               onDetectCard={handleDetectCard}
-              onDisconnectUsbDevice={() => setSearchNfcError(null)}
+              onDisconnectUsbDevice={handleDisconnectUsbDevice}
             />
             <label className="input" htmlFor="code">
               <input
