@@ -12,24 +12,38 @@ export const useSearchNfc = () => {
     try {
       setIsLoading(true);
       setUserId(null);
-      setSearchError(null);
 
       const { data, error } = await fetchUserIdByNfcId(cardId);
 
       if (error) {
         setSearchError(error.message);
-        return { data, error: error.message };
+        setUserId(data);
+        return data;
       }
 
-      const userId = data ? camelcaseKeys(data).userId : data;
+      if (!data) {
+        setSearchError(
+          `このカード (ID: ${cardId}) を登録しているユーザーは存在しません。`,
+        );
+        setUserId(data);
+        return data;
+      }
+
+      const { userId } = camelcaseKeys(data);
+      setSearchError(null);
       setUserId(userId);
-      return { data: userId, error };
-    } catch (e) {
+      return userId;
+    } catch {
       setSearchError("エラーが発生しました。");
-      throw e;
+      setUserId(null);
+      return null;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const clearError = () => {
+    setSearchError(null);
   };
 
   return {
@@ -37,5 +51,6 @@ export const useSearchNfc = () => {
     data: userId,
     error: searchError,
     search,
+    clearError,
   };
 };

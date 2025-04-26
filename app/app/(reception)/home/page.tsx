@@ -15,7 +15,6 @@ import { SeatAreaMap } from "./client-components/SeatAreaMap";
 
 export default function HomePage() {
   const [searchUserKeyword, setSearchUserKeyword] = useState<string>("");
-  const [searchNfcError, setSearchNfcError] = useState<string | null>(null);
   const [debouncedChangeSearchWord] = useDebounce(searchUserKeyword, 500);
   const {
     seats,
@@ -44,30 +43,21 @@ export default function HomePage() {
     isLoading: usersLoading,
     error: usersError,
   } = useSearchUsers(debouncedChangeSearchWord);
-  const { search: searchNfc } = useSearchNfc();
+  const {
+    search: searchNfc,
+    error: searchNfcError,
+    clearError: clearSearchNfcError,
+  } = useSearchNfc();
 
   const handleDetectCard = async (cardId: string) => {
-    try {
-      const { data: userId, error } = await searchNfc(cardId);
+    const userId = await searchNfc(cardId);
 
-      if (error) {
-        setSearchUserKeyword("");
-        setSearchNfcError(error);
-        return;
-      }
-
-      if (userId === null) {
-        setSearchUserKeyword("");
-        setSearchNfcError("このカードを登録しているユーザーは存在しません。");
-        return;
-      }
-
-      setSearchNfcError(null);
-      setSearchUserKeyword(userId.toString());
-    } catch {
+    if (userId === null) {
       setSearchUserKeyword("");
-      setSearchNfcError("エラーが発生しました。");
+      return;
     }
+
+    setSearchUserKeyword(userId.toString());
   };
 
   const handleChangeSearchWord = (searchWord: string) => {
@@ -127,7 +117,7 @@ export default function HomePage() {
           onChangeSearchWord={handleChangeSearchWord}
           onClose={() => {}}
           onDetectCard={handleDetectCard}
-          onDisconnectUsbDevice={() => setSearchNfcError(null)}
+          onDisconnectUsbDevice={clearSearchNfcError}
         />
 
         <div className="h-12"></div>
