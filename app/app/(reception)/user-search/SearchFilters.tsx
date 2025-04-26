@@ -11,23 +11,21 @@ type Props = {
   register: UseFormRegister<Filters>;
 };
 
-const filterItems: { name: keyof Filters; text: string }[] = [
+type FilterItemKey = Exclude<keyof Filters, "searchText">;
+
+const filterItems: { name: FilterItemKey; text: string }[] = [
   { name: "id", text: "会員番号" },
   { name: "email", text: "Email" },
   { name: "phone", text: "電話番号" },
 ];
 
 const FilterLabel: React.FC<{
-  filterItem: { name: string; text: string };
+  filterItem: { name: FilterItemKey; text: string };
   register: UseFormRegister<Filters>;
 }> = ({ filterItem, register }) => {
   return (
     <label className="flex items-center">
-      <input
-        className="mr-2"
-        type="checkbox"
-        {...register(filterItem.name as keyof Filters)}
-      />
+      <input className="mr-2" type="checkbox" {...register(filterItem.name)} />
       {filterItem.text}
     </label>
   );
