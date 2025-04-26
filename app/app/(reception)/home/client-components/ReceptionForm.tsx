@@ -2,35 +2,39 @@
 
 import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
-import { useDebouncedCallback } from "use-debounce";
 import AssignSeatConfirmModal from "@/app/(reception)/home/client-components/AssignSeatConfirmModal";
+import CardReaderControlButton from "@/app/components/CardReaderControlButton";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, User } from "@/app/types";
 
 interface ReceptionFormProps {
+  searchWord: string;
   searchUserList: User[] | null;
+  searchNfcError: string | null;
   emptySeats: Seat[];
   onChangeSearchWord: (input: string) => void;
   onClose: () => void;
+  onDetectCard: (cardId: string) => void;
+  onDisconnectUsbDevice: () => void;
   assignSeat: (seat: Seat, user: User) => void;
 }
 
 const ReceptionForm: React.FC<ReceptionFormProps> = ({
+  searchWord,
   searchUserList,
+  searchNfcError,
   emptySeats,
   onChangeSearchWord,
   onClose,
+  onDetectCard,
+  onDisconnectUsbDevice,
   assignSeat,
 }) => {
-  const [searchWord, setSearchWord] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [userList, setUserList] = useState<User[] | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const debouncedChangeSearchWord = useDebouncedCallback((word: string) => {
-    onChangeSearchWord(word);
-  }, 500);
 
   useEffect(() => {
     setUserList(searchUserList);
@@ -51,8 +55,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     emptySeats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
 
   const handleChangeSearchWord = (word: string) => {
-    setSearchWord(word);
-    debouncedChangeSearchWord(word);
+    onChangeSearchWord(word);
   };
 
   const handleSelectArea = (area: string) => {
@@ -66,7 +69,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   };
 
   const handleClose = () => {
-    setSearchWord("");
+    handleChangeSearchWord("");
     setSelectedUser(null);
     setSelectedArea(null);
     setSelectedSeat(null);
@@ -75,23 +78,41 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     onClose();
   };
 
+  const handleDetectCard = (cardId: string) => {
+    onDetectCard(cardId);
+  };
+
+  const handleDisconnectUsbDevice = () => {
+    onDisconnectUsbDevice();
+  };
+
   return (
     <>
-      <div className="absolute right-0 z-[100] flex justify-end">
-        <div className="bg-base-200 w-[32rem] px-[1rem] py-2">
-          <div className="mb-2 flex items-center">
-            <input
-              className="input w-full pr-10"
-              name="code"
-              placeholder="会員番号"
-              type="text"
-              value={searchWord}
-              onChange={(e) => handleChangeSearchWord(e.target.value)}
+      <div className="absolute right-0 z-[100]">
+        <div className="bg-base-200 w-2xl px-4 py-2">
+          <div className="flex justify-between">
+            <CardReaderControlButton
+              onDetectCard={handleDetectCard}
+              onDisconnectUsbDevice={handleDisconnectUsbDevice}
             />
-            <button className="absolute right-6" onClick={handleClose}>
-              <MdClose size={24} />
-            </button>
+            <label className="input" htmlFor="code">
+              <input
+                name="code"
+                placeholder="会員番号"
+                type="text"
+                value={searchWord}
+                onChange={(e) => handleChangeSearchWord(e.target.value)}
+              />
+              {searchWord && (
+                <button className="cursor-pointer" onClick={handleClose}>
+                  <MdClose size={24} />
+                </button>
+              )}
+            </label>
           </div>
+          {searchNfcError && (
+            <span className="text-error text-xs">{searchNfcError}</span>
+          )}
           {userList && selectedUser === null && (
             <ul className="list bg-base-100 my-1 rounded-none px-1">
               {userList.map((user) => (

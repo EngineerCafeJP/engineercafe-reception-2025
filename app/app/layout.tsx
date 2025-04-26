@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import NfcPortLibLoader from "@/app/components/NfcPortLibLoader";
 import ReactQueryClientProvider from "@/app/components/ReactQueryClientProvider";
 import type { Metadata } from "next";
 
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <NfcPortLibLoader />
         <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
       </body>
     </html>
