@@ -24,9 +24,8 @@ const registrationTermsMap: Record<string, ComponentType<object>> = {
 };
 
 export default function ConsentForm({ methods }: ConsentFormProps) {
-  const locale: string = "ja";
-  const RegistrationTerms =
-    registrationTermsMap[locale] ?? registrationTermsMap["en"];
+  // TODO: i18n適用後に修正が必要
+  const RegistrationTerms = registrationTermsMap["ja"];
 
   return (
     <>
