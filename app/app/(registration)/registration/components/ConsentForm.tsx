@@ -1,38 +1,59 @@
 import { ErrorMessage } from "@hookform/error-message";
+import dynamic from "next/dynamic";
+import { ComponentType } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { RegistrationSchema } from "@/app/(registration)/registration/types";
-import Terms from "@/markdown/terms.mdx";
 
 type ConsentFormProps = {
   methods: UseFormReturn<RegistrationSchema>;
 };
 
+const registrationTermsMap: Record<string, ComponentType<object>> = {
+  ja: dynamic(
+    () =>
+      import(
+        "@/app/(registration)/registration/markdown/registration-terms/ja.mdx"
+      ),
+  ),
+  en: dynamic(
+    () =>
+      import(
+        "@/app/(registration)/registration/markdown/registration-terms/en.mdx"
+      ),
+  ),
+};
+
 export default function ConsentForm({ methods }: ConsentFormProps) {
+  // TODO: i18n適用後に修正が必要
+  const RegistrationTerms = registrationTermsMap["ja"];
+
   return (
     <>
-      <h1 className="text-center text-2xl font-bold sm:text-3xl">
+      <h1 className="text-center text-2xl font-extrabold sm:text-3xl">
         エンジニアカフェへようこそ
       </h1>
       <p className="text-center text-xl text-gray-400">新規会員登録</p>
       <div className="bg-base-100 border-base-300 my-6 rounded-lg border p-4">
-        <div className="h-90 overflow-auto">
-          <Terms />
+        <div className="h-96 overflow-auto">
+          <article className="prose prose-sm prose-h1:text-xl prose-h2:text-lg prose-h3:text-base">
+            <RegistrationTerms />
+          </article>
         </div>
       </div>
-      <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4">
-        <legend className="fieldset-legend">体調について</legend>
+      <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4">
+        <legend className="fieldset-legend">体調チェックの確認</legend>
         <label
           className="fieldset-label"
           htmlFor={methods.register("consent.health").name}
         >
           <input
             {...methods.register("consent.health")}
-            className="checkbox validator"
+            className="checkbox validator mr-3"
             id={methods.register("consent.health").name}
             type="checkbox"
             required
           />
-          体調不良は無く、健康です。
+          上記の症状がないことを確認しました
         </label>
         <ErrorMessage
           errors={methods.formState.errors}
@@ -42,8 +63,10 @@ export default function ConsentForm({ methods }: ConsentFormProps) {
           )}
         />
       </fieldset>
-      <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4">
-        <legend className="fieldset-legend">個人情報の利用目的について</legend>
+      <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4">
+        <legend className="fieldset-legend">
+          個人情報の取扱いに関する同意
+        </legend>
         <label
           className="fieldset-label"
           htmlFor={methods.register("consent.term").name}
@@ -55,7 +78,7 @@ export default function ConsentForm({ methods }: ConsentFormProps) {
             type="checkbox"
             required
           />
-          同意します。
+          上記の個人情報の利用目的に同意します
         </label>
         <ErrorMessage
           errors={methods.formState.errors}
