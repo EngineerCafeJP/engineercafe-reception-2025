@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdComment, MdWarning } from "react-icons/md";
 import AssignSeatConfirmModal from "@/app/(reception)/home/client-components/AssignSeatConfirmModal";
 import CardReaderControlButton from "@/app/components/CardReaderControlButton";
 import UserIcon from "@/app/components/icons/UserIcon";
@@ -17,6 +17,7 @@ interface ReceptionFormProps {
   onDetectCard: (cardId: string) => void;
   onDisconnectUsbDevice: () => void;
   assignSeat: (seat: Seat, user: User) => void;
+  onEditUser: (user: User) => void;
 }
 
 const ReceptionForm: React.FC<ReceptionFormProps> = ({
@@ -29,6 +30,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   onDetectCard,
   onDisconnectUsbDevice,
   assignSeat,
+  onEditUser,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
@@ -86,6 +88,11 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     onDisconnectUsbDevice();
   };
 
+  const handleEditUser = (user: User) => {
+    onEditUser(user);
+    handleClose();
+  };
+
   return (
     <>
       <div className="absolute right-0 z-[100]">
@@ -118,7 +125,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
               {userList.map((user) => (
                 <li
                   key={user.id}
-                  className="list-row border-base-300 hover:bg-primary/30 rounded-none border-b p-[0.5rem]"
+                  className="list-row border-base-300 hover:border-base-300/30 rounded-none border-b p-[0.5rem]"
                   onClick={() => handleSelectUser(user)}
                 >
                   <div className="flex items-center gap-2">
@@ -132,7 +139,10 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           {selectedUser && (
             <div className="mt-8 flex flex-col gap-[1rem]">
               <ul className="list bg-base-100 rounded-box px-1">
-                <li className="list-row rounded-4 border p-[0]">
+                <li
+                  className="list-row rounded-4 hover:bg-base-300/30 border p-[0]"
+                  onClick={() => handleEditUser(selectedUser)}
+                >
                   <div className="m-auto">
                     <UserIcon size={40} />
                   </div>
@@ -140,6 +150,16 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                     <div>id: {`${selectedUser.id}`}</div>
                     <div>name: {`${selectedUser.name}`}</div>
                   </div>
+                  {selectedUser.comments && (
+                    <div className="text-warning m-1 flex items-center">
+                      <MdComment className="mr-1" size={20} />
+                    </div>
+                  )}
+                  {selectedUser.warnings && (
+                    <div className="text-error m-1 flex items-center">
+                      <MdWarning className="mr-1" size={20} />
+                    </div>
+                  )}
                 </li>
               </ul>
 
