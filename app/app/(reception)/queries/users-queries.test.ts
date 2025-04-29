@@ -95,19 +95,17 @@ describe("fetchUsersBySearchParams", () => {
 });
 
 describe("fetchLatestRegisteredUserId", () => {
-  const mockUsersData = [
-    {
-      id: 1,
-      created_at: "2025-03-14 10:00:00",
-    },
-  ];
+  const mockUserData = {
+    id: 1,
+    created_at: "2025-03-14 10:00:00",
+  };
   const mockError = null;
   const supabaseTableMock = {
     select: jest.fn().mockReturnThis(),
     order: jest.fn().mockReturnThis(),
     limit: jest.fn().mockReturnThis(),
     single: jest.fn().mockResolvedValue({
-      data: mockUsersData,
+      data: mockUserData,
       error: mockError,
     }),
   };
@@ -118,7 +116,7 @@ describe("fetchLatestRegisteredUserId", () => {
 
   it("should fetch latest registered user id", async () => {
     const { data, error } = await fetchLatestRegisteredUserId();
-    expect(data).toEqual(mockUsersData);
+    expect(data).toEqual(mockUserData);
     expect(error).toBeNull();
   });
 });
