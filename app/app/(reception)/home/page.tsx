@@ -48,6 +48,7 @@ export default function HomePage() {
     users,
     isLoading: usersLoading,
     error: usersError,
+    fetch: fetchUsers,
   } = useSearchUsers(debouncedChangeSearchWord);
   const {
     search: searchNfc,
@@ -114,7 +115,8 @@ export default function HomePage() {
     );
 
     if (updatedUser != null) {
-      setSearchUserKeyword(updatedUser.id.toString());
+      // ユーザー情報を再取得する
+      fetchUsers(searchUserKeyword);
     }
   };
 

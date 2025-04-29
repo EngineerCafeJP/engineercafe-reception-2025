@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MdClose, MdComment, MdWarning } from "react-icons/md";
 import AssignSeatConfirmModal from "@/app/(reception)/home/client-components/AssignSeatConfirmModal";
 import CardReaderControlButton from "@/app/components/CardReaderControlButton";
@@ -32,18 +32,17 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   assignSeat,
   onEditUser,
 }) => {
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
-  const [userList, setUserList] = useState<User[] | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
-  useEffect(() => {
-    setUserList(searchUserList);
-  }, [searchUserList]);
+  const selectedUser = searchUserList?.find(
+    (user) => user.id === selectedUserId,
+  );
 
   const handleSelectUser = (user: User) => {
-    setSelectedUser(user);
+    setSelectedUserId(user.id);
   };
 
   const areaList = emptySeats
@@ -72,10 +71,9 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
 
   const handleClose = () => {
     handleChangeSearchWord("");
-    setSelectedUser(null);
+    setSelectedUserId(null);
     setSelectedArea(null);
     setSelectedSeat(null);
-    setUserList(null);
     setIsConfirmModalOpen(false);
     onClose();
   };
@@ -90,7 +88,6 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
 
   const handleEditUser = (user: User) => {
     onEditUser(user);
-    handleClose();
   };
 
   return (
@@ -120,9 +117,9 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           {searchNfcError && (
             <span className="text-error text-xs">{searchNfcError}</span>
           )}
-          {userList && selectedUser === null && (
+          {searchUserList && selectedUser == null && (
             <ul className="list bg-base-100 my-1 rounded-none px-1">
-              {userList.map((user) => (
+              {searchUserList.map((user) => (
                 <li
                   key={user.id}
                   className="list-row border-base-300 hover:border-base-300/30 rounded-none border-b p-[0.5rem]"
@@ -236,7 +233,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           onClose={() => setIsConfirmModalOpen(false)}
         />
       )}
-      {(userList || selectedUser) && (
+      {searchUserList && selectedUser == null && (
         <div
           className="modal-backdrop fixed inset-0 z-[1] h-screen w-screen"
           onClick={handleClose}
