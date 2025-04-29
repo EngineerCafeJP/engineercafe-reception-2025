@@ -15,6 +15,7 @@ export const useUpdateUser = () => {
     user: Partial<User>,
   ): Promise<User | null> => {
     try {
+      setError(null);
       setIsLoading(true);
 
       const { error } = await updateUser(userId, user);
