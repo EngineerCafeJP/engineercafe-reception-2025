@@ -14,25 +14,30 @@ export const useUpdateUser = () => {
     userId: number,
     user: Partial<User>,
   ): Promise<User | null> => {
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-    const { error } = await updateUser(userId, user);
-    if (error) {
-      setError(error);
-      setIsLoading(false);
+      const { error } = await updateUser(userId, user);
+      if (error) {
+        setError(error);
+        setIsLoading(false);
+        return null;
+      }
+
+      const { data, error: fetchError } = await fetchUser(userId);
+      if (fetchError) {
+        setError(fetchError);
+        setIsLoading(false);
+        return null;
+      }
+
+      return humps.camelizeKeys(data) as unknown as User;
+    } catch (error) {
+      setError(error as Error);
       return null;
-    }
-
-    const { data, error: fetchError } = await fetchUser(userId);
-    if (fetchError) {
-      setError(fetchError);
+    } finally {
       setIsLoading(false);
-      return null;
     }
-
-    setIsLoading(false);
-
-    return humps.camelizeKeys(data) as unknown as User;
   };
 
   return {
