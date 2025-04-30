@@ -1,4 +1,4 @@
-import Header from "@/app/(reception)/components/Header/index";
+import Header from "@/app/(reception)/components/Header";
 import { AuthProvider } from "@/app/(reception)/contexts/AuthContext";
 
 export default function ReceptionLayout({
