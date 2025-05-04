@@ -49,6 +49,16 @@ export const fetchSeatUsageLogsByStartTime = async (
   return await query;
 };
 
+export const updateSeatUsageIsDeleted = async (
+  id: number,
+  is_delete: boolean,
+) => {
+  return client
+    .from("seat_usage_logs")
+    .update({ is_delete: is_delete })
+    .eq("id", id);
+};
+
 export const fetchInUseSeatUsageLogsBySeatId = async (seatId: number) => {
   // seat_usage_logsの中で、seat_idがseatIdで、end_timeがnullのデータを取得する
 

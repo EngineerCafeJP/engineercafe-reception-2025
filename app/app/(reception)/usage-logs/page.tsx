@@ -2,6 +2,7 @@
 
 import { format } from "date-fns";
 import { useState } from "react";
+import { useInUsageLogs } from "@/app/(reception)/hooks";
 import DeleteHistoryItemConfirmModal from "@/app/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
 import { SeatUsage } from "@/app/types";
 import DateSelectorForm from "./client-components/DateSelectorForm";
@@ -21,45 +22,42 @@ export default function UsageHistory() {
 
   // 履歴の標示対象日付
   const [targetDate, setTargetDate] = useState(new Date());
-  //const [seatUsages, setSeatUsages] = useState<SeatUsage[]>([]);
-
-  // 利用数・利用者数
-  const [totalUsagesNum, setTotalUsagesNum] = useState(222);
-  const [totalUsersNum, setTotalUsersNum] = useState(111);
 
   // 削除対象アイテム 及び その行番号
-  const [deleteHistoryItemDisplayRowNo, setDeleteHistoryItemDisplayRowNo] =
-    useState<number | null>(null);
-  const [deleteHistoryItem, setDeleteHistoryItem] = useState<SeatUsage | null>(
-    null,
-  );
+  const [deleteItemDisplayRowNo, setDeleteHistoryItemDisplayRowNo] = useState<
+    number | null
+  >(null);
+  const [deleteItem, setDeleteHistoryItem] = useState<SeatUsage | null>(null);
+
+  const {
+    seatUsages,
+    isLoading,
+    error,
+    fetchUsageLogs,
+    updateUsageLogsIsDeleted,
+  } = useInUsageLogs(targetDate);
 
   const onHistoryDateChanged = (date: Date) => {
     setTargetDate(date);
-  };
-
-  /** 履歴リフレッシュ時処理 */
-  const onHistoryRefreshed = (logs: SeatUsage[]) => {
-    // 利用数
-    setTotalUsagesNum(logs.length);
-    // 利用者数
-    const distinctIds = new Set(logs.map((item) => item.users.id));
-    setTotalUsersNum(distinctIds.size);
-    //setSeatUsages(logs);
+    fetchUsageLogs(false, date);
   };
 
   /** 履歴レコードの削除ボタンクリック処理 */
   const onDeleteHistory = (displayRowNo: number, deleteItem: SeatUsage) => {
-    if (!displayRowNo || !deleteItem) return;
+    if (isLoading || !displayRowNo || !deleteItem) return;
 
     setDeleteHistoryItemDisplayRowNo(displayRowNo);
     setDeleteHistoryItem(deleteItem);
   };
 
   /** 履歴削除処理を実行 */
-  const onAppliedDeleteHistory = () => {
-    alert("TODO: DB更新処理を実行！！");
+  const onAppliedDeleteHistory = async () => {
+    if (isLoading || !deleteItem) return;
 
+    await updateUsageLogsIsDeleted(deleteItem?.id, true);
+    fetchUsageLogs(false, targetDate);
+
+    // キャッシュクリア
     setDeleteHistoryItemDisplayRowNo(null);
     setDeleteHistoryItem(null);
   };
@@ -78,25 +76,19 @@ export default function UsageHistory() {
         onHistoryDateChanged={onHistoryDateChanged}
       />
 
-      <ScoreDisplayForm
-        totalUsagesNum={totalUsagesNum}
-        totalUsersNum={totalUsersNum}
-      />
+      <ScoreDisplayForm seatUsages={seatUsages} />
 
       <HistoryListViewForm
-        targetDate={targetDate}
+        seatUsages={seatUsages}
         onDeleteHistory={onDeleteHistory}
-        onHistoryRefreshed={onHistoryRefreshed}
       />
 
       {/* 履歴削除の確認ダイアログ */}
-      {deleteHistoryItem && deleteHistoryItemDisplayRowNo && (
+      {deleteItem && deleteItemDisplayRowNo && (
         <DeleteHistoryItemConfirmModal
-          displayRowNo={deleteHistoryItemDisplayRowNo}
-          isOpen={
-            Boolean(deleteHistoryItem) && Boolean(deleteHistoryItemDisplayRowNo)
-          }
-          seatUsage={deleteHistoryItem}
+          displayRowNo={deleteItemDisplayRowNo}
+          isOpen={Boolean(deleteItem) && Boolean(deleteItemDisplayRowNo)}
+          seatUsage={deleteItem}
           onApplied={onAppliedDeleteHistory}
           onCanceled={onCanceledDeleteHistory}
         />

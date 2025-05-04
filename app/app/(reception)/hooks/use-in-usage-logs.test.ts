@@ -1,12 +1,11 @@
-import { renderHook, waitFor } from "@testing-library/react";
-import { fetchSeatUsageLogsByStartTime } from "@/app/(reception)/queries/seat-usages-queries";
+import { act, renderHook, waitFor } from "@testing-library/react";
+import { useInUsageLogs } from "@/app/(reception)/hooks";
 import {
-  useInUsageLogsSearchLogs,
-  useInUsageLogsSearchLogs,
-  useInUsageLogsSearchLogs,
-} from "./use-in-usage-logs-search-logs";
+  createSeatUsage,
+  fetchSeatUsageLogsByStartTime,
+  updateSeatUsageIsDeleted,
+} from "@/app/(reception)/queries/seat-usages-queries";
 
-//jest.mock("@/utils/supabase/client");
 jest.mock("@/app/(reception)/queries/seat-usages-queries");
 const mockSeatsData = [
   {
@@ -49,8 +48,8 @@ const mockSeatsData = [
   },
 ];
 
-describe("useInUsageLogsSearchLogs", () => {
-  describe("fetch any data", () => {
+describe("useInUsageLogs", () => {
+  describe("fetchSeatUsageLogsByStartTime", () => {
     beforeEach(() => {
       (fetchSeatUsageLogsByStartTime as jest.Mock).mockResolvedValue({
         data: mockSeatsData,
@@ -58,12 +57,13 @@ describe("useInUsageLogsSearchLogs", () => {
       });
     });
 
-    it("should return 2 logs", async () => {
+    it("fetched 2 logs", async () => {
       const { result } = renderHook(() =>
-        useInUsageLogsSearchLogs(false, new Date(2025, 1, 11)),
+        useInUsageLogs(new Date(2025, 1, 11)),
       );
-
       await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.error).toBeNull();
         expect(result.current.seatUsages).toEqual([
           {
             id: 1002,
@@ -104,14 +104,11 @@ describe("useInUsageLogsSearchLogs", () => {
             },
           },
         ]);
-
-        expect(result.current.isLoading).toBe(false);
-        expect(result.current.error).toBeNull();
       });
     });
   });
 
-  describe("fetch no data", () => {
+  describe("fetchSeatUsageLogsByStartTime", () => {
     beforeEach(() => {
       (fetchSeatUsageLogsByStartTime as jest.Mock).mockResolvedValue({
         data: [],
@@ -119,37 +116,65 @@ describe("useInUsageLogsSearchLogs", () => {
       });
     });
 
-    it("should return 0 logs", async () => {
-      const { result } = renderHook(() =>
-        useInUsageLogsSearchLogs(false, new Date(2025, 3, 11)),
-      );
+    it("fetched 0 logs", async () => {
+      const { result } = renderHook(() => useInUsageLogs(new Date(2000, 1, 1)));
 
       await waitFor(() => {
-        expect(result.current.seatUsages).toEqual([]);
-
         expect(result.current.isLoading).toBe(false);
         expect(result.current.error).toBeNull();
+        expect(result.current.seatUsages).toEqual([]);
       });
     });
   });
 
-  describe("error occurs on fetch", () => {
+  describe("fetchSeatUsageLogsByStartTime", () => {
     beforeEach(() => {
       (fetchSeatUsageLogsByStartTime as jest.Mock).mockResolvedValue({
         data: null,
         error: new Error("Error"),
       });
     });
-    it("should return the error", async () => {
-      const { result } = renderHook(() =>
-        useInUsageLogsSearchLogs(false, new Date(2024, 12, 31)),
-      );
+    it("error occurs on fetch", async () => {
+      const { result } = renderHook(() => useInUsageLogs(new Date(2000, 1, 1)));
 
       await waitFor(() => {
         expect(result.current.seatUsages).toEqual([]);
         expect(result.current.isLoading).toBe(false);
         expect(result.current.error).toBeInstanceOf(Error);
       });
+    });
+  });
+
+  describe("updateSeatUsageIsDeleted", () => {
+    beforeEach(() => {
+      (updateSeatUsageIsDeleted as jest.Mock).mockResolvedValue({
+        data: null,
+        error: null,
+      });
+    });
+    it("done deleting logs", async () => {
+      const { result } = renderHook(() => useInUsageLogs(new Date(2000, 1, 1)));
+
+      await act(async () => {
+        await result.current.updateUsageLogsIsDeleted(123, true);
+        expect(createSeatUsage).toHaveBeenCalledWith(123, true);
+      });
+    });
+  });
+  describe("updateSeatUsageIsDeleted", () => {
+    beforeEach(() => {
+      (updateSeatUsageIsDeleted as jest.Mock).mockResolvedValue({
+        data: null,
+        error: new Error("Error"),
+      });
+    });
+    it("error occurs on deleting logs", async () => {
+      const { result } = renderHook(() => useInUsageLogs(new Date(2000, 1, 1)));
+
+      await act(async () => {
+        await result.current.updateUsageLogsIsDeleted(234, true);
+      });
+      expect(result.current.error).toBeInstanceOf(Error);
     });
   });
 });
