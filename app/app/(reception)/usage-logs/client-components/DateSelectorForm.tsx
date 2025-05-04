@@ -14,7 +14,15 @@ const DateSelectorForm: React.FC<Props> = ({
   const [inputedDate, setInputedDate] = useState(systemDate);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // UIに反映
     setInputedDate(event.target.value);
+
+    // 入力値が日付に変換できない値の場合、通知せず終了する
+    const value = new Date(event.target.value).toString();
+    const errorValue = new Date("X").toString();
+    if (value == errorValue) {
+      return;
+    }
     onHistoryDateChanged(new Date(event.target.value));
   };
 
