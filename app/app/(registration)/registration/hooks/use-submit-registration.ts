@@ -6,11 +6,7 @@ export function useSubmitRegistration(options: {
   onSuccess: (userId: number) => void;
 }) {
   const { isPending, isError, isSuccess, mutateAsync } = useInsertMutation(
-    // Use `any` type until the following issue is fixed.
-    // https://github.com/psteinroe/supabase-cache-helpers/issues/557
-    // TODO: Need to be fixed after the issue is resolved.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    supabase.from("users") as any,
+    supabase.from("users"),
     ["id"],
     "id",
     {
@@ -27,11 +23,7 @@ export function useSubmitRegistration(options: {
     isError,
     isSuccess,
     insert: async (data: RegistrationSchema) => {
-      // Use `any` type until the following issue is fixed.
-      // https://github.com/psteinroe/supabase-cache-helpers/issues/557
-      // TODO: Need to be fixed after the issue is resolved.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await mutateAsync(transformRegistrationValues(data) as any);
+      await mutateAsync([transformRegistrationValues(data)]);
     },
   };
 }
