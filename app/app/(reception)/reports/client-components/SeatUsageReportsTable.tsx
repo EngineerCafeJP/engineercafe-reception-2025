@@ -37,8 +37,8 @@ const SeatUsageReportTable: FC<SeatUsageReportTableProps> = ({
                   <td colSpan={6}>データがありません</td>
                 </tr>
               ) : (
-                seatUsageReports.map((report, index) => (
-                  <tr key={index}>
+                seatUsageReports.map((report) => (
+                  <tr key={report.key}>
                     <th>{report.key}</th>
                     <td>
                       {report.totalUsers} ({report.uniqueUsers})
