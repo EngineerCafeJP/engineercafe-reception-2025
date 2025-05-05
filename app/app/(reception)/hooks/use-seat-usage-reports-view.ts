@@ -60,14 +60,14 @@ export const useSeatUsageMonthlyReport = (yearMonth: string) => {
     setIsLoading(true);
     const { data, error } = await fetchSeatUsageMonthlyReport(yearMonth);
 
-    // 0件の場合はundefinedを返す
+    // 0件の場合はnullを返す
     if (error?.code === "PGRST116") {
       setData(null);
       setIsLoading(false);
       return;
     }
 
-    // エラーの場合はエラーを返す
+    // その他のエラーの場合はエラーを返す
     if (error) {
       setError(error);
       setIsLoading(false);
@@ -102,14 +102,14 @@ export const useSeatUsageYearlyReport = (year: string) => {
     setIsLoading(true);
     const { data, error } = await fetchSeatUsageYearlyReport(year);
 
-    // 0件の場合はundefinedを返す
+    // 0件の場合はnullを返す
     if (error?.code === "PGRST116") {
       setData(null);
       setIsLoading(false);
       return;
     }
 
-    // エラーの場合はエラーを返す
+    // その他のエラーの場合はエラーを返す
     if (error) {
       setError(error);
       setIsLoading(false);
