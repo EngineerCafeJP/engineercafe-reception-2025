@@ -16,7 +16,12 @@ export const useInUsageLogs = (targetDate: Date) => {
     fetchUsageLogs(false, targetDate);
   }, []);
 
-  /** 利用履歴一覧情報の取得 */
+  /**
+   * 利用履歴一覧情報の取得
+   * @param isDelete 削除済み/未削除 のどちらを検索対象とするか
+   * @param date 検索対象の日付
+   * @returns 検索結果
+   */
   const fetchUsageLogs = async (isDeleted: boolean, date?: Date) => {
     setIsLoading(true);
 
@@ -38,7 +43,11 @@ export const useInUsageLogs = (targetDate: Date) => {
     setIsLoading(false);
   };
 
-  /** 利用履歴の削除 */
+  /**
+   * 利用履歴の削除
+   * @param id 対象の利用履歴ID
+   * @param is_delete 削除済みフラグ
+   */
   const updateUsageLogsIsDeleted = async (id: number, isDeleted: boolean) => {
     const { error: seatUsageError } = await fetchSeatUsageLogById(id);
     if (seatUsageError) {

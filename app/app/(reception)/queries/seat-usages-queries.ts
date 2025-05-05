@@ -5,7 +5,12 @@ export const fetchSeatUsageLogById = async (id: number) => {
   return client.from("seat_usage_logs").select("*").eq("id", id).single();
 };
 
-/** 利用履歴一覧情報の取得 */
+/**
+ * 利用履歴一覧情報の取得
+ * @param isDelete 削除済み/未削除 のどちらを検索対象とするか
+ * @param date 検索対象の日付
+ * @returns 検索結果
+ */
 export const fetchSeatUsageLogsByStartTime = async (
   isDelete: boolean,
   date: Date,
@@ -88,7 +93,11 @@ export const updateSeatUsageEndtime = async (id: number, endTime: string) => {
     .eq("id", id);
 };
 
-/** 利用履歴の削除 */
+/**
+ * 利用履歴の削除
+ * @param id 対象の利用履歴ID
+ * @param is_delete 削除済みフラグ
+ */
 export const updateSeatUsageIsDeleted = async (
   id: number,
   is_delete: boolean,

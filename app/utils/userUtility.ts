@@ -1,7 +1,7 @@
 /**
- * 所定の桁数をゼロ埋めした文字列を取得
+ * 所定の桁数（６桁）をゼロ埋めした文字列を取得
  * @param id
- * @returns
+ * @returns ゼロ埋めした文字列
  */
 const getFormatedUserId = (id: number): string => {
   if (!id) return "";
