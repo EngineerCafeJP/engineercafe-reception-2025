@@ -78,10 +78,17 @@ export default function UsageHistory() {
 
       <ScoreDisplayForm seatUsages={seatUsages} />
 
-      <HistoryListViewForm
-        seatUsages={seatUsages}
-        onDeleteHistory={onDeleteHistory}
-      />
+      {seatUsages.length > 0 && (
+        <HistoryListViewForm
+          seatUsages={seatUsages}
+          onDeleteHistory={onDeleteHistory}
+        />
+      )}
+      {seatUsages.length == 0 && (
+        <div className="mt-[3em] flex items-center justify-center">
+          <b>対象データは存在しません。</b>
+        </div>
+      )}
 
       {/* 履歴削除の確認ダイアログ */}
       {deleteItem && deleteItemDisplayRowNo && (
@@ -92,6 +99,10 @@ export default function UsageHistory() {
           onApplied={onAppliedDeleteHistory}
           onCanceled={onCanceledDeleteHistory}
         />
+      )}
+
+      {isLoading && (
+        <span className="z-index-1000 loading loading-spinner loading-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></span>
       )}
     </div>
   );

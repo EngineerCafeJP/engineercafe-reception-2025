@@ -25,13 +25,15 @@ export const useInUsageLogs = (targetDate: Date) => {
     );
 
     if (error) {
+      setSeatUsages([]);
       setError(error);
       setIsLoading(false);
       return;
     }
 
-    const camelizedData = humps.camelizeKeys(data);
-    setSeatUsages(camelizedData as SeatUsage[]);
+    const camelizedData = humps.camelizeKeys(data) as SeatUsage[];
+    setSeatUsages(camelizedData);
+    setError(null);
     setIsLoading(false);
   };
 
@@ -49,6 +51,7 @@ export const useInUsageLogs = (targetDate: Date) => {
       setIsLoading(false);
       return;
     }
+    setError(null);
     setIsLoading(false);
 
     return humps.camelizeKeys(data);
