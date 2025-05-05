@@ -48,7 +48,7 @@ export const useSeatUsageDailyReports = (
 };
 
 export const useSeatUsageMonthlyReport = (yearMonth: string) => {
-  const [data, setData] = useState<SeatUsageReport>();
+  const [data, setData] = useState<SeatUsageReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -59,13 +59,25 @@ export const useSeatUsageMonthlyReport = (yearMonth: string) => {
   const fetch = async (yearMonth: string) => {
     setIsLoading(true);
     const { data, error } = await fetchSeatUsageMonthlyReport(yearMonth);
+
+    // 0件の場合はundefinedを返す
+    if (error?.code === "PGRST116") {
+      setData(null);
+      setIsLoading(false);
+      return;
+    }
+
+    // エラーの場合はエラーを返す
     if (error) {
       setError(error);
       setIsLoading(false);
       return;
     }
+
+    // データをキャメルケースに変換して返す
     const camelizedData = humps.camelizeKeys(data);
     setData(camelizedData as SeatUsageReport);
+    setError(null);
     setIsLoading(false);
   };
 
@@ -78,7 +90,7 @@ export const useSeatUsageMonthlyReport = (yearMonth: string) => {
 };
 
 export const useSeatUsageYearlyReport = (year: string) => {
-  const [data, setData] = useState<SeatUsageReport>();
+  const [data, setData] = useState<SeatUsageReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -89,13 +101,25 @@ export const useSeatUsageYearlyReport = (year: string) => {
   const fetch = async (year: string) => {
     setIsLoading(true);
     const { data, error } = await fetchSeatUsageYearlyReport(year);
+
+    // 0件の場合はundefinedを返す
+    if (error?.code === "PGRST116") {
+      setData(null);
+      setIsLoading(false);
+      return;
+    }
+
+    // エラーの場合はエラーを返す
     if (error) {
       setError(error);
       setIsLoading(false);
       return;
     }
+
+    // データをキャメルケースに変換して返す
     const camelizedData = humps.camelizeKeys(data);
     setData(camelizedData as SeatUsageReport);
+    setError(null);
     setIsLoading(false);
   };
 

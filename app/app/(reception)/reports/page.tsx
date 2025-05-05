@@ -58,31 +58,28 @@ export default function ReportsPage() {
       </div>
     );
   }
+
   return (
     <div className="container mx-auto mt-[1rem] max-w-screen-lg p-4">
       <h1 className="mb-6 text-3xl font-bold">レポート</h1>
       <DateSelectForm selectedDate={date} onChange={(date) => setDate(date)} />
 
-      {seatUsageYearlyReport && (
-        <SeatUsageReportTable
-          seatUsageReports={[seatUsageYearlyReport]}
-          title="年度集計"
-        />
-      )}
+      <SeatUsageReportTable
+        seatUsageReports={seatUsageYearlyReport ? [seatUsageYearlyReport] : []}
+        title="年度集計"
+      />
 
-      {seatUsageMonthlyReport && (
-        <SeatUsageReportTable
-          seatUsageReports={[seatUsageMonthlyReport]}
-          title="月次集計"
-        />
-      )}
+      <SeatUsageReportTable
+        seatUsageReports={
+          seatUsageMonthlyReport ? [seatUsageMonthlyReport] : []
+        }
+        title="月次集計"
+      />
 
-      {seatUsageDailyReports && (
-        <SeatUsageReportTable
-          seatUsageReports={seatUsageDailyReports}
-          title="日次集計"
-        />
-      )}
+      <SeatUsageReportTable
+        seatUsageReports={seatUsageDailyReports}
+        title="日次集計"
+      />
     </div>
   );
 }
