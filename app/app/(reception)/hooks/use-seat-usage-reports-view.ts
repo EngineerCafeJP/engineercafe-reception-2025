@@ -40,7 +40,7 @@ const convertToSeatUsageReport = (
 
 const handleErrorResponse = (
   error: PostgrestError | null,
-  setData: (data: SeatUsageReport[] | null) => void,
+  setData: (data: SeatUsageReport[]) => void,
   setError: (error: PostgrestError | null) => void,
 ) => {
   if (error?.code === NO_RECORDS_ERROR_CODE) {
@@ -50,7 +50,7 @@ const handleErrorResponse = (
   }
 
   if (error) {
-    setData(null);
+    setData([]);
     setError(error);
     return;
   }
@@ -60,7 +60,7 @@ export const useSeatUsageDailyReports = (
   startDate?: string,
   endDate?: string,
 ) => {
-  const [data, setData] = useState<SeatUsageReport[] | null>(null);
+  const [data, setData] = useState<SeatUsageReport[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<PostgrestError | null>(null);
 
@@ -97,7 +97,7 @@ export const useSeatUsageDailyReports = (
 };
 
 export const useSeatUsageMonthlyReports = (yearMonth?: string) => {
-  const [data, setData] = useState<SeatUsageReport[] | null>(null);
+  const [data, setData] = useState<SeatUsageReport[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<PostgrestError | null>(null);
 
@@ -129,7 +129,7 @@ export const useSeatUsageMonthlyReports = (yearMonth?: string) => {
 };
 
 export const useSeatUsageYearlyReports = (year: string) => {
-  const [data, setData] = useState<SeatUsageReport[] | null>(null);
+  const [data, setData] = useState<SeatUsageReport[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<PostgrestError | null>(null);
 

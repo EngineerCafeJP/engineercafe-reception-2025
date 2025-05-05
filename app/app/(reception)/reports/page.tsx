@@ -65,17 +65,17 @@ export default function ReportsPage() {
       <DateSelectForm selectedDate={date} onChange={(date) => setDate(date)} />
 
       <SeatUsageReportTable
-        seatUsageReports={seatUsageYearlyReports ?? []}
+        seatUsageReports={seatUsageYearlyReports}
         title="年度集計"
       />
 
       <SeatUsageReportTable
-        seatUsageReports={seatUsageMonthlyReports ?? []}
+        seatUsageReports={seatUsageMonthlyReports}
         title="月次集計"
       />
 
       <SeatUsageReportTable
-        seatUsageReports={seatUsageDailyReports ?? []}
+        seatUsageReports={seatUsageDailyReports}
         title="日次集計"
       />
     </div>
