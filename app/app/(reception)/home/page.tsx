@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { useDebounce } from "use-debounce";
 import {
   useInUseSeatUsages,
+  useSearchNfc,
   useSeatsWithCategory,
   useSeatUsage,
 } from "@/app/(reception)/hooks";
@@ -12,7 +14,8 @@ import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
 
 export default function HomePage() {
-  const [searchUserKeyword, setSearchUserKeyword] = useState<string>();
+  const [searchUserKeyword, setSearchUserKeyword] = useState<string>("");
+  const [debouncedChangeSearchWord] = useDebounce(searchUserKeyword, 500);
   const {
     seats,
     isLoading: seatsLoading,
@@ -39,7 +42,27 @@ export default function HomePage() {
     users,
     isLoading: usersLoading,
     error: usersError,
-  } = useSearchUsers(searchUserKeyword);
+  } = useSearchUsers(debouncedChangeSearchWord);
+  const {
+    search: searchNfc,
+    error: searchNfcError,
+    clearError: clearSearchNfcError,
+  } = useSearchNfc();
+
+  const handleDetectCard = async (cardId: string) => {
+    const userId = await searchNfc(cardId);
+
+    if (userId === null) {
+      setSearchUserKeyword("");
+      return;
+    }
+
+    setSearchUserKeyword(userId.toString());
+  };
+
+  const handleChangeSearchWord = (searchWord: string) => {
+    setSearchUserKeyword(searchWord);
+  };
 
   const handleExtendSeatUsage = async (seatUsage: SeatUsage) => {
     await extendSeatUsage(seatUsage);
@@ -62,10 +85,6 @@ export default function HomePage() {
   const handleAssignSeat = async (seat: Seat, user: User) => {
     await create(seat.id, user.id);
     await fetchInUseSeatUsage();
-  };
-
-  const onChangeSearch = (searchWord: string) => {
-    setSearchUserKeyword(searchWord);
   };
 
   const isLoading =
@@ -92,9 +111,13 @@ export default function HomePage() {
           emptySeats={seats.filter(
             (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
           )}
+          searchNfcError={searchNfcError}
           searchUserList={users}
-          onChangeSearchWord={onChangeSearch}
+          searchWord={searchUserKeyword}
+          onChangeSearchWord={handleChangeSearchWord}
           onClose={() => {}}
+          onDetectCard={handleDetectCard}
+          onDisconnectUsbDevice={clearSearchNfcError}
         />
 
         <div className="h-12"></div>

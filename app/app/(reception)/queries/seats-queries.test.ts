@@ -25,7 +25,11 @@ describe("getSeats", () => {
   };
 
   beforeEach(() => {
-    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
+    supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it("should fetch in use seat usage logs by seat id", async () => {
@@ -62,7 +66,11 @@ describe("getSeatsWithCategory", () => {
   };
 
   beforeEach(() => {
-    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
+    supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it("should fetch seats with category", async () => {
