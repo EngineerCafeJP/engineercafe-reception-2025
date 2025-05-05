@@ -7,7 +7,6 @@ import DeleteHistoryItemConfirmModal from "@/app/(reception)/usage-logs/client-c
 import { SeatUsage } from "@/app/types";
 import DateSelectorForm from "./client-components/DateSelectorForm";
 import HistoryListViewForm from "./client-components/HistoryListViewForm";
-import PageTitleForm from "./client-components/PageTitleForm";
 import ScoreDisplayForm from "./client-components/ScoreDisplayForm";
 
 export default function UsageHistory() {
@@ -59,35 +58,37 @@ export default function UsageHistory() {
   };
 
   return (
-    <div className="container mx-auto mt-[1rem] max-w-[810px] p-4">
-      <PageTitleForm />
+    <div className="min-h-screen p-8">
+      <div className="mx-auto max-w-4xl rounded-lg p-6 shadow-lg">
+        <h1 className="mb-6 text-3xl font-bold">利用履歴</h1>
 
-      <DateSelectorForm
-        systemDate={format(targetDate, "yyyy-MM-dd")}
-        onHistoryDateChanged={onHistoryDateChanged}
-      />
-
-      <ScoreDisplayForm seatUsages={seatUsages} />
-
-      <HistoryListViewForm
-        seatUsages={seatUsages}
-        onDeleteHistory={onDeleteHistory}
-      />
-
-      {/* 履歴削除の確認ダイアログ */}
-      {deleteItem && deleteItemDisplayRowNo && (
-        <DeleteHistoryItemConfirmModal
-          displayRowNo={deleteItemDisplayRowNo}
-          isOpen={Boolean(deleteItem) && Boolean(deleteItemDisplayRowNo)}
-          seatUsage={deleteItem}
-          onApplied={onAppliedDeleteHistory}
-          onCanceled={onCanceledDeleteHistory}
+        <DateSelectorForm
+          systemDate={format(targetDate, "yyyy-MM-dd")}
+          onHistoryDateChanged={onHistoryDateChanged}
         />
-      )}
 
-      {isLoading && (
-        <span className="z-index-1000 loading loading-spinner loading-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></span>
-      )}
+        <ScoreDisplayForm seatUsages={seatUsages} />
+
+        <HistoryListViewForm
+          seatUsages={seatUsages}
+          onDeleteHistory={onDeleteHistory}
+        />
+
+        {/* 履歴削除の確認ダイアログ */}
+        {deleteItem && deleteItemDisplayRowNo && (
+          <DeleteHistoryItemConfirmModal
+            displayRowNo={deleteItemDisplayRowNo}
+            isOpen={Boolean(deleteItem) && Boolean(deleteItemDisplayRowNo)}
+            seatUsage={deleteItem}
+            onApplied={onAppliedDeleteHistory}
+            onCanceled={onCanceledDeleteHistory}
+          />
+        )}
+
+        {isLoading && (
+          <span className="z-index-1000 loading loading-spinner loading-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></span>
+        )}
+      </div>
     </div>
   );
 }
