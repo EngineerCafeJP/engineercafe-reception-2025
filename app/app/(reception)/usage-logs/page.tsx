@@ -11,15 +11,6 @@ import PageTitleForm from "./client-components/PageTitleForm";
 import ScoreDisplayForm from "./client-components/ScoreDisplayForm";
 
 export default function UsageHistory() {
-  // TODO: (KUROKI) ログイン状態を判定してリダイレクト。
-  // 共通のヘッダー等で行えば、個別画面でやる必要ない？
-  /*
-  const { session } = useAuth();
-  if (session == null) {
-    redirect("/");
-  }
-  */
-
   // 履歴の標示対象日付
   const [targetDate, setTargetDate] = useState(new Date());
 
@@ -78,17 +69,10 @@ export default function UsageHistory() {
 
       <ScoreDisplayForm seatUsages={seatUsages} />
 
-      {seatUsages.length > 0 && (
-        <HistoryListViewForm
-          seatUsages={seatUsages}
-          onDeleteHistory={onDeleteHistory}
-        />
-      )}
-      {seatUsages.length == 0 && (
-        <div className="mt-[3em] flex items-center justify-center">
-          <b>対象データは存在しません。</b>
-        </div>
-      )}
+      <HistoryListViewForm
+        seatUsages={seatUsages}
+        onDeleteHistory={onDeleteHistory}
+      />
 
       {/* 履歴削除の確認ダイアログ */}
       {deleteItem && deleteItemDisplayRowNo && (
