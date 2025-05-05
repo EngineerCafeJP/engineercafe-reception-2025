@@ -7,6 +7,8 @@ import {
 } from "@/app/(reception)/queries/seat-usage-report-queries";
 import { SeatUsageReport } from "@/app/types/seat-usage-report";
 
+const NO_RECORDS_ERROR_CODE = "PGRST116";
+
 export const useSeatUsageDailyReports = (
   startDate?: string,
   endDate?: string,
@@ -61,7 +63,7 @@ export const useSeatUsageMonthlyReport = (yearMonth: string) => {
     const { data, error } = await fetchSeatUsageMonthlyReport(yearMonth);
 
     // 0件の場合はnullを返す
-    if (error?.code === "PGRST116") {
+    if (error?.code === NO_RECORDS_ERROR_CODE) {
       setData(null);
       setIsLoading(false);
       return;
@@ -103,7 +105,7 @@ export const useSeatUsageYearlyReport = (year: string) => {
     const { data, error } = await fetchSeatUsageYearlyReport(year);
 
     // 0件の場合はnullを返す
-    if (error?.code === "PGRST116") {
+    if (error?.code === NO_RECORDS_ERROR_CODE) {
       setData(null);
       setIsLoading(false);
       return;
