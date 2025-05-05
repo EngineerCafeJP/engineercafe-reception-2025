@@ -1,8 +1,9 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { useInUsageLogs } from "@/app/(reception)/hooks";
 import {
-  createSeatUsage,
+  fetchInUseSeatUsageLogs,
   fetchSeatUsageLogsByStartTime,
+  fetchSeatUsageLogById,
   updateSeatUsageIsDeleted,
 } from "@/app/(reception)/queries/seat-usages-queries";
 
@@ -58,9 +59,7 @@ describe("useInUsageLogs", () => {
     });
 
     it("fetched 2 logs", async () => {
-      const { result } = renderHook(() =>
-        useInUsageLogs(new Date(2025, 1, 11)),
-      );
+      const { result } = renderHook(() => useInUsageLogs(new Date()));
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
         expect(result.current.error).toBeNull();
@@ -117,7 +116,7 @@ describe("useInUsageLogs", () => {
     });
 
     it("fetched 0 logs", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date(2000, 1, 1)));
+      const { result } = renderHook(() => useInUsageLogs(new Date()));
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -135,7 +134,7 @@ describe("useInUsageLogs", () => {
       });
     });
     it("error occurs on fetch", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date(2000, 1, 1)));
+      const { result } = renderHook(() => useInUsageLogs(new Date()));
 
       await waitFor(() => {
         expect(result.current.seatUsages).toEqual([]);
@@ -147,32 +146,74 @@ describe("useInUsageLogs", () => {
 
   describe("updateSeatUsageIsDeleted", () => {
     beforeEach(() => {
+      (fetchInUseSeatUsageLogs as jest.Mock).mockResolvedValue({
+        data: mockSeatsData,
+        error: null,
+      });
+      (fetchSeatUsageLogById as jest.Mock).mockResolvedValue({
+        data: null,
+        error: null,
+      });
       (updateSeatUsageIsDeleted as jest.Mock).mockResolvedValue({
         data: null,
         error: null,
       });
     });
     it("done deleting logs", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date(2000, 1, 1)));
+      const { result } = renderHook(() => useInUsageLogs(new Date()));
 
       await act(async () => {
-        await result.current.updateUsageLogsIsDeleted(123, true);
-        expect(createSeatUsage).toHaveBeenCalledWith(123, true);
+        await result.current.updateUsageLogsIsDeleted(1002, true);
+        expect(updateSeatUsageIsDeleted).toHaveBeenCalledWith(1002, true);
       });
     });
   });
+
   describe("updateSeatUsageIsDeleted", () => {
     beforeEach(() => {
+      (fetchInUseSeatUsageLogs as jest.Mock).mockResolvedValue({
+        data: null,
+        error: null,
+      });
+      (fetchSeatUsageLogById as jest.Mock).mockResolvedValue({
+        data: null,
+        error: new Error("Error"),
+      });
+      (updateSeatUsageIsDeleted as jest.Mock).mockResolvedValue({
+        data: null,
+        error: null,
+      });
+    });
+    it("error occurs before deleting logs", async () => {
+      const { result } = renderHook(() => useInUsageLogs(new Date()));
+
+      await act(async () => {
+        await result.current.updateUsageLogsIsDeleted(234, true);
+      });
+      expect(result.current.error).toBeInstanceOf(Error);
+    });
+  });
+
+  describe("updateSeatUsageIsDeleted", () => {
+    beforeEach(() => {
+      (fetchInUseSeatUsageLogs as jest.Mock).mockResolvedValue({
+        data: mockSeatsData,
+        error: null,
+      });
+      (fetchSeatUsageLogById as jest.Mock).mockResolvedValue({
+        data: null,
+        error: null,
+      });
       (updateSeatUsageIsDeleted as jest.Mock).mockResolvedValue({
         data: null,
         error: new Error("Error"),
       });
     });
     it("error occurs on deleting logs", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date(2000, 1, 1)));
+      const { result } = renderHook(() => useInUsageLogs(new Date()));
 
       await act(async () => {
-        await result.current.updateUsageLogsIsDeleted(234, true);
+        await result.current.updateUsageLogsIsDeleted(9876, true);
       });
       expect(result.current.error).toBeInstanceOf(Error);
     });

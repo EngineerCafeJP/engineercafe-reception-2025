@@ -8,18 +8,13 @@ import {
 import { SeatUsage } from "@/app/types";
 
 export const useInUsageLogs = (targetDate: Date) => {
-  //const [targetDate, setTargetDate] = useState("");
   const [seatUsages, setSeatUsages] = useState<SeatUsage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!targetDate || targetDate.toString() == new Date("X").toString()) {
-      setSeatUsages([]);
-      setError(error);
-      setIsLoading(false);
-    }
-  });
+    fetchUsageLogs(false, targetDate);
+  }, []);
 
   const fetchUsageLogs = async (isDeleted: boolean, date?: Date) => {
     setIsLoading(true);
@@ -60,7 +55,6 @@ export const useInUsageLogs = (targetDate: Date) => {
   };
 
   return {
-    targetDate,
     seatUsages,
     isLoading,
     error,
