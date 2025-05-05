@@ -12,49 +12,45 @@ import ScoreDisplayForm from "./client-components/ScoreDisplayForm";
 export default function UsageHistory() {
   // 履歴の標示対象日付
   const [targetDate, setTargetDate] = useState(new Date());
-
-  // 削除対象アイテム 及び その行番号
-  const [deleteItemDisplayRowNo, setDeleteHistoryItemDisplayRowNo] = useState<
+  // 削除対象アイテム番号
+  const [deleteItemDisplayRowNo, setDeleteItemDisplayRowNo] = useState<
     number | null
   >(null);
-  const [deleteItem, setDeleteHistoryItem] = useState<SeatUsage | null>(null);
+  // 削除対象アイテム
+  const [deleteItem, setDeleteItem] = useState<SeatUsage | null>(null);
 
-  const {
-    seatUsages,
-    isLoading,
-    error,
-    fetchUsageLogs,
-    updateUsageLogsIsDeleted,
-  } = useInUsageLogs(targetDate);
+  const { seatUsages, isLoading, fetchUsageLogs, updateUsageLogsIsDeleted } =
+    useInUsageLogs(targetDate);
 
+  // 日付変更時のデータ検索処理
   const onHistoryDateChanged = (date: Date) => {
     setTargetDate(date);
     fetchUsageLogs(false, date);
   };
 
-  /** 履歴レコードの削除ボタンクリック処理 */
+  // 履歴レコードの削除ボタンクリック処理
   const onDeleteHistory = (displayRowNo: number, deleteItem: SeatUsage) => {
     if (isLoading || !displayRowNo || !deleteItem) return;
 
-    setDeleteHistoryItemDisplayRowNo(displayRowNo);
-    setDeleteHistoryItem(deleteItem);
+    setDeleteItemDisplayRowNo(displayRowNo);
+    setDeleteItem(deleteItem);
   };
 
-  /** 履歴削除処理を実行 */
+  // 履歴削除処理を実行
   const onAppliedDeleteHistory = async () => {
     if (isLoading || !deleteItem) return;
 
     await updateUsageLogsIsDeleted(deleteItem?.id, true);
-    fetchUsageLogs(false, targetDate);
+    await fetchUsageLogs(false, targetDate);
 
     // キャッシュクリア
-    setDeleteHistoryItemDisplayRowNo(null);
-    setDeleteHistoryItem(null);
+    setDeleteItemDisplayRowNo(null);
+    setDeleteItem(null);
   };
-  /** 履歴削除処理をキャンセル */
+  // 履歴削除処理をキャンセル
   const onCanceledDeleteHistory = () => {
-    setDeleteHistoryItemDisplayRowNo(null);
-    setDeleteHistoryItem(null);
+    setDeleteItemDisplayRowNo(null);
+    setDeleteItem(null);
   };
 
   return (
@@ -85,6 +81,7 @@ export default function UsageHistory() {
           />
         )}
 
+        {/* ローディング */}
         {isLoading && (
           <span className="z-index-1000 loading loading-spinner loading-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></span>
         )}

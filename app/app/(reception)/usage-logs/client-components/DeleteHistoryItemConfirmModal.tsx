@@ -29,9 +29,7 @@ const DeleteHistoryItemConfirmModal: React.FC<Props> = ({
           <div>利用履歴を削除しますか？</div>
           <div>行番号：{displayRowNo}</div>
           <div className="m-4 border-1 border-gray-300 p-2">
-            <div>
-              {/*seatUsage.AreaName*/}　{seatUsage.seats.name}
-            </div>
+            <div>{seatUsage.seats.name}</div>
             <div>
               {getFormatedUserId(seatUsage.users.id)}　{seatUsage.users.name}
             </div>
