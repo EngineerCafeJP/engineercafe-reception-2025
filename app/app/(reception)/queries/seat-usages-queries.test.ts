@@ -79,11 +79,11 @@ describe("fetchSeatUsageLogsByStartTime", () => {
     select: jest.fn().mockReturnThis(),
     gte: jest.fn().mockReturnThis(),
     lt: jest.fn().mockReturnThis(),
-    eq: jest.fn().mockResolvedValue({
+    eq: jest.fn().mockReturnThis(),
+    order: jest.fn().mockResolvedValue({
       data: mockSeatUsageLogData,
       error: mockError,
     }),
-    //order: jest.fn().mockReturnThis(),
   };
 
   beforeEach(() => {
@@ -110,7 +110,9 @@ describe("fetchSeatUsageLogsByStartTime", () => {
       format(endDate, "yyyy-MM-dd"),
     );
     expect(supabaseTableMock.eq).toHaveBeenCalledWith("is_delete", isDeleted);
-    //expect(supabaseTableMock.order).toHaveBeenCalledWith("id", { ascending: true });
+    expect(supabaseTableMock.order).toHaveBeenCalledWith("start_time", {
+      ascending: true,
+    });
   });
 });
 

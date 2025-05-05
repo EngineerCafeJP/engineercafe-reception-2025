@@ -42,9 +42,8 @@ export const fetchSeatUsageLogsByStartTime = async (
     .gte("start_time", startTime)
     .lt("start_time", endTime)
     // 未削除の履歴のみを対象とする
-    .eq("is_delete", isDelete);
-  // TODO KUROKI　Jest実装
-  //.order("id", { ascending: true });
+    .eq("is_delete", isDelete)
+    .order("start_time", { ascending: true });
 
   return await query;
 };
