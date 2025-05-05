@@ -25,7 +25,7 @@ const HistoryListViewForm: React.FC<Props> = ({
         ))}
       {seatUsages.length == 0 && (
         <div className="mt-[1.5em] flex items-center justify-center">
-          <b>対象データは存在しません。</b>
+          <b>該当データは存在しません。</b>
         </div>
       )}
     </div>
