@@ -32,29 +32,35 @@ const SeatUsageReportTable: FC<SeatUsageReportTableProps> = ({
               </tr>
             </thead>
             <tbody>
-              {seatUsageReports.map((report, index) => (
-                <tr key={index}>
-                  <th>{report.key}</th>
-                  <td>
-                    {report.totalUsers} ({report.uniqueUsers})
-                  </td>
-                  <td>
-                    {report.totalOverseasUsers} ({report.uniqueOverseasUsers})
-                  </td>
-                  <td>
-                    {report.totalOutsideFukuokaPrefUsers} (
-                    {report.uniqueOutsideFukuokaPrefUsers})
-                  </td>
-                  <td>
-                    {report.totalOutsideFukuokaCityUsers} (
-                    {report.uniqueOutsideFukuokaCityUsers})
-                  </td>
-                  <td>
-                    {report.totalFukuokaCityUsers} (
-                    {report.uniqueFukuokaCityUsers})
-                  </td>
+              {seatUsageReports.length === 0 ? (
+                <tr>
+                  <td colSpan={6}>データがありません</td>
                 </tr>
-              ))}
+              ) : (
+                seatUsageReports.map((report, index) => (
+                  <tr key={index}>
+                    <th>{report.key}</th>
+                    <td>
+                      {report.totalUsers} ({report.uniqueUsers})
+                    </td>
+                    <td>
+                      {report.totalOverseasUsers} ({report.uniqueOverseasUsers})
+                    </td>
+                    <td>
+                      {report.totalOutsideFukuokaPrefUsers} (
+                      {report.uniqueOutsideFukuokaPrefUsers})
+                    </td>
+                    <td>
+                      {report.totalOutsideFukuokaCityUsers} (
+                      {report.uniqueOutsideFukuokaCityUsers})
+                    </td>
+                    <td>
+                      {report.totalFukuokaCityUsers} (
+                      {report.uniqueFukuokaCityUsers})
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
