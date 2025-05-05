@@ -6,6 +6,7 @@ import {
   fetchSeatUsageLogById,
   fetchSeatUsageLogsByStartTime,
   updateSeatUsageEndtime,
+  updateSeatUsageIsDeleted,
 } from "@/app/(reception)/queries/seat-usages-queries";
 import supabase from "@/utils/supabase/client";
 
@@ -274,6 +275,44 @@ describe("updateSeatUsageEndtime", () => {
     expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
     expect(supabaseTableMock.update).toHaveBeenCalledWith({
       end_time: endTime,
+    });
+  });
+});
+
+describe("updateSeatUsageIsDeleted", () => {
+  const mockSeatUsageLogData = {
+    id: 1,
+    seat_id: 1,
+    user_id: 1,
+    is_delete: true,
+  };
+  const mockError = null;
+
+  const supabaseTableMock = {
+    update: jest.fn().mockReturnThis(),
+    eq: jest
+      .fn()
+      .mockReturnValue({ data: mockSeatUsageLogData, error: mockError }),
+  };
+
+  beforeEach(() => {
+    (supabase.from as jest.Mock).mockReturnValue(supabaseTableMock);
+  });
+
+  it("should update the seat usage end time", async () => {
+    const seatUsageId = 1;
+    const isDelete = true;
+
+    const { data, error } = await updateSeatUsageIsDeleted(
+      seatUsageId,
+      isDelete,
+    );
+
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.update).toHaveBeenCalledWith({
+      is_delete: isDelete,
     });
   });
 });
