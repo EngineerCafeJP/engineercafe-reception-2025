@@ -494,7 +494,7 @@ export type Database = {
           email?: string | null;
           found_id?: number | null;
           found_other?: string | null;
-          id?: never;
+          id?: number;
           is_delete?: boolean | null;
           job_id?: number | null;
           job_other?: string | null;
@@ -518,7 +518,7 @@ export type Database = {
           email?: string | null;
           found_id?: number | null;
           found_other?: string | null;
-          id?: never;
+          id?: number;
           is_delete?: boolean | null;
           job_id?: number | null;
           job_other?: string | null;

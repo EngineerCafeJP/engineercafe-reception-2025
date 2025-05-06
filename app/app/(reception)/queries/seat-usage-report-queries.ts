@@ -12,20 +12,35 @@ export const fetchSeatUsageDailyReports = async (
     .order("date", { ascending: true });
 };
 
-export const fetchSeatUsageMonthlyReport = async (month: string) => {
+export const fetchSeatUsageMonthlyReports = async (month?: string) => {
+  // 月が指定されている場合は、その月のデータを取得
+  // 月が指定されていない場合は、全てのデータを取得
+  if (month != null) {
+    return client
+      .from("seat_usage_monthly_reports_view")
+      .select("*, key:month")
+      .eq("month", month)
+      .order("month", { ascending: true });
+  }
+
   return client
     .from("seat_usage_monthly_reports_view")
     .select("*, key:month")
-    .eq("month", month)
-    .order("month", { ascending: true })
-    .single();
+    .order("month", { ascending: true });
 };
 
-export const fetchSeatUsageYearlyReport = async (year: string) => {
+export const fetchSeatUsageYearlyReports = async (year?: string) => {
+  // 年が指定されている場合は、その年のデータを取得
+  // 年が指定されていない場合は、全てのデータを取得
+  if (year != null) {
+    return client
+      .from("seat_usage_yearly_reports_view")
+      .select("*, key:year")
+      .eq("year", year)
+      .order("year", { ascending: true });
+  }
   return client
     .from("seat_usage_yearly_reports_view")
     .select("*, key:year")
-    .eq("year", year)
-    .order("year", { ascending: true })
-    .single();
+    .order("year", { ascending: true });
 };
