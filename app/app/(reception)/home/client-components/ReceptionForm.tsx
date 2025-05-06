@@ -117,7 +117,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           {searchNfcError && (
             <span className="text-error text-xs">{searchNfcError}</span>
           )}
-          {searchUserList && selectedUser == null && (
+          {searchUserList && !selectedUser && (
             <ul className="list bg-base-100 my-1 rounded-none px-1">
               {searchUserList.map((user) => (
                 <li
@@ -233,7 +233,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           onClose={() => setIsConfirmModalOpen(false)}
         />
       )}
-      {searchUserList && selectedUser == null && (
+      {searchUserList && !selectedUser && (
         <div
           className="modal-backdrop fixed inset-0 z-[1] h-screen w-screen"
           onClick={handleClose}
