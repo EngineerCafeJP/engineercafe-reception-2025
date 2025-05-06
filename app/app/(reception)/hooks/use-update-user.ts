@@ -32,7 +32,7 @@ export const useUpdateUser = () => {
         return null;
       }
 
-      return humps.camelizeKeys(data) as unknown as User;
+      return humps.camelizeKeys(data) as User;
     } catch (error) {
       setError(error as Error);
       return null;
