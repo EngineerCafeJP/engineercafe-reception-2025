@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import {
   useSeatUsageDailyReports,
-  useSeatUsageMonthlyReport,
-  useSeatUsageYearlyReport,
+  useSeatUsageMonthlyReports,
+  useSeatUsageYearlyReports,
 } from "@/app/(reception)/hooks/use-seat-usage-reports-view";
 import DateSelectForm from "@/app/(reception)/reports/client-components/DateSelectForm";
 import SeatUsageReportTable from "@/app/(reception)/reports/client-components/SeatUsageReportsTable";
@@ -20,16 +20,16 @@ export default function ReportsPage() {
     new Date().toISOString().split("T")[0],
   );
   const {
-    data: seatUsageYearlyReport,
+    data: seatUsageYearlyReports,
     isLoading: isLoadingYearlyReport,
     error: errorYearlyReport,
-  } = useSeatUsageYearlyReport(formatYear(new Date(date)));
+  } = useSeatUsageYearlyReports(formatYear(new Date(date)));
 
   const {
-    data: seatUsageMonthlyReport,
+    data: seatUsageMonthlyReports,
     isLoading: isLoadingMonthlyReport,
     error: errorMonthlyReport,
-  } = useSeatUsageMonthlyReport(formatYearMonth(new Date(date)));
+  } = useSeatUsageMonthlyReports(formatYearMonth(new Date(date)));
 
   const {
     data: seatUsageDailyReports,
@@ -58,31 +58,26 @@ export default function ReportsPage() {
       </div>
     );
   }
+
   return (
     <div className="container mx-auto mt-[1rem] max-w-screen-lg p-4">
       <h1 className="mb-6 text-3xl font-bold">レポート</h1>
       <DateSelectForm selectedDate={date} onChange={(date) => setDate(date)} />
 
-      {seatUsageYearlyReport && (
-        <SeatUsageReportTable
-          seatUsageReports={[seatUsageYearlyReport]}
-          title="年度集計"
-        />
-      )}
+      <SeatUsageReportTable
+        seatUsageReports={seatUsageYearlyReports}
+        title="年度集計"
+      />
 
-      {seatUsageMonthlyReport && (
-        <SeatUsageReportTable
-          seatUsageReports={[seatUsageMonthlyReport]}
-          title="月次集計"
-        />
-      )}
+      <SeatUsageReportTable
+        seatUsageReports={seatUsageMonthlyReports}
+        title="月次集計"
+      />
 
-      {seatUsageDailyReports && (
-        <SeatUsageReportTable
-          seatUsageReports={seatUsageDailyReports}
-          title="日次集計"
-        />
-      )}
+      <SeatUsageReportTable
+        seatUsageReports={seatUsageDailyReports}
+        title="日次集計"
+      />
     </div>
   );
 }
