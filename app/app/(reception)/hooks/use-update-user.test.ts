@@ -48,7 +48,7 @@ describe("useUpdateUser", () => {
       const updatedUser = await result.current.update(1, userData);
       expect(updatedUser).toBeNull();
     });
-    expect(result.current.error).toEqual(new Error("Update failed"));
+    expect(result.current.error?.message).toEqual("Update failed");
   });
 
   it("should return error when fetchUser fails", async () => {

@@ -48,26 +48,30 @@ export const fetchUser = (userId: number) => {
 };
 
 export const updateUser = (userId: number, user: Partial<User>) => {
-  return client
-    .from("users")
-    .update({
-      name: user.name,
-      pronunciation: user.pronunciation,
-      email: user.email,
-      phone: user.phone,
-      prefecture_id: user.prefectureId,
-      prefecture_other: user.prefectureOther,
-      city: user.city,
-      address: user.address,
-      building: user.building,
-      belong_id: user.belongId,
-      belong_other: user.belongOther,
-      belong_detail: user.belongDetail,
-      job_id: user.jobId,
-      job_other: user.jobOther,
-      comments: user.comments,
-      warnings: user.warnings,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", userId);
+  const updateData = {
+    name: user.name,
+    pronunciation: user.pronunciation,
+    email: user.email,
+    phone: user.phone,
+    prefecture_id: user.prefectureId,
+    prefecture_other: user.prefectureOther,
+    city: user.city,
+    address: user.address,
+    building: user.building,
+    belong_id: user.belongId,
+    belong_other: user.belongOther,
+    belong_detail: user.belongDetail,
+    job_id: user.jobId,
+    job_other: user.jobOther,
+    comments: user.comments,
+    warnings: user.warnings,
+    updated_at: new Date().toISOString(),
+  };
+
+  // undefinedの値を除外
+  const filteredUpdateData = Object.fromEntries(
+    Object.entries(updateData).filter(([_, value]) => value !== undefined),
+  );
+
+  return client.from("users").update(filteredUpdateData).eq("id", userId);
 };
