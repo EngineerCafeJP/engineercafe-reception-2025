@@ -1,7 +1,7 @@
 import {
   fetchSeatUsageDailyReports,
-  fetchSeatUsageMonthlyReport,
-  fetchSeatUsageYearlyReport,
+  fetchSeatUsageMonthlyReports,
+  fetchSeatUsageYearlyReports,
 } from "@/app/(reception)/queries/seat-usage-report-queries";
 import supabase from "@/utils/supabase/client";
 
@@ -81,8 +81,7 @@ describe("fetchSeatUsageMonthlyReport", () => {
   const supabaseTableMock = {
     select: jest.fn().mockReturnThis(),
     eq: jest.fn().mockReturnThis(),
-    order: jest.fn().mockReturnThis(),
-    single: jest.fn().mockResolvedValue({
+    order: jest.fn().mockResolvedValue({
       data: mockSeatUsageMonthlyReportData,
       error: mockError,
     }),
@@ -98,7 +97,7 @@ describe("fetchSeatUsageMonthlyReport", () => {
 
   it("should fetch in use seat usage logs by seat id", async () => {
     const month = "2025-03";
-    const { data, error } = await fetchSeatUsageMonthlyReport(month);
+    const { data, error } = await fetchSeatUsageMonthlyReports(month);
     expect(data).toEqual(mockSeatUsageMonthlyReportData);
     expect(error).toBeNull();
     expect(supabase.from).toHaveBeenCalledWith(
@@ -109,7 +108,6 @@ describe("fetchSeatUsageMonthlyReport", () => {
     expect(supabaseTableMock.order).toHaveBeenCalledWith("month", {
       ascending: true,
     });
-    expect(supabaseTableMock.single).toHaveBeenCalled();
   });
 });
 
@@ -133,8 +131,7 @@ describe("fetchSeatUsageYearlyReport", () => {
   const supabaseTableMock = {
     select: jest.fn().mockReturnThis(),
     eq: jest.fn().mockReturnThis(),
-    order: jest.fn().mockReturnThis(),
-    single: jest.fn().mockResolvedValue({
+    order: jest.fn().mockResolvedValue({
       data: mockSeatUsageYearlyReportData,
       error: mockError,
     }),
@@ -150,7 +147,7 @@ describe("fetchSeatUsageYearlyReport", () => {
 
   it("should fetch in use seat usage logs by seat id", async () => {
     const year = "2025";
-    const { data, error } = await fetchSeatUsageYearlyReport(year);
+    const { data, error } = await fetchSeatUsageYearlyReports(year);
     expect(data).toEqual(mockSeatUsageYearlyReportData);
     expect(error).toBeNull();
     expect(supabase.from).toHaveBeenCalledWith(
@@ -161,6 +158,5 @@ describe("fetchSeatUsageYearlyReport", () => {
     expect(supabaseTableMock.order).toHaveBeenCalledWith("year", {
       ascending: true,
     });
-    expect(supabaseTableMock.single).toHaveBeenCalled();
   });
 });

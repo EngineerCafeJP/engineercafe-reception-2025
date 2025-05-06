@@ -2,13 +2,13 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import humps from "humps";
 import {
   useSeatUsageDailyReports,
-  useSeatUsageMonthlyReport,
-  useSeatUsageYearlyReport,
+  useSeatUsageMonthlyReports,
+  useSeatUsageYearlyReports,
 } from "@/app/(reception)/hooks/use-seat-usage-reports-view";
 import {
   fetchSeatUsageDailyReports,
-  fetchSeatUsageMonthlyReport,
-  fetchSeatUsageYearlyReport,
+  fetchSeatUsageMonthlyReports,
+  fetchSeatUsageYearlyReports,
 } from "@/app/(reception)/queries/seat-usage-report-queries";
 
 jest.mock("@/app/(reception)/queries/seat-usage-report-queries");
@@ -94,9 +94,9 @@ describe("useSeatUsageDailyReports", () => {
   });
 });
 
-describe("useSeatUsageMonthlyReport", () => {
+describe("useSeatUsageMonthlyReports", () => {
   beforeEach(() => {
-    (fetchSeatUsageMonthlyReport as jest.Mock).mockResolvedValue({
+    (fetchSeatUsageMonthlyReports as jest.Mock).mockResolvedValue({
       data: mockSeatUsageMonthlyReportData,
       error: null,
     });
@@ -109,22 +109,22 @@ describe("useSeatUsageMonthlyReport", () => {
   const month = "2025-03";
 
   it("should fetch seat usage monthly report", async () => {
-    const { result } = renderHook(() => useSeatUsageMonthlyReport(month));
+    const { result } = renderHook(() => useSeatUsageMonthlyReports(month));
     await waitFor(() => {
-      expect(result.current.data).toEqual(
+      expect(result.current.data).toEqual([
         humps.camelizeKeys(mockSeatUsageMonthlyReportData),
-      );
+      ]);
       expect(result.current.isLoading).toBe(false);
       expect(result.current.error).toBeNull();
     });
   });
 
   it("should return an error if the data is not returned", async () => {
-    (fetchSeatUsageMonthlyReport as jest.Mock).mockResolvedValue({
+    (fetchSeatUsageMonthlyReports as jest.Mock).mockResolvedValue({
       data: null,
       error: new Error("Error"),
     });
-    const { result } = renderHook(() => useSeatUsageMonthlyReport(month));
+    const { result } = renderHook(() => useSeatUsageMonthlyReports(month));
     await waitFor(() => {
       expect(result.current.error).toEqual(new Error("Error"));
       expect(result.current.isLoading).toBe(false);
@@ -132,9 +132,9 @@ describe("useSeatUsageMonthlyReport", () => {
   });
 });
 
-describe("useSeatUsageYearlyReport", () => {
+describe("useSeatUsageYearlyReports", () => {
   beforeEach(() => {
-    (fetchSeatUsageYearlyReport as jest.Mock).mockResolvedValue({
+    (fetchSeatUsageYearlyReports as jest.Mock).mockResolvedValue({
       data: mockSeatUsageYearlyReportData,
       error: null,
     });
@@ -147,22 +147,22 @@ describe("useSeatUsageYearlyReport", () => {
   const year = "2025";
 
   it("should fetch seat usage yearly report", async () => {
-    const { result } = renderHook(() => useSeatUsageYearlyReport(year));
+    const { result } = renderHook(() => useSeatUsageYearlyReports(year));
     await waitFor(() => {
-      expect(result.current.data).toEqual(
+      expect(result.current.data).toEqual([
         humps.camelizeKeys(mockSeatUsageYearlyReportData),
-      );
+      ]);
       expect(result.current.isLoading).toBe(false);
       expect(result.current.error).toBeNull();
     });
   });
 
   it("should return an error if the data is not returned", async () => {
-    (fetchSeatUsageYearlyReport as jest.Mock).mockResolvedValue({
+    (fetchSeatUsageYearlyReports as jest.Mock).mockResolvedValue({
       data: null,
       error: new Error("Error"),
     });
-    const { result } = renderHook(() => useSeatUsageYearlyReport(year));
+    const { result } = renderHook(() => useSeatUsageYearlyReports(year));
     await waitFor(() => {
       expect(result.current.error).toEqual(new Error("Error"));
       expect(result.current.isLoading).toBe(false);
