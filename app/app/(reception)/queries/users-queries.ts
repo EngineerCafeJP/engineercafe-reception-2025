@@ -70,7 +70,9 @@ export const updateUser = (userId: number, user: Partial<User>) => {
 
   // undefinedの値を除外
   const filteredUpdateData = Object.fromEntries(
-    Object.entries(updateData).filter(([_, value]) => value !== undefined),
+    Object.entries(updateData).filter(
+      ([_, value]) => value !== undefined && value !== null,
+    ),
   );
 
   return client.from("users").update(filteredUpdateData).eq("id", userId);
