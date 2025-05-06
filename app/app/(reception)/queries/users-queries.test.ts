@@ -30,7 +30,7 @@ describe("fetchUsersBySearchParams", () => {
 
   describe("when no search params", () => {
     beforeEach(() => {
-      jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock as any);
+      supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
     });
     it("should fetch empty array", async () => {
       const { data, error } = await fetchUsersBySearchParams();
@@ -45,7 +45,7 @@ describe("fetchUsersBySearchParams", () => {
         data: mockUsersData,
         error: mockError,
       });
-      jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock as any);
+      supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
     });
 
     it("should fetch users by search params", async () => {
@@ -64,7 +64,7 @@ describe("fetchUsersBySearchParams", () => {
         data: mockUsersData,
         error: mockError,
       });
-      jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock as any);
+      supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
     });
 
     it("should fetch users by search params", async () => {
@@ -111,7 +111,11 @@ describe("fetchLatestRegisteredUserId", () => {
   };
 
   beforeEach(() => {
-    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock as any);
+    supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it("should fetch latest registered user id", async () => {
@@ -145,7 +149,7 @@ describe("fetchUser", () => {
   };
 
   beforeEach(() => {
-    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock as any);
+    supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
   });
 
   it("should fetch user", async () => {
@@ -190,7 +194,7 @@ describe("updateUser", () => {
   };
 
   beforeEach(() => {
-    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock as any);
+    supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
   });
 
   it("should update user", async () => {

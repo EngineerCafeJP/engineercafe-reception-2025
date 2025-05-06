@@ -109,10 +109,12 @@ export default function HomePage() {
   };
 
   const handleUpdateUser = async (userData: UserFormData) => {
-    const updatedUser = await updateUser(
-      userData.id,
-      userData as unknown as Partial<User>,
-    );
+    const updatedUser = await updateUser(userData.id, {
+      ...userData,
+      prefectureId: Number(userData.prefectureId),
+      belongId: Number(userData.belongId),
+      jobId: Number(userData.jobId),
+    } as Partial<User>);
 
     if (updatedUser != null) {
       // ユーザー情報を再取得する
