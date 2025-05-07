@@ -29,16 +29,11 @@ const DeleteHistoryItemConfirmModal: React.FC<Props> = ({
           <div>利用履歴を削除しますか？</div>
           <div>行番号：{displayRowNo}</div>
           <div className="m-4 border-1 border-gray-300 p-2">
-            <div>{seatUsage.seats.name}</div>
+            <div>{seatUsage.seat.name}</div>
             <div>
-              {getFormatedUserId(seatUsage.users.id)}　{seatUsage.users.name}
+              {getFormatedUserId(seatUsage.user.id)}　{seatUsage.user.name}
             </div>
-            <div>
-              {getUsageStatus(
-                seatUsage.startTime as string,
-                seatUsage.endTime as string,
-              )}
-            </div>
+            <div>{getUsageStatus(seatUsage)}</div>
           </div>
         </div>
         <div className="flex flex-col gap-[1rem] p-[1rem] p-[2rem]">

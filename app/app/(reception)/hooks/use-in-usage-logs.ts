@@ -2,19 +2,19 @@ import humps from "humps";
 import { useEffect, useState } from "react";
 import {
   fetchSeatUsageLogById,
-  fetchSeatUsageLogsByStartTime,
+  fetchSeatUsageLogsByDate,
   updateSeatUsageIsDeleted,
 } from "@/app/(reception)/queries/seat-usages-queries";
 import { SeatUsage } from "@/app/types";
 
-export const useInUsageLogs = (targetDate: Date) => {
+export const useSeatUsageLogsByDate = (targetDate: Date) => {
   const [seatUsages, setSeatUsages] = useState<SeatUsage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     fetchUsageLogs(false, targetDate);
-  }, []);
+  }, [targetDate]);
 
   /**
    * 利用履歴一覧情報の取得
@@ -22,13 +22,10 @@ export const useInUsageLogs = (targetDate: Date) => {
    * @param date 検索対象の日付
    * @returns 検索結果
    */
-  const fetchUsageLogs = async (isDeleted: boolean, date?: Date) => {
+  const fetchUsageLogs = async (isDeleted: boolean, date: Date) => {
     setIsLoading(true);
 
-    const { data, error } = await fetchSeatUsageLogsByStartTime(
-      isDeleted,
-      date!,
-    );
+    const { data, error } = await fetchSeatUsageLogsByDate(isDeleted, date);
 
     if (error) {
       setSeatUsages([]);

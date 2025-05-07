@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { SeatUsage } from "@/app/types";
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 }
 
 const ScoreDisplayForm: React.FC<Props> = ({ seatUsages }) => {
+  /*
   // 利用数
   const [totalUsagesNum, setTotalUsagesNum] = useState("-");
   // 利用者数
@@ -16,9 +17,13 @@ const ScoreDisplayForm: React.FC<Props> = ({ seatUsages }) => {
   useEffect(() => {
     setTotalUsagesNum(seatUsages.length.toString());
     setTotalUsersNum(
-      new Set(seatUsages.map((item) => item.users.id)).size.toString(),
+      new Set(seatUsages.map((item) => item.user.id)).size.toString(),
     );
   });
+  */
+
+  const totalUsagesNum = seatUsages.length;
+  const totalUsersNum = new Set(seatUsages.map((item) => item.user.id)).size;
 
   return (
     <div className="border-neutral-content mx-auto mt-[1.5em] max-w-[450px] border-1 py-[15px]">

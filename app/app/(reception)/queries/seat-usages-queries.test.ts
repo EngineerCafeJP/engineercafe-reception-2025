@@ -4,7 +4,7 @@ import {
   fetchInUseSeatUsageLogs,
   fetchInUseSeatUsageLogsBySeatId,
   fetchSeatUsageLogById,
-  fetchSeatUsageLogsByStartTime,
+  fetchSeatUsageLogsByDate,
   updateSeatUsageEndtime,
   updateSeatUsageIsDeleted,
 } from "@/app/(reception)/queries/seat-usages-queries";
@@ -50,7 +50,7 @@ describe("fetchSeatUsageLogById", () => {
   });
 });
 
-describe("fetchSeatUsageLogsByStartTime", () => {
+describe("fetchSeatUsageLogsByDate", () => {
   const mockSeatUsageLogData = [
     {
       id: 1,
@@ -79,7 +79,7 @@ describe("fetchSeatUsageLogsByStartTime", () => {
     select: jest.fn().mockReturnThis(),
     gte: jest.fn().mockReturnThis(),
     lt: jest.fn().mockReturnThis(),
-    eq: jest.fn().mockReturnThis(),
+    not: jest.fn().mockReturnThis(),
     order: jest.fn().mockResolvedValue({
       data: mockSeatUsageLogData,
       error: mockError,
@@ -94,7 +94,7 @@ describe("fetchSeatUsageLogsByStartTime", () => {
     const startDate = new Date(2025, 3, 13);
     const endDate = new Date(2025, 3, 14);
     const isDeleted = false;
-    const { data, error } = await fetchSeatUsageLogsByStartTime(
+    const { data, error } = await fetchSeatUsageLogsByDate(
       isDeleted,
       startDate,
     );
@@ -109,7 +109,11 @@ describe("fetchSeatUsageLogsByStartTime", () => {
       "start_time",
       format(endDate, "yyyy-MM-dd"),
     );
-    expect(supabaseTableMock.eq).toHaveBeenCalledWith("is_delete", isDeleted);
+    expect(supabaseTableMock.not).toHaveBeenCalledWith(
+      "is_delete",
+      "eq",
+      isDeleted,
+    );
     expect(supabaseTableMock.order).toHaveBeenCalledWith("start_time", {
       ascending: true,
     });

@@ -46,25 +46,23 @@ const HistoryListViewItemForm: React.FC<Props> = ({
             <div>
               <SeatIcon size={21} />
             </div>
-            <div>{item.seats.name}</div>
+            <div>{item.seat.name}</div>
           </div>
           <div className="flex h-[21] flex-row gap-2">
             <UserIcon size={21} />
-            <div>{getFormatedUserId(item.users.id)}</div>
+            <div>{getFormatedUserId(item.user.id)}</div>
             <div
               className="overflow-hidden text-ellipsis whitespace-nowrap"
-              title={item.users.name}
+              title={item.user.name}
             >
-              {item.users.name}
+              {item.user.name}
             </div>
           </div>
         </div>
       </div>
       <div className="w-2/14 p-2">
         <div className="h-full text-left">
-          <div>
-            {getUsageStatus(item.startTime as string, item.endTime as string)}
-          </div>
+          <div>{getUsageStatus(item)}</div>
         </div>
       </div>
       <div className="w-2/14 p-2">

@@ -1,8 +1,8 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { useInUsageLogs } from "@/app/(reception)/hooks";
+import { useSeatUsageLogsByDate } from "@/app/(reception)/hooks";
 import {
   fetchInUseSeatUsageLogs,
-  fetchSeatUsageLogsByStartTime,
+  fetchSeatUsageLogsByDate,
   fetchSeatUsageLogById,
   updateSeatUsageIsDeleted,
 } from "@/app/(reception)/queries/seat-usages-queries";
@@ -49,17 +49,17 @@ const mockSeatsData = [
   },
 ];
 
-describe("useInUsageLogs", () => {
-  describe("fetchSeatUsageLogsByStartTime", () => {
+describe("useSeatUsageLogsByDate", () => {
+  describe("fetchSeatUsageLogsByDate", () => {
     beforeEach(() => {
-      (fetchSeatUsageLogsByStartTime as jest.Mock).mockResolvedValue({
+      (fetchSeatUsageLogsByDate as jest.Mock).mockResolvedValue({
         data: mockSeatsData,
         error: null,
       });
     });
 
     it("fetched 2 logs", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
         expect(result.current.error).toBeNull();
@@ -107,16 +107,16 @@ describe("useInUsageLogs", () => {
     });
   });
 
-  describe("fetchSeatUsageLogsByStartTime", () => {
+  describe("fetchSeatUsageLogsByDate", () => {
     beforeEach(() => {
-      (fetchSeatUsageLogsByStartTime as jest.Mock).mockResolvedValue({
+      (fetchSeatUsageLogsByDate as jest.Mock).mockResolvedValue({
         data: [],
         error: null,
       });
     });
 
     it("fetched 0 logs", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -126,15 +126,15 @@ describe("useInUsageLogs", () => {
     });
   });
 
-  describe("fetchSeatUsageLogsByStartTime", () => {
+  describe("fetchSeatUsageLogsByDate", () => {
     beforeEach(() => {
-      (fetchSeatUsageLogsByStartTime as jest.Mock).mockResolvedValue({
+      (fetchSeatUsageLogsByDate as jest.Mock).mockResolvedValue({
         data: null,
         error: new Error("Error"),
       });
     });
     it("error occurs on fetch", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
 
       await waitFor(() => {
         expect(result.current.seatUsages).toEqual([]);
@@ -160,7 +160,7 @@ describe("useInUsageLogs", () => {
       });
     });
     it("done deleting logs", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
 
       await act(async () => {
         await result.current.updateUsageLogsIsDeleted(1002, true);
@@ -185,7 +185,7 @@ describe("useInUsageLogs", () => {
       });
     });
     it("error occurs before deleting logs", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
 
       await act(async () => {
         await result.current.updateUsageLogsIsDeleted(234, true);
@@ -210,7 +210,7 @@ describe("useInUsageLogs", () => {
       });
     });
     it("error occurs on deleting logs", async () => {
-      const { result } = renderHook(() => useInUsageLogs(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
 
       await act(async () => {
         await result.current.updateUsageLogsIsDeleted(9876, true);

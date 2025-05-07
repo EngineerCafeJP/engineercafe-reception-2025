@@ -2,7 +2,7 @@
 
 import { format } from "date-fns";
 import { useState } from "react";
-import { useInUsageLogs } from "@/app/(reception)/hooks";
+import { useSeatUsageLogsByDate } from "@/app/(reception)/hooks";
 import DeleteHistoryItemConfirmModal from "@/app/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
 import { SeatUsage } from "@/app/types";
 import DateSelectorForm from "./client-components/DateSelectorForm";
@@ -20,7 +20,7 @@ export default function UsageHistory() {
   const [deleteItem, setDeleteItem] = useState<SeatUsage | null>(null);
 
   const { seatUsages, isLoading, fetchUsageLogs, updateUsageLogsIsDeleted } =
-    useInUsageLogs(targetDate);
+    useSeatUsageLogsByDate(targetDate);
 
   // 日付変更時のデータ検索処理
   const onHistoryDateChanged = (date: Date) => {
