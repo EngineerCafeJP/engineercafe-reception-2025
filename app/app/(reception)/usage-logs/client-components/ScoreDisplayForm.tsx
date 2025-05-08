@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
+import { SeatUsage } from "@/app/types";
 
 interface Props {
-  totalUsagesNum: number;
-  totalUsersNum: number;
+  seatUsages: SeatUsage[];
 }
 
-const ScoreDisplayForm: React.FC<Props> = ({
-  totalUsagesNum,
-  totalUsersNum,
-}) => {
+const ScoreDisplayForm: React.FC<Props> = ({ seatUsages }) => {
+  const totalUsagesNum = seatUsages.length;
+  const totalUsersNum = new Set(seatUsages.map((item) => item.user.id)).size;
+
   return (
     <div className="border-neutral-content mx-auto mt-[1.5em] max-w-[450px] border-1 py-[15px]">
       <div className="columns-2 text-center">
