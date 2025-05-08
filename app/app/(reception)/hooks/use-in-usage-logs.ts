@@ -13,19 +13,18 @@ export const useSeatUsageLogsByDate = (targetDate: Date) => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    fetchUsageLogs(false, targetDate);
+    fetchUsageLogs(targetDate);
   }, [targetDate]);
 
   /**
    * 利用履歴一覧情報の取得
-   * @param isDelete 削除済み/未削除 のどちらを検索対象とするか
    * @param date 検索対象の日付
    * @returns 検索結果
    */
-  const fetchUsageLogs = async (isDeleted: boolean, date: Date) => {
+  const fetchUsageLogs = async (date: Date) => {
     setIsLoading(true);
 
-    const { data, error } = await fetchSeatUsageLogsByDate(isDeleted, date);
+    const { data, error } = await fetchSeatUsageLogsByDate(date);
 
     if (error) {
       setSeatUsages([]);
@@ -34,7 +33,15 @@ export const useSeatUsageLogsByDate = (targetDate: Date) => {
       return;
     }
 
-    const camelizedData = humps.camelizeKeys(data) as SeatUsage[];
+    const formatedData = data.map((seatUsage) => ({
+      ...seatUsage,
+      user: seatUsage.users,
+      users: undefined, // 元の users プロパティを削除
+      seat: seatUsage.seats,
+      seats: undefined, // 元の users プロパティを削除
+    }));
+
+    const camelizedData = humps.camelizeKeys(formatedData) as SeatUsage[];
     setSeatUsages(camelizedData);
     setError(null);
     setIsLoading(false);

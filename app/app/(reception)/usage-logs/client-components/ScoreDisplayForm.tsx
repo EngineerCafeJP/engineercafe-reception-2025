@@ -8,20 +8,6 @@ interface Props {
 }
 
 const ScoreDisplayForm: React.FC<Props> = ({ seatUsages }) => {
-  /*
-  // 利用数
-  const [totalUsagesNum, setTotalUsagesNum] = useState("-");
-  // 利用者数
-  const [totalUsersNum, setTotalUsersNum] = useState("-");
-
-  useEffect(() => {
-    setTotalUsagesNum(seatUsages.length.toString());
-    setTotalUsersNum(
-      new Set(seatUsages.map((item) => item.user.id)).size.toString(),
-    );
-  });
-  */
-
   const totalUsagesNum = seatUsages.length;
   const totalUsersNum = new Set(seatUsages.map((item) => item.user.id)).size;
 

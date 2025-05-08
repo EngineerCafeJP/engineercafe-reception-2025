@@ -25,7 +25,7 @@ export default function UsageHistory() {
   // 日付変更時のデータ検索処理
   const onHistoryDateChanged = (date: Date) => {
     setTargetDate(date);
-    fetchUsageLogs(false, date);
+    fetchUsageLogs(date);
   };
 
   // 履歴レコードの削除ボタンクリック処理
@@ -41,7 +41,7 @@ export default function UsageHistory() {
     if (isLoading || !deleteItem) return;
 
     await updateUsageLogsIsDeleted(deleteItem?.id, true);
-    await fetchUsageLogs(false, targetDate);
+    await fetchUsageLogs(targetDate);
 
     // キャッシュクリア
     setDeleteItemDisplayRowNo(null);

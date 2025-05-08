@@ -7,14 +7,10 @@ export const fetchSeatUsageLogById = async (id: number) => {
 
 /**
  * 利用履歴一覧情報の取得
- * @param isDelete 削除済み/未削除 のどちらを検索対象とするか
  * @param date 検索対象の日付
  * @returns 検索結果
  */
-export const fetchSeatUsageLogsByDate = async (
-  isDelete: boolean,
-  date: Date,
-) => {
+export const fetchSeatUsageLogsByDate = async (date: Date) => {
   const startTime = format(new Date(date), "yyyy-MM-dd");
   const endTime = format(
     new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
@@ -30,25 +26,20 @@ export const fetchSeatUsageLogsByDate = async (
       user_id,
       start_time,
       end_time,
-      user (
+      users (
         id,
         name
       ),
-      seat (
+      seats (
         id,
-        name,
-        category_id,
-        seat_category (
-          id,
-          name
-        )
+        name
       )`,
     )
     // 当日のみ（＝当日の0時以降 ～ 翌日の0時未満）を抽出対象とする
     .gte("start_time", startTime)
     .lt("start_time", endTime)
     // 未削除 or Null の履歴を対象とする
-    .not("is_delete", "eq", true)
+    .or("is_delete.eq.false,is_delete.is.null")
     // 利用開始日時順
     .order("start_time", { ascending: true });
 

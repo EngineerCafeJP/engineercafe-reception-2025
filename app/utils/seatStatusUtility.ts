@@ -2,8 +2,7 @@ import { SeatUsage } from "@/app/types";
 
 /**
  * ステータス名の取得
- * @param startTime 利用開始日時
- * @param endTime 利用終了日時
+ * @param seatUsage 利用履歴
  * @returns ステータス名
  */
 const getUsageStatus = (seatUsage: SeatUsage): string => {

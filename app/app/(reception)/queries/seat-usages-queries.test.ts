@@ -58,7 +58,7 @@ describe("fetchSeatUsageLogsByDate", () => {
       user_id: "00001",
       start_time: "2025-01-01",
       end_time: "2025-01-01",
-      is_deleted: false,
+      is_delete: false,
       user: {
         id: "00001",
         name: "hoge",
@@ -66,11 +66,6 @@ describe("fetchSeatUsageLogsByDate", () => {
       seat: {
         id: "101",
         name: "101",
-        category_id: "1",
-        seatCategory: {
-          id: "1",
-          name: "101",
-        },
       },
     },
   ];
@@ -79,25 +74,17 @@ describe("fetchSeatUsageLogsByDate", () => {
     select: jest.fn().mockReturnThis(),
     gte: jest.fn().mockReturnThis(),
     lt: jest.fn().mockReturnThis(),
-    not: jest.fn().mockReturnThis(),
+    or: jest.fn().mockReturnThis(),
     order: jest.fn().mockResolvedValue({
       data: mockSeatUsageLogData,
       error: mockError,
     }),
   };
 
-  beforeEach(() => {
-    jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
-  });
-
   it("should fetch seat usage logs by seat startTime", async () => {
     const startDate = new Date(2025, 3, 13);
     const endDate = new Date(2025, 3, 14);
-    const isDeleted = false;
-    const { data, error } = await fetchSeatUsageLogsByDate(
-      isDeleted,
-      startDate,
-    );
+    const { data, error } = await fetchSeatUsageLogsByDate(startDate);
     expect(data).toEqual(mockSeatUsageLogData);
     expect(error).toBeNull();
     expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
@@ -109,10 +96,8 @@ describe("fetchSeatUsageLogsByDate", () => {
       "start_time",
       format(endDate, "yyyy-MM-dd"),
     );
-    expect(supabaseTableMock.not).toHaveBeenCalledWith(
-      "is_delete",
-      "eq",
-      isDeleted,
+    expect(supabaseTableMock.or).toHaveBeenCalledWith(
+      "is_delete.eq.false,is_delete.is.null",
     );
     expect(supabaseTableMock.order).toHaveBeenCalledWith("start_time", {
       ascending: true,
