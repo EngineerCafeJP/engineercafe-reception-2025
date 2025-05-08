@@ -1,13 +1,11 @@
 "use client";
 
-import { SeatUsage } from "@/app/types";
-import { getUsageStatus } from "@/utils/seatStatusUtility";
-import { getFormatedUserId } from "@/utils/userUtility";
+import HistoryListViewItemEntity from "@/app/(reception)/usage-logs/entities/HistoryListViewItemEntity";
 
 interface Props {
   isOpen: boolean;
   displayRowNo: number;
-  seatUsage: SeatUsage;
+  historyListViewItemEntity: HistoryListViewItemEntity;
   onApplied: () => void;
   onCanceled: () => void;
 }
@@ -15,7 +13,7 @@ interface Props {
 const DeleteHistoryItemConfirmModal: React.FC<Props> = ({
   isOpen,
   displayRowNo,
-  seatUsage,
+  historyListViewItemEntity,
   onApplied,
   onCanceled,
 }) => {
@@ -29,11 +27,15 @@ const DeleteHistoryItemConfirmModal: React.FC<Props> = ({
           <div>利用履歴を削除しますか？</div>
           <div>行番号：{displayRowNo}</div>
           <div className="m-4 border-1 border-gray-300 p-2">
-            <div>{seatUsage.seat.name}</div>
             <div>
-              {getFormatedUserId(seatUsage.user.id)}　{seatUsage.user.name}
+              {historyListViewItemEntity.AreaName}　
+              {historyListViewItemEntity.SeatName}
             </div>
-            <div>{getUsageStatus(seatUsage)}</div>
+            <div>
+              {historyListViewItemEntity.MembershipNumber}　
+              {historyListViewItemEntity.UserName}
+            </div>
+            <div>{historyListViewItemEntity.Status}</div>
           </div>
         </div>
         <div className="flex flex-col gap-[1rem] p-[1rem] p-[2rem]">

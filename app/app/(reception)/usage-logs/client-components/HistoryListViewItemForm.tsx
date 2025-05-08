@@ -1,17 +1,15 @@
 "use client";
 
-import ClockIcon from "@/app/components/icons/ClockIcon";
-import SeatIcon from "@/app/components/icons/SeatIcon";
-import UserIcon from "@/app/components/icons/UserIcon";
-import { SeatUsage } from "@/app/types";
-import { formatTimeWithQuarter } from "@/utils/formatTime";
-import { getUsageStatus } from "@/utils/seatStatusUtility";
-import { getFormatedUserId } from "@/utils/userUtility";
+import Image from "next/image";
+import HistoryListViewItemEntity from "@/app/(reception)/usage-logs/entities/HistoryListViewItemEntity";
 
 interface Props {
   displayRowNo: number;
-  item: SeatUsage;
-  onDeleteHistory: (displayRowNo: number, deleteItem: SeatUsage) => void;
+  item: HistoryListViewItemEntity;
+  onDeleteHistory: (
+    displayRowNo: number,
+    deleteItem: HistoryListViewItemEntity,
+  ) => void;
 }
 
 const HistoryListViewItemForm: React.FC<Props> = ({
@@ -28,45 +26,60 @@ const HistoryListViewItemForm: React.FC<Props> = ({
       </div>
       <div className="w-2/14 p-2">
         <div className="flex flex-col gap-1">
+          {/* // TODO: (KUROKI) use ~/components/icons/ClockIcon.tsx after pull feature-7*/}
           <div className="flex h-[21] flex-row gap-2">
             <div className="w-[21]">
-              <ClockIcon size={21} />
+              <Image
+                alt="Time"
+                height={21}
+                src={"/images/mock.png"}
+                width={21}
+              />
             </div>
-            <div>{formatTimeWithQuarter(item.startTime as string)} -</div>
+            <div>{item.CheckInTime_YYYY_HH_MM} -</div>
           </div>
           <div className="flex h-[21] flex-row gap-2">
             <div className="w-[21]"></div>
-            <div>{formatTimeWithQuarter(item.endTime as string)}</div>
+            <div>{item.CheckOutTime_YYYY_HH_MM}</div>
           </div>
         </div>
       </div>
       <div className="w-7/14 p-2">
         <div className="flex flex-col gap-1">
           <div className="flex h-[21] flex-row gap-2">
+            {/* // TODO: (KUROKI) use ~/components/icons/SeatIcon.tsx after pull feature-7 */}
             <div>
-              <SeatIcon size={21} />
+              <Image
+                alt="Seat"
+                height={21}
+                src={"/images/mock.png"}
+                width={21}
+              />
             </div>
-            <div>{item.seat.name}</div>
+            <div>{item.AreaName}</div>
+            <div>{item.SeatName}</div>
           </div>
           <div className="flex h-[21] flex-row gap-2">
-            <UserIcon size={21} />
-            <div>{getFormatedUserId(item.user.id)}</div>
+            {/* // TODO: (KUROKI) use ~/components/icons/UserIcon.tsx after pull feature-7 */}
+            <Image alt="User" height={21} src={"/images/mock.png"} width={21} />
+            <div>{item.MembershipNumber}</div>
             <div
               className="overflow-hidden text-ellipsis whitespace-nowrap"
-              title={item.user.name}
+              title={item.UserName}
             >
-              {item.user.name}
+              {item.UserName}
             </div>
           </div>
-        </div>
-      </div>
-      <div className="w-2/14 p-2">
-        <div className="h-full text-left">
-          <div>{getUsageStatus(item)}</div>
         </div>
       </div>
       <div className="w-2/14 p-2">
         <div className="h-full text-center">
+          <div>{item.Status}</div>
+        </div>
+      </div>
+      <div className="w-2/14 p-2">
+        <div className="h-full text-center">
+          {/* // TODO: (KUROKI) add ~/components/icons/trashCanIcon.tsx */}
           <button
             className="rounded-full bg-blue-200 px-2 py-2 text-[0.75em] font-bold text-white hover:bg-red-200"
             onClick={() => onDeleteHistory(displayRowNo, item)}
