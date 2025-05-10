@@ -1,30 +1,35 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 interface Props {
   systemDate: string;
-  onHistoryDateChanged: (dateStr: string) => void;
+  onHistoryDateChanged: (date: Date) => void;
 }
 
 const DateSelectorForm: React.FC<Props> = ({
   systemDate,
   onHistoryDateChanged,
 }) => {
-  const [inputedDate, setTargetDate] = useState(systemDate);
+  const [inputedDate, setInputedDate] = useState(systemDate);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTargetDate(event.target.value);
-  };
+    // UIに反映
+    setInputedDate(event.target.value);
 
-  useEffect(() => {
-    onHistoryDateChanged(inputedDate);
-  }, [inputedDate]);
+    // 入力値が日付に変換できない値の場合、通知せず終了する
+    const value = new Date(event.target.value).toString();
+    const errorValue = new Date("X").toString();
+    if (value == errorValue) {
+      return;
+    }
+    onHistoryDateChanged(new Date(event.target.value));
+  };
 
   return (
     <div className="mt-[1.5em] flex items-center justify-center">
       <input
-        className="border-transparent bg-transparent text-[1.5em]"
+        className="w-[175] border-transparent bg-transparent px-2 text-[1.5em]"
         type="date"
         value={inputedDate}
         onChange={handleDateChange}
