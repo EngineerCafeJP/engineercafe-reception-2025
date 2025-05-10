@@ -1,9 +1,12 @@
+import { format } from "date-fns";
 import {
   createSeatUsage,
   fetchInUseSeatUsageLogs,
   fetchInUseSeatUsageLogsBySeatId,
   fetchSeatUsageLogById,
+  fetchSeatUsageLogsByDate,
   updateSeatUsageEndtime,
+  updateSeatUsageIsDeleted,
 } from "@/app/(reception)/queries/seat-usages-queries";
 import supabase from "@/utils/supabase/client";
 
@@ -44,6 +47,61 @@ describe("fetchSeatUsageLogById", () => {
     expect(supabaseTableMock.select).toHaveBeenCalledWith("*");
     expect(supabaseTableMock.eq).toHaveBeenCalledWith("id", id);
     expect(supabaseTableMock.single).toHaveBeenCalled();
+  });
+});
+
+describe("fetchSeatUsageLogsByDate", () => {
+  const mockSeatUsageLogData = [
+    {
+      id: 1,
+      seat_id: "101",
+      user_id: "00001",
+      start_time: "2025-01-01",
+      end_time: "2025-01-01",
+      is_delete: false,
+      user: {
+        id: "00001",
+        name: "hoge",
+      },
+      seat: {
+        id: "101",
+        name: "101",
+      },
+    },
+  ];
+  const mockError = null;
+  const supabaseTableMock = {
+    select: jest.fn().mockReturnThis(),
+    gte: jest.fn().mockReturnThis(),
+    lt: jest.fn().mockReturnThis(),
+    or: jest.fn().mockReturnThis(),
+    order: jest.fn().mockResolvedValue({
+      data: mockSeatUsageLogData,
+      error: mockError,
+    }),
+  };
+
+  it("should fetch seat usage logs by seat startTime", async () => {
+    const startDate = new Date(2025, 3, 13);
+    const endDate = new Date(2025, 3, 14);
+    const { data, error } = await fetchSeatUsageLogsByDate(startDate);
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.gte).toHaveBeenCalledWith(
+      "start_time",
+      format(startDate, "yyyy-MM-dd"),
+    );
+    expect(supabaseTableMock.lt).toHaveBeenCalledWith(
+      "start_time",
+      format(endDate, "yyyy-MM-dd"),
+    );
+    expect(supabaseTableMock.or).toHaveBeenCalledWith(
+      "is_delete.eq.false,is_delete.is.null",
+    );
+    expect(supabaseTableMock.order).toHaveBeenCalledWith("start_time", {
+      ascending: true,
+    });
   });
 });
 
@@ -224,6 +282,44 @@ describe("updateSeatUsageEndtime", () => {
     expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
     expect(supabaseTableMock.update).toHaveBeenCalledWith({
       end_time: endTime,
+    });
+  });
+});
+
+describe("updateSeatUsageIsDeleted", () => {
+  const mockSeatUsageLogData = {
+    id: 1,
+    seat_id: 1,
+    user_id: 1,
+    is_delete: true,
+  };
+  const mockError = null;
+
+  const supabaseTableMock = {
+    update: jest.fn().mockReturnThis(),
+    eq: jest
+      .fn()
+      .mockReturnValue({ data: mockSeatUsageLogData, error: mockError }),
+  };
+
+  beforeEach(() => {
+    (supabase.from as jest.Mock).mockReturnValue(supabaseTableMock);
+  });
+
+  it("should update the seat usage end time", async () => {
+    const seatUsageId = 1;
+    const isDelete = true;
+
+    const { data, error } = await updateSeatUsageIsDeleted(
+      seatUsageId,
+      isDelete,
+    );
+
+    expect(data).toEqual(mockSeatUsageLogData);
+    expect(error).toBeNull();
+    expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
+    expect(supabaseTableMock.update).toHaveBeenCalledWith({
+      is_delete: isDelete,
     });
   });
 });

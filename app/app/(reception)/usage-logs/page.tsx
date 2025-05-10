@@ -1,100 +1,91 @@
 "use client";
 
-//import { redirect } from "next/navigation";
-//import { useAuth } from "@/app/contexts/AuthContext";
+import { format } from "date-fns";
 import { useState } from "react";
+import { useSeatUsageLogsByDate } from "@/app/(reception)/hooks";
 import DeleteHistoryItemConfirmModal from "@/app/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
+import { SeatUsage } from "@/app/types";
 import DateSelectorForm from "./client-components/DateSelectorForm";
 import HistoryListViewForm from "./client-components/HistoryListViewForm";
-import PageTitleForm from "./client-components/PageTitleForm";
 import ScoreDisplayForm from "./client-components/ScoreDisplayForm";
-import HistoryListViewItemEntity from "./entities/HistoryListViewItemEntity";
-import HistoryPageEntity from "./entities/HistoryPageEntity";
-
-const historyPageEntity = new HistoryPageEntity();
-historyPageEntity.TotalUsagesNum = 123;
-historyPageEntity.TotalUsersNum = 111;
-historyPageEntity.SelectedDateStr = new Date().toISOString().split("T")[0];
 
 export default function UsageHistory() {
-  // TODO: (KUROKI) ログイン状態を判定してリダイレクト。
-  // 共通のヘッダー等で行えば、個別画面でやる必要ない？
-  /*
-  const { session } = useAuth();
-  if (session == null) {
-    redirect("/");
-  }
-  */
+  // 履歴の標示対象日付
+  const [targetDate, setTargetDate] = useState(new Date());
+  // 削除対象アイテム番号
+  const [deleteItemDisplayRowNo, setDeleteItemDisplayRowNo] = useState<
+    number | null
+  >(null);
+  // 削除対象アイテム
+  const [deleteItem, setDeleteItem] = useState<SeatUsage | null>(null);
 
-  // 削除対象アイテム 及び その行番号
-  const [deleteHistoryItem, setDeleteHistoryItem] =
-    useState<HistoryListViewItemEntity | null>(null);
-  const [deleteHistoryItemDisplayRowNo, setDeleteHistoryItemDisplayRowNo] =
-    useState<number | null>(null);
+  const { seatUsages, isLoading, fetchUsageLogs, updateUsageLogsIsDeleted } =
+    useSeatUsageLogsByDate(targetDate);
 
-  const onHistoryDateChanged = (dateStr: string) => {
-    historyPageEntity.SelectedDateStr = dateStr;
-
-    // TODO: (KUROKI) DB検索して資料数・利用者数をリフレッシュ
-    //historyPageEntity.TotalUsagesNum += 1;
+  // 日付変更時のデータ検索処理
+  const onHistoryDateChanged = (date: Date) => {
+    setTargetDate(date);
+    fetchUsageLogs(date);
   };
 
-  /** 履歴レコードの削除ボタンクリック処理 */
-  const onDeleteHistory = (
-    displayRowNo: number,
-    deleteItem: HistoryListViewItemEntity,
-  ) => {
-    if (!displayRowNo || !deleteItem) return;
+  // 履歴レコードの削除ボタンクリック処理
+  const onDeleteHistory = (displayRowNo: number, deleteItem: SeatUsage) => {
+    if (isLoading || !displayRowNo || !deleteItem) return;
 
-    setDeleteHistoryItemDisplayRowNo(displayRowNo);
-    setDeleteHistoryItem(deleteItem);
+    setDeleteItemDisplayRowNo(displayRowNo);
+    setDeleteItem(deleteItem);
   };
 
-  /** 履歴削除処理を実行 */
-  const onAppliedDeleteHistory = () => {
-    alert("TODO: DB更新処理を実行！！");
+  // 履歴削除処理を実行
+  const onAppliedDeleteHistory = async () => {
+    if (isLoading || !deleteItem) return;
 
-    setDeleteHistoryItemDisplayRowNo(null);
-    setDeleteHistoryItem(null);
+    await updateUsageLogsIsDeleted(deleteItem?.id, true);
+    await fetchUsageLogs(targetDate);
+
+    // キャッシュクリア
+    setDeleteItemDisplayRowNo(null);
+    setDeleteItem(null);
   };
-
-  /** 履歴削除処理をキャンセル */
+  // 履歴削除処理をキャンセル
   const onCanceledDeleteHistory = () => {
-    setDeleteHistoryItemDisplayRowNo(null);
-    setDeleteHistoryItem(null);
+    setDeleteItemDisplayRowNo(null);
+    setDeleteItem(null);
   };
 
   return (
-    <div className="container mx-auto mt-[1rem] max-w-[810px] p-4">
-      <PageTitleForm />
+    <div className="min-h-screen p-8">
+      <div className="mx-auto max-w-4xl rounded-lg p-6 shadow-lg">
+        <h1 className="mb-6 text-3xl font-bold">利用履歴</h1>
 
-      <DateSelectorForm
-        systemDate={historyPageEntity.SelectedDateStr}
-        onHistoryDateChanged={onHistoryDateChanged}
-      />
-
-      <ScoreDisplayForm
-        totalUsagesNum={historyPageEntity.TotalUsagesNum}
-        totalUsersNum={historyPageEntity.TotalUsersNum}
-      />
-
-      <HistoryListViewForm
-        listViewItemEntities={historyPageEntity.HistoryListViewItemEntities}
-        onDeleteHistory={onDeleteHistory}
-      />
-
-      {/* 履歴削除の確認ダイアログ */}
-      {deleteHistoryItem && deleteHistoryItemDisplayRowNo && (
-        <DeleteHistoryItemConfirmModal
-          displayRowNo={deleteHistoryItemDisplayRowNo}
-          historyListViewItemEntity={deleteHistoryItem}
-          isOpen={
-            Boolean(deleteHistoryItem) && Boolean(deleteHistoryItemDisplayRowNo)
-          }
-          onApplied={onAppliedDeleteHistory}
-          onCanceled={onCanceledDeleteHistory}
+        <DateSelectorForm
+          systemDate={format(targetDate, "yyyy-MM-dd")}
+          onHistoryDateChanged={onHistoryDateChanged}
         />
-      )}
+
+        <ScoreDisplayForm seatUsages={seatUsages} />
+
+        <HistoryListViewForm
+          seatUsages={seatUsages}
+          onDeleteHistory={onDeleteHistory}
+        />
+
+        {/* 履歴削除の確認ダイアログ */}
+        {deleteItem && deleteItemDisplayRowNo && (
+          <DeleteHistoryItemConfirmModal
+            displayRowNo={deleteItemDisplayRowNo}
+            isOpen={Boolean(deleteItem) && Boolean(deleteItemDisplayRowNo)}
+            seatUsage={deleteItem}
+            onApplied={onAppliedDeleteHistory}
+            onCanceled={onCanceledDeleteHistory}
+          />
+        )}
+
+        {/* ローディング */}
+        {isLoading && (
+          <span className="z-index-1000 loading loading-spinner loading-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></span>
+        )}
+      </div>
     </div>
   );
 }
