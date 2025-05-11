@@ -2,7 +2,6 @@
 
 import { SeatUsage } from "@/app/types";
 import { getUsageStatus } from "@/utils/seatStatusUtility";
-import { getFormatedUserId } from "@/utils/userUtility";
 
 interface Props {
   isOpen: boolean;
@@ -30,8 +29,9 @@ const DeleteHistoryItemConfirmModal: React.FC<Props> = ({
           <div>行番号：{displayRowNo}</div>
           <div className="m-4 border-1 border-gray-300 p-2">
             <div>{seatUsage.seat.name}</div>
-            <div>
-              {getFormatedUserId(seatUsage.user.id)}　{seatUsage.user.name}
+            <div className="flex justify-center gap-5">
+              <span>{seatUsage.user.id}</span>
+              <span title={seatUsage.user.name}>{seatUsage.user.name}</span>
             </div>
             <div>{getUsageStatus(seatUsage)}</div>
           </div>
