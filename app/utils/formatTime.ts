@@ -6,7 +6,9 @@ const formatTime = (timeString: string) => {
 };
 
 // 15分単位
-const formatTimeWithQuarter = (timeString: string) => {
+const formatTimeWithQuarter = (timeString: string | null) => {
+  if (!timeString) return "";
+
   const date = new Date(timeString);
   date.setMinutes(Math.ceil(date.getMinutes() / 15) * 15);
   return format(date, "HH:mm");
