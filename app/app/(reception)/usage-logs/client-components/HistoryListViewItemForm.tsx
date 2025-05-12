@@ -6,7 +6,6 @@ import UserIcon from "@/app/components/icons/UserIcon";
 import { SeatUsage } from "@/app/types";
 import { formatTimeWithQuarter } from "@/utils/formatTime";
 import { getUsageStatus } from "@/utils/seatStatusUtility";
-import { getFormatedUserId } from "@/utils/userUtility";
 
 interface Props {
   displayRowNo: number;
@@ -50,7 +49,7 @@ const HistoryListViewItemForm: React.FC<Props> = ({
           </div>
           <div className="flex h-[21] flex-row gap-2">
             <UserIcon size={21} />
-            <div>{getFormatedUserId(item.user.id)}</div>
+            <div className="min-w-[80px]">{item.user.id}</div>
             <div
               className="overflow-hidden text-ellipsis whitespace-nowrap"
               title={item.user.name}
