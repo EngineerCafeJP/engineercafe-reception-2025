@@ -5,15 +5,12 @@ export function fetchUsers(
   client: SupabaseClient<Database>,
   filters: {
     searchText: string;
-    number?: boolean;
+    id?: boolean;
     email?: boolean;
     phone?: boolean;
   },
 ) {
-  let query = client
-    .from("users")
-    .select("*")
-    .order("number", { ascending: true });
+  let query = client.from("users").select("*").order("id", { ascending: true });
 
   const conditions: string[] = [];
   const keyword = filters.searchText.trim();
@@ -22,8 +19,8 @@ export function fetchUsers(
     return query; // 空文字ならそのまま返す（全件取得）
   }
 
-  if (filters.number && !isNaN(Number(keyword))) {
-    conditions.push(`number.eq.${Number(keyword)}`);
+  if (filters.id && !isNaN(Number(keyword))) {
+    conditions.push(`id.eq.${Number(keyword)}`);
   }
 
   if (filters.email) {

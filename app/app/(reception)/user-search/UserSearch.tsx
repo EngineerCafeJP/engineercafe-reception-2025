@@ -12,13 +12,13 @@ type User = Tables<"users">;
 
 type UserFilters = {
   searchText: string;
-  number?: boolean;
+  id?: boolean;
   email?: boolean;
   phone?: boolean;
 };
 
 export default function UserSearch() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const { register, getValues } = useForm<Filters>();
 
@@ -26,7 +26,7 @@ export default function UserSearch() {
     const loadUsers = async () => {
       const { data, error } = await fetchUsers(supabase, {
         searchText: "", // 初期値
-        number: false,
+        id: false,
         email: false,
         phone: false,
       });
@@ -50,11 +50,11 @@ export default function UserSearch() {
   };
 
   const handleSearch = () => {
-    const { searchText, number, email, phone } = getValues();
+    const { searchText, id, email, phone } = getValues();
 
     const filters: UserFilters = {
       searchText,
-      number: number || false,
+      id: id || false,
       email: email || false,
       phone: phone || false,
     };
