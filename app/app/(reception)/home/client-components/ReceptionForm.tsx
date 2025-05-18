@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { MdClose } from "react-icons/md";
+import React, { useState } from "react";
+import { MdClose, MdComment, MdWarning } from "react-icons/md";
 import AssignSeatConfirmModal from "@/app/(reception)/home/client-components/AssignSeatConfirmModal";
 import CardReaderControlButton from "@/app/components/CardReaderControlButton";
 import UserIcon from "@/app/components/icons/UserIcon";
@@ -17,6 +17,7 @@ interface ReceptionFormProps {
   onDetectCard: (cardId: string) => void;
   onDisconnectUsbDevice: () => void;
   assignSeat: (seat: Seat, user: User) => void;
+  onEditUser: (user: User) => void;
 }
 
 const ReceptionForm: React.FC<ReceptionFormProps> = ({
@@ -29,27 +30,32 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   onDetectCard,
   onDisconnectUsbDevice,
   assignSeat,
+  onEditUser,
 }) => {
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
-  const [userList, setUserList] = useState<User[] | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
-  useEffect(() => {
-    setUserList(searchUserList);
-  }, [searchUserList]);
+  const selectedUser = React.useMemo(
+    () => searchUserList?.find((user) => user.id === selectedUserId),
+    [searchUserList, selectedUserId],
+  );
 
   const handleSelectUser = (user: User) => {
-    setSelectedUser(user);
+    setSelectedUserId(user.id);
   };
 
-  const areaList = emptySeats
-    .map((seat: Seat) => seat.seatCategory.name)
-    .filter(
-      (categoryName: string, index: number, self: string[]) =>
-        self.indexOf(categoryName) === index,
-    );
+  const areaList = React.useMemo(
+    () =>
+      emptySeats
+        .map((seat: Seat) => seat.seatCategory.name)
+        .filter(
+          (categoryName: string, index: number, self: string[]) =>
+            self.indexOf(categoryName) === index,
+        ),
+    [emptySeats],
+  );
 
   const seatList = (categoryName: string) =>
     emptySeats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
@@ -64,16 +70,17 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   };
 
   const handleAssignSeat = async () => {
-    await assignSeat(selectedSeat!, selectedUser!);
-    handleClose();
+    if (selectedUser && selectedSeat) {
+      await assignSeat(selectedSeat, selectedUser);
+      handleClose();
+    }
   };
 
   const handleClose = () => {
     handleChangeSearchWord("");
-    setSelectedUser(null);
+    setSelectedUserId(null);
     setSelectedArea(null);
     setSelectedSeat(null);
-    setUserList(null);
     setIsConfirmModalOpen(false);
     onClose();
   };
@@ -84,6 +91,15 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
 
   const handleDisconnectUsbDevice = () => {
     onDisconnectUsbDevice();
+  };
+
+  const handleEditUser = (userId: number) => {
+    const user = searchUserList?.find((user) => user.id === userId);
+    if (!user) {
+      console.error("ユーザーが見つかりません");
+      return;
+    }
+    onEditUser(user);
   };
 
   return (
@@ -113,12 +129,12 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           {searchNfcError && (
             <span className="text-error text-xs">{searchNfcError}</span>
           )}
-          {userList && selectedUser === null && (
+          {searchUserList && !selectedUserId && (
             <ul className="list bg-base-100 my-1 rounded-none px-1">
-              {userList.map((user) => (
+              {searchUserList.map((user) => (
                 <li
                   key={user.id}
-                  className="list-row border-base-300 hover:bg-primary/30 rounded-none border-b p-[0.5rem]"
+                  className="list-row border-base-300 hover:border-base-300/30 rounded-none border-b p-[0.5rem]"
                   onClick={() => handleSelectUser(user)}
                 >
                   <div className="flex items-center gap-2">
@@ -129,17 +145,30 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
               ))}
             </ul>
           )}
-          {selectedUser && (
+          {selectedUserId && selectedUser && (
             <div className="mt-8 flex flex-col gap-[1rem]">
               <ul className="list bg-base-100 rounded-box px-1">
-                <li className="list-row rounded-4 border p-[0]">
+                <li
+                  className="list-row rounded-4 hover:bg-base-300/30 border p-[0]"
+                  onClick={() => handleEditUser(selectedUserId)}
+                >
                   <div className="m-auto">
                     <UserIcon size={40} />
                   </div>
                   <div className="items-center align-[middle] text-[1.25rem]">
-                    <div>id: {`${selectedUser.id}`}</div>
-                    <div>name: {`${selectedUser.name}`}</div>
+                    <div>id: {`${selectedUser?.id}`}</div>
+                    <div>name: {`${selectedUser?.name}`}</div>
                   </div>
+                  {selectedUser?.comments && (
+                    <div className="text-warning m-1 flex items-center">
+                      <MdComment className="mr-1" size={20} />
+                    </div>
+                  )}
+                  {selectedUser?.warnings && (
+                    <div className="text-error m-1 flex items-center">
+                      <MdWarning className="mr-1" size={20} />
+                    </div>
+                  )}
                 </li>
               </ul>
 
@@ -207,7 +236,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
         </div>
       </div>
 
-      {selectedSeat && selectedUser && (
+      {selectedSeat && selectedUserId && selectedUser && (
         <AssignSeatConfirmModal
           isOpen={isConfirmModalOpen}
           seat={selectedSeat}
@@ -216,7 +245,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           onClose={() => setIsConfirmModalOpen(false)}
         />
       )}
-      {(userList || selectedUser) && (
+      {searchUserList && !selectedUserId && (
         <div
           className="modal-backdrop fixed inset-0 z-[1] h-screen w-screen"
           onClick={handleClose}

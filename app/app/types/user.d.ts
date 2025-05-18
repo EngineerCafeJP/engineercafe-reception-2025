@@ -1,7 +1,23 @@
 export type User = {
   id: number;
-  code: string;
   name: string;
+  pronunciation: string;
+  email: string;
+  phone: string;
+  prefectureId: number;
+  prefectureOther: string;
+  city: string;
+  address: string;
+  building: string;
+  belongId: number;
+  belongOther: string;
+  belongDetail: string;
+  jobId: number;
+  jobOther: string;
+  foundId: number;
+  foundOther: string;
+  comments: string;
+  warnings: string;
   createdAt: string;
   updatedAt: string;
 };

@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
+import UserEditModal, {
+  UserFormData,
+} from "@/app/(reception)/components/UserEditModal";
 import {
   useInUseSeatUsages,
   useSearchNfc,
@@ -9,12 +12,15 @@ import {
   useSeatUsage,
 } from "@/app/(reception)/hooks";
 import { useSearchUsers } from "@/app/(reception)/hooks/use-search-users";
+import { useUpdateUser } from "@/app/(reception)/hooks/use-update-user";
+import { useRegistrationOptions } from "@/app/(registration)/registration/hooks/use-registration-options";
 import { Seat, SeatUsage, User } from "@/app/types";
 import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
 
 export default function HomePage() {
   const [searchUserKeyword, setSearchUserKeyword] = useState<string>("");
+  const [editUser, setEditUser] = useState<User | null>(null);
   const [debouncedChangeSearchWord] = useDebounce(searchUserKeyword, 500);
   const {
     seats,
@@ -42,12 +48,27 @@ export default function HomePage() {
     users,
     isLoading: usersLoading,
     error: usersError,
+    fetch: fetchUsers,
   } = useSearchUsers(debouncedChangeSearchWord);
   const {
     search: searchNfc,
     error: searchNfcError,
     clearError: clearSearchNfcError,
   } = useSearchNfc();
+
+  const {
+    isLoading: isOptionsLoading,
+    isError: isOptionsError,
+    prefectures,
+    belongs,
+    jobs,
+  } = useRegistrationOptions("ja");
+
+  const {
+    update: updateUser,
+    isLoading: isUpdateUserLoading,
+    error: updateUserError,
+  } = useUpdateUser();
 
   const handleDetectCard = async (cardId: string) => {
     const userId = await searchNfc(cardId);
@@ -87,20 +108,42 @@ export default function HomePage() {
     await fetchInUseSeatUsage();
   };
 
+  const handleUpdateUser = async (userData: UserFormData) => {
+    const updatedUser = await updateUser(userData.id, {
+      ...userData,
+      prefectureId: Number(userData.prefectureId),
+      belongId: Number(userData.belongId),
+      jobId: Number(userData.jobId),
+    } as Partial<User>);
+
+    if (updatedUser != null) {
+      // ユーザー情報を再取得する
+      fetchUsers(searchUserKeyword);
+    }
+  };
+
   const isLoading =
-    seatsLoading || seatUsagesLoading || seatUsageLoading || usersLoading;
+    seatsLoading ||
+    seatUsagesLoading ||
+    seatUsageLoading ||
+    usersLoading ||
+    isOptionsLoading ||
+    isUpdateUserLoading;
+
+  const error =
+    seatsError ??
+    seatUsagesError ??
+    seatUsageError ??
+    usersError ??
+    updateUserError;
 
   // TODO エラー表示を作成する
-  if (seatsError || seatUsagesError || seatUsageError || usersError) {
-    return (
-      <div>
-        Error:
-        {seatsError?.message ||
-          seatUsagesError?.message ||
-          seatUsageError?.message ||
-          usersError?.message}
-      </div>
-    );
+  if (error) {
+    return <div>Error: {error?.message}</div>;
+  }
+
+  if (isOptionsError) {
+    return <div>Error: パラメーターの取得に失敗しました。</div>;
   }
 
   return (
@@ -118,6 +161,7 @@ export default function HomePage() {
           onClose={() => {}}
           onDetectCard={handleDetectCard}
           onDisconnectUsbDevice={clearSearchNfcError}
+          onEditUser={setEditUser}
         />
 
         <div className="h-12"></div>
@@ -129,6 +173,17 @@ export default function HomePage() {
           onMoveSeat={handleMoveSeat}
         />
       </div>
+      {editUser && prefectures && belongs && jobs && (
+        <UserEditModal
+          belongs={belongs}
+          initialValues={editUser}
+          isOpen={Boolean(editUser)}
+          jobs={jobs}
+          prefectures={prefectures}
+          onClose={() => setEditUser(null)}
+          onSave={handleUpdateUser}
+        />
+      )}
       {isLoading && (
         <span className="z-index-1000 loading loading-spinner loading-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></span>
       )}

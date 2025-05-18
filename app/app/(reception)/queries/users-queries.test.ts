@@ -1,4 +1,9 @@
-import { fetchUsersBySearchParams } from "@/app/(reception)/queries/users-queries";
+import {
+  fetchLatestRegisteredUserId,
+  fetchUser,
+  fetchUsersBySearchParams,
+  updateUser,
+} from "@/app/(reception)/queries/users-queries";
 import supabase from "@/utils/supabase/client";
 
 jest.mock("@/utils/supabase/client");
@@ -25,7 +30,7 @@ describe("fetchUsersBySearchParams", () => {
 
   describe("when no search params", () => {
     beforeEach(() => {
-      jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
+      supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
     });
     it("should fetch empty array", async () => {
       const { data, error } = await fetchUsersBySearchParams();
@@ -40,7 +45,7 @@ describe("fetchUsersBySearchParams", () => {
         data: mockUsersData,
         error: mockError,
       });
-      jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
+      supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
     });
 
     it("should fetch users by search params", async () => {
@@ -59,7 +64,7 @@ describe("fetchUsersBySearchParams", () => {
         data: mockUsersData,
         error: mockError,
       });
-      jest.spyOn(supabase, "from").mockReturnValue(supabaseTableMock);
+      supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
     });
 
     it("should fetch users by search params", async () => {
@@ -85,6 +90,132 @@ describe("fetchUsersBySearchParams", () => {
       expect(data).toEqual(mockUsersData);
       expect(error).toBeNull();
       expect(supabase.from).toHaveBeenCalledWith("users");
+    });
+  });
+});
+
+describe("fetchLatestRegisteredUserId", () => {
+  const mockUserData = {
+    id: 1,
+    created_at: "2025-03-14 10:00:00",
+  };
+  const mockError = null;
+  const supabaseTableMock = {
+    select: jest.fn().mockReturnThis(),
+    order: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockReturnThis(),
+    single: jest.fn().mockResolvedValue({
+      data: mockUserData,
+      error: mockError,
+    }),
+  };
+
+  beforeEach(() => {
+    supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should fetch latest registered user id", async () => {
+    const { data, error } = await fetchLatestRegisteredUserId();
+    expect(data).toEqual(mockUserData);
+    expect(error).toBeNull();
+  });
+});
+
+describe("fetchUser", () => {
+  const mockUsersData = [
+    {
+      id: 1,
+      name: "user_name",
+      email: "user_email",
+      phone: "user_phone",
+      created_at: "2025-03-14 10:00:00",
+    },
+  ];
+  const mockError = null;
+  const supabaseTableMock = {
+    select: jest.fn().mockReturnThis(),
+    is: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    or: jest.fn().mockReturnThis(),
+    single: jest.fn().mockResolvedValue({
+      data: mockUsersData,
+      error: mockError,
+    }),
+  };
+
+  beforeEach(() => {
+    supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
+  });
+
+  it("should fetch user", async () => {
+    const { data, error } = await fetchUser(1);
+    expect(data).toEqual(mockUsersData);
+    expect(error).toBeNull();
+  });
+
+  describe("when user not found", () => {
+    const mockError = new Error("User not found");
+    beforeEach(() => {
+      supabaseTableMock.single = jest.fn().mockReturnValue({
+        data: null,
+        error: mockError,
+      });
+    });
+
+    it("should fetch user", async () => {
+      const { data, error } = await fetchUser(1);
+      expect(data).toEqual(null);
+      expect(error).toBeInstanceOf(Error);
+    });
+  });
+});
+
+describe("updateUser", () => {
+  const mockUser = {
+    id: 1,
+    name: "user_name",
+    email: "user_email",
+    phone: "user_phone",
+    created_at: "2025-03-14 10:00:00",
+  };
+
+  const mockError = null;
+  const supabaseTableMock = {
+    update: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnValue({
+      data: mockUser,
+      error: mockError,
+    }),
+  };
+
+  beforeEach(() => {
+    supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
+  });
+
+  it("should update user", async () => {
+    const { data, error } = await updateUser(1, mockUser);
+    expect(data).toEqual(mockUser);
+    expect(error).toBeNull();
+  });
+
+  describe("when user not found", () => {
+    const mockError = new Error("User not found");
+    beforeEach(() => {
+      supabaseTableMock.eq = jest.fn().mockReturnValue({
+        data: null,
+        error: mockError,
+      });
+    });
+
+    it("should update user", async () => {
+      const { data, error } = await updateUser(1, mockUser);
+      expect(data).toEqual(null);
+      expect(error).toBeInstanceOf(Error);
     });
   });
 });
