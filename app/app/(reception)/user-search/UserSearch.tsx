@@ -1,45 +1,65 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import SearchFilters from "./SearchFilters";
+import { fetchUsers } from "@/app/queries/user-search-queries";
+import supabase from "@/utils/supabase/client";
+import { Tables } from "@/utils/supabase/database.types";
+import SearchFilters, { Filters } from "./SearchFilters";
 import SearchInput from "./SearchInput";
 import UserList from "./UserList";
 
+type User = Tables<"users">;
+
+type UserFilters = {
+  searchText: string;
+  number?: boolean;
+  email?: boolean;
+  phone?: boolean;
+};
+
 export default function UserSearch() {
   const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const { register, watch, getValues } = useForm<Filters>({
-    defaultValues: {
-      searchText: "",
-      id: false,
-      email: false,
-      phone: false,
-    },
-  });
-  const filters = watch();
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const { register, getValues } = useForm<Filters>();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const res = await fetch("https://jsonplaceholder.typicode.com/users");
-      const data = await res.json();
+    const loadUsers = async () => {
+      const { data, error } = await fetchUsers(supabase, {
+        searchText: "", // 初期値
+        number: false,
+        email: false,
+        phone: false,
+      });
+      if (error) {
+        console.error("ユーザ取得に失敗しました:", error.message);
+        return;
+      }
       setUsers(data);
       setFilteredUsers(data);
     };
-    fetchUsers();
+    loadUsers();
   }, []);
 
+  const applySearchFilters = async (filters: UserFilters) => {
+    const { data, error } = await fetchUsers(supabase, filters);
+    if (error) {
+      console.error("検索に失敗しました:", error.message);
+      return;
+    }
+    setFilteredUsers(data);
+  };
+
   const handleSearch = () => {
-    const { searchText, id, email, phone } = getValues();
-    const keyword = searchText.toLowerCase();
+    const { searchText, number, email, phone } = getValues();
 
-    const filtered = users.filter((user) => {
-      const matchId = id && user.id.toString().includes(keyword);
-      const matchEmail = email && user.email.toLowerCase().includes(keyword);
-      const matchPhone = phone && user.phone.includes(keyword);
-      return matchId || matchEmail || matchPhone;
-    });
-
-    setFilteredUsers(filtered);
+    const filters: UserFilters = {
+      searchText,
+      number: number || false,
+      email: email || false,
+      phone: phone || false,
+    };
+    console.log("適用する filters:", filters);
+    applySearchFilters(filters);
   };
 
   return (

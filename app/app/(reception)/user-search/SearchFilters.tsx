@@ -1,7 +1,7 @@
 import { UseFormRegister } from "react-hook-form";
 
-type Filters = {
-  id: boolean;
+export type Filters = {
+  number: boolean;
   email: boolean;
   phone: boolean;
   searchText: string;
@@ -14,7 +14,7 @@ type Props = {
 type FilterItemKey = Exclude<keyof Filters, "searchText">;
 
 const filterItems: { name: FilterItemKey; text: string }[] = [
-  { name: "id", text: "会員番号" },
+  { name: "number", text: "会員番号" },
   { name: "email", text: "Email" },
   { name: "phone", text: "電話番号" },
 ];
