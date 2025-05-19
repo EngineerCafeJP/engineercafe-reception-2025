@@ -10,6 +10,7 @@ import CardReaderControlButton from "@/app/components/CardReaderControlButton";
 import { User } from "@/app/types";
 
 type NfcRegistrationFormProps = {
+  defaultUserId?: number;
   isCreateNfcPending: boolean;
   isLatestRegisteredUserLoading: boolean;
   latestRegisteredUser: Pick<User, "id" | "createdAt">;
@@ -17,6 +18,7 @@ type NfcRegistrationFormProps = {
 };
 
 export default function NfcRegistrationForm({
+  defaultUserId,
   isCreateNfcPending,
   isLatestRegisteredUserLoading,
   latestRegisteredUser,
@@ -30,12 +32,16 @@ export default function NfcRegistrationForm({
     setValue,
     getFieldState,
   } = useForm<NfcRegistrationSchema>({
+    defaultValues: {
+      cardId: "",
+      userId: defaultUserId?.toString() || "",
+    },
     resolver: standardSchemaResolver(nfcRegistrationSchema),
   });
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset();
+      reset({ cardId: "", userId: "" });
     }
   }, [isSubmitSuccessful, reset]);
 
@@ -73,7 +79,7 @@ export default function NfcRegistrationForm({
             <span className="ml-1 text-xs text-red-400">必須</span>
           </label>
           <input
-            {...register("userId", { valueAsNumber: true })}
+            {...register("userId")}
             autoComplete="off"
             className={clsx("input w-full", {
               "input-error": getFieldState("userId").invalid,
@@ -95,7 +101,7 @@ export default function NfcRegistrationForm({
           isLoading={isLatestRegisteredUserLoading}
           latestRegisteredUser={latestRegisteredUser}
           onUserIdCopy={(userId) => {
-            setValue("userId", userId);
+            setValue("userId", userId.toString());
           }}
         />
       </div>

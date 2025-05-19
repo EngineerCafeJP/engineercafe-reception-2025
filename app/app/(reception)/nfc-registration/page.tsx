@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { LuIdCard } from "react-icons/lu";
 import NfcRegistrationError from "@/app/(reception)/nfc-registration/components/NfcRegistrationError";
@@ -8,6 +9,12 @@ import { useLatestRegisteredUser } from "@/app/(reception)/nfc-registration/hook
 import { useSubmitNfcRegistration } from "@/app/(reception)/nfc-registration/hooks/use-submit-nfc-registration";
 
 export default function NfcRegistration() {
+  const searchParams = useSearchParams();
+  const searchParamUserId = searchParams.get("userId");
+  const defaultUserId =
+    searchParamUserId !== null && !Number.isNaN(Number(searchParamUserId))
+      ? Number(searchParamUserId)
+      : undefined;
   const {
     isLoading: isLatestRegisteredUserLoading,
     isError: isLatestRegisteredUserError,
@@ -67,6 +74,7 @@ export default function NfcRegistration() {
             </div>
             {latestRegisteredUser && (
               <NfcRegistrationForm
+                defaultUserId={defaultUserId}
                 isCreateNfcPending={isCreateNfcPending}
                 isLatestRegisteredUserLoading={isLatestRegisteredUserLoading}
                 latestRegisteredUser={{
