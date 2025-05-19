@@ -13,6 +13,8 @@ type User = Tables<"users">;
 type UserFilters = {
   searchText: string;
   id?: boolean;
+  name?: boolean;
+  pronunciation?: boolean;
   email?: boolean;
   phone?: boolean;
 };
@@ -50,11 +52,13 @@ export default function UserSearch() {
   };
 
   const handleSearch = () => {
-    const { searchText, id, email, phone } = getValues();
+    const { searchText, id, name, pronunciation, email, phone } = getValues();
 
     const filters: UserFilters = {
       searchText,
       id: id || false,
+      name: name || false,
+      pronunciation: pronunciation || false,
       email: email || false,
       phone: phone || false,
     };

@@ -4,6 +4,8 @@ export type Filters = {
   id?: boolean;
   email?: boolean;
   phone?: boolean;
+  name?: boolean;
+  pronunciation?: boolean;
   searchText: string;
 };
 
@@ -15,6 +17,8 @@ type FilterItemKey = Exclude<keyof Filters, "searchText">;
 
 const filterItems: { name: FilterItemKey; text: string }[] = [
   { name: "id", text: "会員番号" },
+  { name: "name", text: "名前" },
+  { name: "pronunciation", text: "フリガナ" },
   { name: "email", text: "Email" },
   { name: "phone", text: "電話番号" },
 ];

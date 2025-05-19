@@ -6,6 +6,8 @@ export function fetchUsers(
   filters: {
     searchText: string;
     id?: boolean;
+    name?: boolean;
+    pronunciation?: boolean;
     email?: boolean;
     phone?: boolean;
   },
@@ -16,11 +18,18 @@ export function fetchUsers(
   const keyword = filters.searchText.trim();
 
   if (keyword.length === 0) {
-    return query; // 空文字ならそのまま返す（全件取得）
+    return query.filter("id", "eq", -1); //空を返す
   }
 
   if (filters.id && !isNaN(Number(keyword))) {
     conditions.push(`id.eq.${Number(keyword)}`);
+  }
+
+  if (filters.name) {
+    conditions.push(`name.ilike.%${keyword}%`);
+  }
+  if (filters.pronunciation) {
+    conditions.push(`pronunciation.ilike.%${keyword}%`);
   }
 
   if (filters.email) {
