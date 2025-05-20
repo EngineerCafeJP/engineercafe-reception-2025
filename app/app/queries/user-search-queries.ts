@@ -18,10 +18,10 @@ export function fetchUsers(
   const keyword = filters.searchText.trim();
 
   if (keyword.length === 0) {
-    return query.filter("id", "eq", -1); //空を返す
+    return Promise.resolve({ data: [], error: null }); //空を返す
   }
 
-  if (filters.id && !isNaN(Number(keyword))) {
+  if (filters.id && keyword !== "" && !isNaN(Number(keyword))) {
     conditions.push(`id.eq.${Number(keyword)}`);
   }
 
