@@ -1,11 +1,14 @@
 import { UseFormRegister } from "react-hook-form";
 
-type FormValues = {
+type SearchFormValues = {
   searchText: string;
+  id?: boolean;
+  email?: boolean;
+  phone?: boolean;
 };
 
 type Props = {
-  register: UseFormRegister<FormValues>;
+  register: UseFormRegister<SearchFormValues>;
   onSubmit: () => void;
 };
 

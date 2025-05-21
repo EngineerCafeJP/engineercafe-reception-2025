@@ -1,5 +1,10 @@
+import Link from "next/link";
+import { Tables } from "@/utils/supabase/database.types";
+
+type User = Tables<"users">;
+
 type Props = {
-  users: { number: number; email: string; phone: string }[];
+  users: User[];
 };
 
 export default function UserList({ users }: Props) {
@@ -9,10 +14,23 @@ export default function UserList({ users }: Props) {
       {users.length > 0 ? (
         <ul className="space-y-4">
           {users.map((user) => (
-            <li key={user.number} className="rounded-lg bg-gray-100 p-4 shadow">
-              <p className="text-lg font-semibold">会員番号: {user.number}</p>
-              <p className="text-gray-600">Email: {user.email}</p>
-              <p className="text-gray-500">電話番号: {user.phone}</p>
+            <li
+              key={user.id}
+              className="flex items-center justify-between rounded-lg bg-gray-100 p-4 shadow"
+            >
+              <div>
+                <p className="text-lg font-semibold">会員番号: {user.id}</p>
+                <p className="font-medium text-gray-800">名前: {user.name}</p>
+                <p className="text-gray-600">フリガナ: {user.pronunciation}</p>
+                <p className="text-gray-600">Email: {user.email}</p>
+                <p className="text-gray-500">電話番号: {user.phone}</p>
+              </div>
+              <Link
+                className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                href={`/nfc-registration?userId=${user.id}`}
+              >
+                編集
+              </Link>
             </li>
           ))}
         </ul>

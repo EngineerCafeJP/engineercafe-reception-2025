@@ -5,25 +5,31 @@ export function fetchUsers(
   client: SupabaseClient<Database>,
   filters: {
     searchText: string;
-    number?: boolean;
+    id?: boolean;
+    name?: boolean;
+    pronunciation?: boolean;
     email?: boolean;
     phone?: boolean;
   },
 ) {
-  let query = client
-    .from("users")
-    .select("*")
-    .order("number", { ascending: true });
+  let query = client.from("users").select("*").order("id", { ascending: true });
 
   const conditions: string[] = [];
   const keyword = filters.searchText.trim();
 
   if (keyword.length === 0) {
-    return query; // 空文字ならそのまま返す（全件取得）
+    return Promise.resolve({ data: [], error: null }); //空を返す
   }
 
-  if (filters.number && !isNaN(Number(keyword))) {
-    conditions.push(`number.eq.${Number(keyword)}`);
+  if (filters.id && keyword !== "" && !isNaN(Number(keyword))) {
+    conditions.push(`id.eq.${Number(keyword)}`);
+  }
+
+  if (filters.name) {
+    conditions.push(`name.ilike.%${keyword}%`);
+  }
+  if (filters.pronunciation) {
+    conditions.push(`pronunciation.ilike.%${keyword}%`);
   }
 
   if (filters.email) {
