@@ -12,7 +12,7 @@ export default function NfcRegistration() {
   const searchParams = useSearchParams();
   const searchParamUserId = searchParams.get("userId");
   const defaultUserId =
-    searchParamUserId !== null && !Number.isNaN(Number(searchParamUserId))
+    searchParamUserId != null && /^\d+$/.test(searchParamUserId)
       ? Number(searchParamUserId)
       : undefined;
   const {
