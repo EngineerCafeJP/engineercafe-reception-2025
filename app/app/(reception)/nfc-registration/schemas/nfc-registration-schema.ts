@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const nfcRegistrationSchema = z.object({
-  cardId: z
+  nfcId: z
     .string({ message: "カードIDを入力して下さい。" })
     .nonempty({ message: "カードIDを入力して下さい。" }),
   userId: z
