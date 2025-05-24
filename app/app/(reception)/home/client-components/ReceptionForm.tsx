@@ -245,7 +245,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           onClose={() => setIsConfirmModalOpen(false)}
         />
       )}
-      {searchUserList && !selectedUserId && (
+      {(searchUserList?.length ?? 0) > 0 && !selectedUserId && (
         <div
           className="modal-backdrop fixed inset-0 z-[1] h-screen w-screen"
           onClick={handleClose}
