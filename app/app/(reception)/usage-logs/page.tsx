@@ -1,10 +1,11 @@
 "use client";
 
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSeatUsageLogsByDate } from "@/app/(reception)/hooks";
 import DeleteHistoryItemConfirmModal from "@/app/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
 import { SeatUsage } from "@/app/types";
+import { formatDate } from "@/utils/formatDate";
 import DateSelectorForm from "./client-components/DateSelectorForm";
 import HistoryListViewForm from "./client-components/HistoryListViewForm";
 import ScoreDisplayForm from "./client-components/ScoreDisplayForm";
@@ -22,11 +23,20 @@ export default function UsageHistory() {
   const { seatUsages, isLoading, fetchUsageLogs, updateUsageLogsIsDeleted } =
     useSeatUsageLogsByDate(targetDate);
 
+  const [isEnableDeleteItem, setIsEnableDeleteItem] = useState(false);
+
   // 日付変更時のデータ検索処理
   const onHistoryDateChanged = (date: Date) => {
     setTargetDate(date);
     fetchUsageLogs(date);
   };
+
+  useEffect(() => {
+    if (seatUsages.length > 0) {
+      // 当日分のみを削除可能とする
+      setIsEnableDeleteItem(formatDate(targetDate) === formatDate(new Date()));
+    }
+  }, [seatUsages]);
 
   // 履歴レコードの削除ボタンクリック処理
   const onDeleteHistory = (displayRowNo: number, deleteItem: SeatUsage) => {
@@ -66,6 +76,7 @@ export default function UsageHistory() {
         <ScoreDisplayForm seatUsages={seatUsages} />
 
         <HistoryListViewForm
+          isEnableDeleteItem={isEnableDeleteItem}
           seatUsages={seatUsages}
           onDeleteHistory={onDeleteHistory}
         />
