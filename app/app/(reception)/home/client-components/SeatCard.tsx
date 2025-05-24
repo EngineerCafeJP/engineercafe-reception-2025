@@ -20,23 +20,26 @@ const SeatCard: React.FC<SeatProps> = ({
 }) => {
   return (
     <div
-      className={`card card-xs card-border ${seatUsage?.userId ? "border-accent bg-accent/30" : "border-primary"} h-[7rem] w-[7rem]`}
+      className={`card card-xs card-border ${seatUsage?.userId ? "border-accent bg-accent/30" : "border-primary"} h-[8rem] w-[7rem] cursor-pointer`}
       onClick={() => onSeatClick(seat, seatUsage)}
     >
       <div className="card-body">
-        <div className="flex flex-row items-center gap-[0.25rem]">
+        <div className="flex flex-row items-center gap-[0.125rem]">
           <SeatIcon />
-          <div className="text-[0.75rem]">{seat.name}</div>
+          <div>
+            <div className="text-[0.675]">{seat.name.split(":")[0]}</div>
+            <div className="text-lg">{seat.name.split(":")[1]}</div>
+          </div>
         </div>
         {seatUsage?.userId && (
           <>
-            <div className="flex flex-row items-center gap-[0.25rem]">
+            <div className="flex flex-row items-center gap-[0.125rem]">
               <UserIcon />
-              <div className="text-[0.75rem]">{seatUsage.userId}</div>
+              <div className="text-base">{seatUsage.userId}</div>
             </div>
-            <div className="flex flex-row items-center gap-[0.25rem]">
+            <div className="flex flex-row items-center gap-[0.125rem]">
               <ClockIcon />
-              <div className="text-[0.75rem]">
+              <div className="text-xs">
                 {`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}
               </div>
             </div>
