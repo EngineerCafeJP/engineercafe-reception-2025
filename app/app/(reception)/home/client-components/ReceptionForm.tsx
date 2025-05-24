@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { MdClose, MdComment, MdWarning } from "react-icons/md";
+import { useKey } from "react-use";
 import AssignSeatConfirmModal from "@/app/(reception)/home/client-components/AssignSeatConfirmModal";
 import CardReaderControlButton from "@/app/components/CardReaderControlButton";
 import UserIcon from "@/app/components/icons/UserIcon";
@@ -32,18 +33,16 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   assignSeat,
   onEditUser,
 }) => {
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [selectedUserIndex, setSelectedUserIndex] = useState<number>(0);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const selectedUser = React.useMemo(
-    () => searchUserList?.find((user) => user.id === selectedUserId),
-    [searchUserList, selectedUserId],
-  );
+  const confirmButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleSelectUser = (user: User) => {
-    setSelectedUserId(user.id);
+    setSelectedUser(user);
   };
 
   const areaList = React.useMemo(
@@ -78,7 +77,8 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
 
   const handleClose = () => {
     handleChangeSearchWord("");
-    setSelectedUserId(null);
+    setSelectedUserIndex(0);
+    setSelectedUser(null);
     setSelectedArea(null);
     setSelectedSeat(null);
     setIsConfirmModalOpen(false);
@@ -101,6 +101,63 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     }
     onEditUser(user);
   };
+
+  const handleEnterKeyDown = useCallback(
+    (_e: KeyboardEvent) => {
+      if (
+        confirmButtonRef.current?.disabled === false &&
+        selectedUser !== null
+      ) {
+        setIsConfirmModalOpen(true);
+      } else if (searchUserList && selectedUser === null) {
+        setSelectedUser(searchUserList[selectedUserIndex]);
+      }
+    },
+    [selectedUser, selectedUserIndex, searchUserList],
+  );
+
+  const handleArrowDownKeyDown = useCallback(
+    (_e: KeyboardEvent) => {
+      if (searchUserList && selectedUser === null) {
+        if (selectedUserIndex < searchUserList.length - 1) {
+          setSelectedUserIndex(selectedUserIndex + 1);
+        }
+      }
+    },
+    [selectedUserIndex, searchUserList, selectedUser],
+  );
+
+  const handleArrowUpKeyDown = useCallback(
+    (_e: KeyboardEvent) => {
+      if (searchUserList && selectedUser === null) {
+        if (selectedUserIndex > 0) {
+          setSelectedUserIndex(selectedUserIndex - 1);
+        }
+      }
+    },
+    [selectedUserIndex, searchUserList, selectedUser],
+  );
+
+  useKey("Enter", handleEnterKeyDown, undefined, [
+    selectedUser,
+    handleEnterKeyDown,
+  ]);
+
+  useKey("Escape", handleClose, undefined, [selectedUser, handleClose]);
+
+  useKey("ArrowUp", handleArrowUpKeyDown, undefined, [
+    selectedUserIndex,
+    searchUserList,
+    selectedUser,
+    handleArrowUpKeyDown,
+  ]);
+
+  useKey("ArrowDown", handleArrowDownKeyDown, undefined, [
+    selectedUserIndex,
+    searchUserList,
+    selectedUser,
+    handleArrowDownKeyDown,
+  ]);
 
   return (
     <>
@@ -129,12 +186,18 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           {searchNfcError && (
             <span className="text-error text-xs">{searchNfcError}</span>
           )}
-          {searchUserList && !selectedUserId && (
+          {searchUserList && selectedUser === null && (
             <ul className="list bg-base-100 my-1 rounded-none px-1">
-              {searchUserList.map((user) => (
+              {searchUserList.map((user, index) => (
                 <li
                   key={user.id}
-                  className="list-row border-base-300 hover:border-base-300/30 rounded-none border-b p-[0.5rem]"
+                  className="list-row border-base-300 hover:border-base-300/30 cursor-pointer rounded-none border-b p-[0.5rem]"
+                  style={{
+                    backgroundColor:
+                      selectedUserIndex === index
+                        ? "var(--color-accent)"
+                        : "var(--color-base-100)",
+                  }}
                   onClick={() => handleSelectUser(user)}
                 >
                   <div className="flex items-center gap-2">
@@ -145,12 +208,12 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
               ))}
             </ul>
           )}
-          {selectedUserId && selectedUser && (
+          {selectedUser && (
             <div className="mt-8 flex flex-col gap-[1rem]">
               <ul className="list bg-base-100 rounded-box px-1">
                 <li
                   className="list-row rounded-4 hover:bg-base-300/30 border p-[0]"
-                  onClick={() => handleEditUser(selectedUserId)}
+                  onClick={() => handleEditUser(selectedUser.id)}
                 >
                   <div className="m-auto">
                     <UserIcon size={40} />
@@ -224,8 +287,10 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                   閉じる
                 </button>
                 <button
+                  ref={confirmButtonRef}
                   className="btn btn-primary"
                   disabled={selectedSeat === null}
+                  id="confirm-button"
                   onClick={() => setIsConfirmModalOpen(true)}
                 >
                   受付する
@@ -236,7 +301,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
         </div>
       </div>
 
-      {selectedSeat && selectedUserId && selectedUser && (
+      {selectedSeat && selectedUser && (
         <AssignSeatConfirmModal
           isOpen={isConfirmModalOpen}
           seat={selectedSeat}
@@ -245,7 +310,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           onClose={() => setIsConfirmModalOpen(false)}
         />
       )}
-      {searchUserList && !selectedUserId && (
+      {searchUserList && searchUserList.length > 0 && selectedUser === null && (
         <div
           className="modal-backdrop fixed inset-0 z-[1] h-screen w-screen"
           onClick={handleClose}
