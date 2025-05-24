@@ -81,6 +81,14 @@ describe("fetchSeatUsageLogsByDate", () => {
     }),
   };
 
+  beforeEach(() => {
+    supabase.from = jest.fn().mockReturnValue(supabaseTableMock);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("should fetch seat usage logs by seat startTime", async () => {
     const startDate = new Date(2025, 3, 13);
     const endDate = new Date(2025, 3, 14);
