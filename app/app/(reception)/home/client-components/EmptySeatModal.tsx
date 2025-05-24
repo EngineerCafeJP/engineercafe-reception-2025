@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useKey } from "react-use";
 import { Seat } from "@/app/types";
 import { EmptySeatModalBox } from "./EmptySeatModalBox";
 
@@ -15,6 +16,8 @@ export const EmptySeatModal: React.FC<SeatModalProps> = ({
   onClose,
   seat,
 }) => {
+  useKey("Escape", onClose, undefined, [isOpen]);
+
   if (seat == null) {
     return <></>;
   }
