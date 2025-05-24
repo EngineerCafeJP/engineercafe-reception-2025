@@ -4,13 +4,13 @@ import HistoryListViewItemForm from "@/app/(reception)/usage-logs/client-compone
 import { SeatUsage } from "@/app/types";
 
 interface Props {
-  isEnableDeleteItem: boolean;
+  isItemDeletable: boolean;
   seatUsages: SeatUsage[];
   onDeleteHistory: (displayRowNo: number, deleteItem: SeatUsage) => void;
 }
 
 const HistoryListViewForm: React.FC<Props> = ({
-  isEnableDeleteItem,
+  isItemDeletable,
   seatUsages,
   onDeleteHistory,
 }) => {
@@ -22,7 +22,7 @@ const HistoryListViewForm: React.FC<Props> = ({
             <HistoryListViewItemForm
               key={index + 1}
               displayRowNo={index + 1}
-              isEnableDeleteItem={isEnableDeleteItem}
+              isItemDeletable={isItemDeletable}
               item={item}
               onDeleteHistory={onDeleteHistory}
             />
@@ -33,7 +33,7 @@ const HistoryListViewForm: React.FC<Props> = ({
           </div>
         )}
       </div>
-      {!isEnableDeleteItem && seatUsages.length > 0 && (
+      {!isItemDeletable && seatUsages.length > 0 && (
         <span className="text-red-500">
           履歴の削除が必要な場合は管理者に依頼してください。
         </span>

@@ -23,7 +23,7 @@ export default function UsageHistory() {
   const { seatUsages, isLoading, fetchUsageLogs, updateUsageLogsIsDeleted } =
     useSeatUsageLogsByDate(targetDate);
 
-  const [isEnableDeleteItem, setIsEnableDeleteItem] = useState(false);
+  const [isItemDeletable, setIsItemDeletable] = useState(false);
 
   // 日付変更時のデータ検索処理
   const onHistoryDateChanged = (date: Date) => {
@@ -34,7 +34,7 @@ export default function UsageHistory() {
   useEffect(() => {
     if (seatUsages.length > 0) {
       // 当日分のみを削除可能とする
-      setIsEnableDeleteItem(formatDate(targetDate) === formatDate(new Date()));
+      setIsItemDeletable(formatDate(targetDate) === formatDate(new Date()));
     }
   }, [seatUsages]);
 
@@ -76,7 +76,7 @@ export default function UsageHistory() {
         <ScoreDisplayForm seatUsages={seatUsages} />
 
         <HistoryListViewForm
-          isEnableDeleteItem={isEnableDeleteItem}
+          isItemDeletable={isItemDeletable}
           seatUsages={seatUsages}
           onDeleteHistory={onDeleteHistory}
         />
