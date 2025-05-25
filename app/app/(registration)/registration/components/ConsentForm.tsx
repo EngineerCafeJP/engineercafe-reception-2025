@@ -3,23 +3,22 @@ import dynamic from "next/dynamic";
 import { ComponentType } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { RegistrationSchema } from "@/app/(registration)/registration/types";
+import type { MDXProps } from "mdx/types";
 
 type ConsentFormProps = {
   methods: UseFormReturn<RegistrationSchema>;
 };
 
-const registrationTermsMap: Record<string, ComponentType<object>> = {
-  ja: dynamic(
-    () =>
-      import(
-        "@/app/(registration)/registration/markdown/registration-terms/ja.mdx"
-      ),
+const registrationTermsMap: Record<string, ComponentType<MDXProps>> = {
+  ja: dynamic<MDXProps>(() =>
+    import(
+      "@/app/(registration)/registration/markdown/registration-terms/ja.mdx"
+    ).then((mod) => mod.default),
   ),
-  en: dynamic(
-    () =>
-      import(
-        "@/app/(registration)/registration/markdown/registration-terms/en.mdx"
-      ),
+  en: dynamic<MDXProps>(() =>
+    import(
+      "@/app/(registration)/registration/markdown/registration-terms/en.mdx"
+    ).then((mod) => mod.default),
   ),
 };
 

@@ -33,7 +33,7 @@ export default function NfcRegistrationForm({
     getFieldState,
   } = useForm<NfcRegistrationSchema>({
     defaultValues: {
-      cardId: "",
+      nfcId: "",
       userId: defaultUserId?.toString() || "",
     },
     resolver: standardSchemaResolver(nfcRegistrationSchema),
@@ -41,7 +41,7 @@ export default function NfcRegistrationForm({
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({ cardId: "", userId: "" });
+      reset({ nfcId: "", userId: "" });
     }
   }, [isSubmitSuccessful, reset]);
 
@@ -49,21 +49,21 @@ export default function NfcRegistrationForm({
     <form className="card-body gap-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 p-4 sm:grid-cols-2">
         <fieldset className="fieldset sm:col-span-1">
-          <label className="fieldset-label" htmlFor={register("cardId").name}>
+          <label className="fieldset-label" htmlFor={register("nfcId").name}>
             カードID<span className="ml-1 text-xs text-red-400">必須</span>
           </label>
           <input
-            {...register("cardId")}
+            {...register("nfcId")}
             autoComplete="off"
             className={clsx("input w-full", {
-              "input-error": getFieldState("cardId").invalid,
+              "input-error": getFieldState("nfcId").invalid,
             })}
-            id={register("cardId").name}
+            id={register("nfcId").name}
             type="text"
           />
           <ErrorMessage
             errors={errors}
-            name={register("cardId").name}
+            name={register("nfcId").name}
             render={({ message }) => (
               <span className="text-error text-xs">{message}</span>
             )}
@@ -71,7 +71,7 @@ export default function NfcRegistrationForm({
         </fieldset>
         <CardReaderControlButton
           className="sm:col-span-1"
-          onDetectCard={(cardId) => setValue("cardId", cardId)}
+          onDetectCard={(nfcId) => setValue("nfcId", nfcId)}
         />
         <fieldset className="fieldset sm:col-span-1">
           <label className="fieldset-label" htmlFor={register("userId").name}>
