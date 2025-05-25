@@ -30,10 +30,8 @@ export default function UsageHistory() {
   };
 
   const isItemDeletable = useMemo(
-    () =>
-      seatUsages.length > 0 &&
-      formatDate(targetDate) === formatDate(new Date()),
-    [targetDate, seatUsages],
+    () => formatDate(targetDate) === formatDate(new Date()),
+    [targetDate],
   );
 
   // 履歴レコードの削除ボタンクリック処理
