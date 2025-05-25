@@ -8,12 +8,14 @@ import { formatTimeWithQuarter } from "@/utils/formatTime";
 import { getUsageStatus } from "@/utils/seatStatusUtility";
 
 interface Props {
+  isItemDeletable: boolean;
   displayRowNo: number;
   item: SeatUsage;
   onDeleteHistory: (displayRowNo: number, deleteItem: SeatUsage) => void;
 }
 
 const HistoryListViewItemForm: React.FC<Props> = ({
+  isItemDeletable,
   displayRowNo,
   item,
   onDeleteHistory,
@@ -66,12 +68,14 @@ const HistoryListViewItemForm: React.FC<Props> = ({
       </div>
       <div className="w-2/14 p-2">
         <div className="h-full text-center">
-          <button
-            className="rounded-full bg-blue-200 px-2 py-2 text-[0.75em] font-bold text-white hover:bg-red-200"
-            onClick={() => onDeleteHistory(displayRowNo, item)}
-          >
-            <img className="h-[19px] w-[19px]" src="/images/trashCan.png" />
-          </button>
+          {isItemDeletable && (
+            <button
+              className="rounded-full bg-blue-200 px-2 py-2 text-[0.75em] font-bold text-white hover:bg-red-200"
+              onClick={() => onDeleteHistory(displayRowNo, item)}
+            >
+              <img className="h-[19px] w-[19px]" src="/images/trashCan.png" />
+            </button>
+          )}
         </div>
       </div>
     </div>

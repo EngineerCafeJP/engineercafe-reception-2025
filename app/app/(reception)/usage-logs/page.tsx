@@ -1,10 +1,11 @@
 "use client";
 
 import { format } from "date-fns";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSeatUsageLogsByDate } from "@/app/(reception)/hooks";
 import DeleteHistoryItemConfirmModal from "@/app/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
 import { SeatUsage } from "@/app/types";
+import { formatDate } from "@/utils/formatDate";
 import DateSelectorForm from "./client-components/DateSelectorForm";
 import HistoryListViewForm from "./client-components/HistoryListViewForm";
 import ScoreDisplayForm from "./client-components/ScoreDisplayForm";
@@ -27,6 +28,11 @@ export default function UsageHistory() {
     setTargetDate(date);
     fetchUsageLogs(date);
   };
+
+  const isItemDeletable = useMemo(
+    () => formatDate(targetDate) === formatDate(new Date()),
+    [targetDate],
+  );
 
   // 履歴レコードの削除ボタンクリック処理
   const onDeleteHistory = (displayRowNo: number, deleteItem: SeatUsage) => {
@@ -66,6 +72,7 @@ export default function UsageHistory() {
         <ScoreDisplayForm seatUsages={seatUsages} />
 
         <HistoryListViewForm
+          isItemDeletable={isItemDeletable}
           seatUsages={seatUsages}
           onDeleteHistory={onDeleteHistory}
         />
