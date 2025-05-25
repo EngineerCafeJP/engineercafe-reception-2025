@@ -33,9 +33,9 @@ const HistoryListViewForm: React.FC<Props> = ({
           </div>
         )}
       </div>
-      {!isItemDeletable && seatUsages.length > 0 && (
+      {!isItemDeletable && (
         <span className="text-red-500">
-          履歴の削除が必要な場合は管理者に依頼してください。
+          過去日の履歴情報の削除は管理者のみ実施可能です。
         </span>
       )}
     </>

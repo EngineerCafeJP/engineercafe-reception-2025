@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSeatUsageLogsByDate } from "@/app/(reception)/hooks";
 import DeleteHistoryItemConfirmModal from "@/app/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
 import { SeatUsage } from "@/app/types";
@@ -23,20 +23,18 @@ export default function UsageHistory() {
   const { seatUsages, isLoading, fetchUsageLogs, updateUsageLogsIsDeleted } =
     useSeatUsageLogsByDate(targetDate);
 
-  const [isItemDeletable, setIsItemDeletable] = useState(false);
-
   // 日付変更時のデータ検索処理
   const onHistoryDateChanged = (date: Date) => {
     setTargetDate(date);
     fetchUsageLogs(date);
   };
 
-  useEffect(() => {
-    if (seatUsages.length > 0) {
-      // 当日分のみを削除可能とする
-      setIsItemDeletable(formatDate(targetDate) === formatDate(new Date()));
-    }
-  }, [seatUsages]);
+  const isItemDeletable = useMemo(
+    () =>
+      seatUsages.length > 0 &&
+      formatDate(targetDate) === formatDate(new Date()),
+    [targetDate, seatUsages],
+  );
 
   // 履歴レコードの削除ボタンクリック処理
   const onDeleteHistory = (displayRowNo: number, deleteItem: SeatUsage) => {
