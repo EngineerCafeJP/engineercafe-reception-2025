@@ -20,7 +20,7 @@ export function useSubmitNfcRegistration(options?: {
     isSuccess,
     error,
     insert: async (data: NfcRegistrationSchema) => {
-      await mutateAsync([{ user_id: data.userId, nfc_id: data.cardId }]);
+      await mutateAsync([{ user_id: Number(data.userId), nfc_id: data.nfcId }]);
     },
   };
 }

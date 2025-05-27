@@ -34,7 +34,9 @@ const convertToSeatUsageReport = (
 ): SeatUsageReport[] => {
   if (!data) return [];
 
-  const camelizedData = humps.camelizeKeys(data);
+  const camelizedData = humps.camelizeKeys(data) as
+    | SeatUsageReport
+    | SeatUsageReport[];
   return Array.isArray(camelizedData) ? camelizedData : [camelizedData];
 };
 
