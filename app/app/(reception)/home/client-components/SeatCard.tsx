@@ -27,7 +27,7 @@ const SeatCard: React.FC<SeatProps> = ({
         <div className="flex flex-row items-center gap-[0.125rem]">
           <SeatIcon />
           <div>
-            <div className="text-[0.675]">{seat.name.split(":")[0]}</div>
+            <div className="text-[0.675rem]">{seat.name.split(":")[0]}</div>
             <div className="text-lg">{seat.name.split(":")[1]}</div>
           </div>
         </div>

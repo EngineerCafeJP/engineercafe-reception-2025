@@ -141,6 +141,8 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   useKey("Enter", handleEnterKeyDown, undefined, [
     selectedUser,
     handleEnterKeyDown,
+    searchUserList,
+    selectedUserIndex,
   ]);
 
   useKey("Escape", handleClose, undefined, [selectedUser, handleClose]);
