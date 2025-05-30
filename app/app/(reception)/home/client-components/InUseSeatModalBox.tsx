@@ -1,5 +1,6 @@
 "use client";
 
+import { useKey } from "react-use";
 import ClockIcon from "@/app/components/icons/ClockIcon";
 import SeatIcon from "@/app/components/icons/SeatIcon";
 import UserIcon from "@/app/components/icons/UserIcon";
@@ -23,6 +24,8 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
   onLeaveSeatClick,
   onExtendSeatClick,
 }) => {
+  useKey("Escape", onClose, undefined, [onClose]);
+
   return (
     <div className="modal-box border-accent border-2 p-[0]">
       <div className="bg-accent text-primary-content flex h-[50px] items-center justify-center text-[1.25rem] font-[800]">

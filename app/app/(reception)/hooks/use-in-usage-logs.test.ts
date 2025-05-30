@@ -1,5 +1,5 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { useSeatUsageLogsByDate } from "@/app/(reception)/hooks";
+import { useSeatUsageLogsByDate } from "@/app/(reception)/hooks/use-in-usage-logs";
 import {
   fetchInUseSeatUsageLogs,
   fetchSeatUsageLogsByDate,
@@ -16,13 +16,13 @@ const mockSeatsData = [
     startTime: new Date(2025, 1, 11, 10, 10, 10),
     endTime: new Date(2025, 1, 11, 10, 30, 10),
     isDeleted: false,
-    seat: {
+    seats: {
       id: 101,
       name: "１０１",
       categoryId: 1,
       seatCategory: "メインスペース",
     },
-    user: {
+    users: {
       id: 1,
       code: "00001",
       name: "２２　２２２",
@@ -35,19 +35,20 @@ const mockSeatsData = [
     startTime: new Date(2025, 1, 11, 10, 10, 10),
     endTime: new Date(2025, 1, 11, 11, 10, 10),
     isDeleted: false,
-    seat: {
+    seats: {
       id: 102,
       name: "１０２",
       categoryId: 1,
       seatCategory: "メインスペース",
     },
-    user: {
+    users: {
       id: 2,
       code: "00002",
       name: "３３３３３",
     },
   },
 ];
+const date = new Date(2025, 1, 11);
 
 describe("useSeatUsageLogsByDate", () => {
   describe("fetchSeatUsageLogsByDate", () => {
@@ -59,7 +60,7 @@ describe("useSeatUsageLogsByDate", () => {
     });
 
     it("fetched 2 logs", async () => {
-      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(date));
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
         expect(result.current.error).toBeNull();
@@ -116,7 +117,7 @@ describe("useSeatUsageLogsByDate", () => {
     });
 
     it("fetched 0 logs", async () => {
-      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(date));
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -134,7 +135,7 @@ describe("useSeatUsageLogsByDate", () => {
       });
     });
     it("error occurs on fetch", async () => {
-      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(date));
 
       await waitFor(() => {
         expect(result.current.seatUsages).toEqual([]);
@@ -160,7 +161,7 @@ describe("useSeatUsageLogsByDate", () => {
       });
     });
     it("done deleting logs", async () => {
-      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(date));
 
       await act(async () => {
         await result.current.updateUsageLogsIsDeleted(1002, true);
@@ -185,7 +186,7 @@ describe("useSeatUsageLogsByDate", () => {
       });
     });
     it("error occurs before deleting logs", async () => {
-      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(date));
 
       await act(async () => {
         await result.current.updateUsageLogsIsDeleted(234, true);
@@ -210,7 +211,7 @@ describe("useSeatUsageLogsByDate", () => {
       });
     });
     it("error occurs on deleting logs", async () => {
-      const { result } = renderHook(() => useSeatUsageLogsByDate(new Date()));
+      const { result } = renderHook(() => useSeatUsageLogsByDate(date));
 
       await act(async () => {
         await result.current.updateUsageLogsIsDeleted(9876, true);

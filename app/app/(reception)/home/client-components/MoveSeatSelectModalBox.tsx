@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useKey } from "react-use";
 import UserIcon from "@/app/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/app/types";
 
@@ -19,6 +20,18 @@ export const MoveSeatSelectModalBox: React.FC<MoveSeatSelectModalBoxProps> = ({
 }) => {
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
+
+  useKey("Escape", onClose, undefined, [onClose]);
+  useKey(
+    "Enter",
+    () => {
+      if (selectedSeat) {
+        onNextButtonClick(selectedSeat);
+      }
+    },
+    undefined,
+    [onNextButtonClick, selectedSeat],
+  );
 
   const areaList = seats
     .map((seat: Seat) => seat.seatCategory.name)

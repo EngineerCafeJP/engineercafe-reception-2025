@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useKey } from "react-use";
 import { AssignSeatConfirmBox } from "@/app/(reception)/home/client-components/AssignSeatConfirmBox";
 import { Seat, User } from "@/app/types";
 
@@ -22,6 +23,9 @@ export const AssignSeatConfirmModal: React.FC<AssignSeatConfirmModalProps> = ({
   const handleClose = () => {
     onClose();
   };
+
+  useKey("Enter", onAssignSeat, undefined, [isOpen, onAssignSeat]);
+  useKey("Escape", handleClose, undefined, [isOpen, handleClose]);
 
   return (
     <dialog

@@ -32,8 +32,8 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
   };
 
   return (
-    <div className="m-[1rem]">
-      <div className="flex justify-between gap-[0.5rem] overflow-x-auto">
+    <div className="m-[1rem] mx-auto w-fit">
+      <div className="mx-auto flex gap-4 overflow-x-auto">
         <AreaBox
           areaName="メインホール"
           maxCol={10}
@@ -53,7 +53,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
           onSeatClick={handleSeatClick}
         />
       </div>
-      <div className="flex justify-between gap-[0.5rem] overflow-x-auto">
+      <div className="mx-auto flex gap-4 overflow-x-auto">
         <AreaBox
           areaName="集中スペース"
           maxCol={3}
