@@ -457,6 +457,50 @@ export type Database = {
           },
         ];
       };
+      stay_categories: {
+        Row: {
+          created_at: string | null;
+          id: number;
+        };
+        Insert: {
+          created_at?: string | null;
+          id?: never;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: never;
+        };
+        Relationships: [];
+      };
+      stay_categories_translations: {
+        Row: {
+          created_at: string | null;
+          locale: string;
+          name: string;
+          stay_categories_id: number;
+        };
+        Insert: {
+          created_at?: string | null;
+          locale: string;
+          name: string;
+          stay_categories_id: number;
+        };
+        Update: {
+          created_at?: string | null;
+          locale?: string;
+          name?: string;
+          stay_categories_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "stay_categories_translations_stay_categories_id_fkey";
+            columns: ["stay_categories_id"];
+            isOneToOne: false;
+            referencedRelation: "stay_categories";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       users: {
         Row: {
           address: string | null;
@@ -479,6 +523,7 @@ export type Database = {
           prefecture_id: number | null;
           prefecture_other: string | null;
           pronunciation: string | null;
+          stay_categories_id: number | null;
           updated_at: string | null;
           warnings: string | null;
         };
@@ -503,6 +548,7 @@ export type Database = {
           prefecture_id?: number | null;
           prefecture_other?: string | null;
           pronunciation?: string | null;
+          stay_categories_id?: number | null;
           updated_at?: string | null;
           warnings?: string | null;
         };
@@ -527,6 +573,7 @@ export type Database = {
           prefecture_id?: number | null;
           prefecture_other?: string | null;
           pronunciation?: string | null;
+          stay_categories_id?: number | null;
           updated_at?: string | null;
           warnings?: string | null;
         };
@@ -557,6 +604,13 @@ export type Database = {
             columns: ["prefecture_id"];
             isOneToOne: false;
             referencedRelation: "prefectures";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "users_stay_categories_id_fkey";
+            columns: ["stay_categories_id"];
+            isOneToOne: false;
+            referencedRelation: "stay_categories";
             referencedColumns: ["id"];
           },
         ];

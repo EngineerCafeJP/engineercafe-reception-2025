@@ -159,6 +159,32 @@ VALUES
   (99, 'en', 'Other');
 
 -- 所属テーブル
+CREATE TABLE IF NOT EXISTS stay_categories (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  created_at timestamptz DEFAULT now ()
+);
+
+INSERT INTO stay_categories (created_at)
+SELECT now()
+FROM generate_series(1, 2);
+
+CREATE TABLE IF NOT EXISTS stay_categories_translations (
+  stay_categories_id bigint NOT NULL,
+  locale text NOT NULL,
+  name text NOT NULL,
+  created_at timestamptz DEFAULT now (),
+  PRIMARY KEY (stay_categories_id, locale),
+  FOREIGN KEY (stay_categories_id) REFERENCES stay_categories(id)
+);
+
+INSERT INTO stay_categories_translations (stay_categories_id, locale, name)
+VALUES
+  (1, 'ja', '日本在住'),
+  (1, 'en', 'Individual'),
+  (2, 'ja', '一時滞在（観光・ビザなど）'),
+  (2, 'en', 'Visiting Japan (tourist\, visa\, etc.)');
+
+-- 所属テーブル
 CREATE TABLE IF NOT EXISTS belongs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   created_at timestamptz DEFAULT now ()
@@ -369,6 +395,7 @@ CREATE TABLE
     email text,
     phone text,
     prefecture_id bigint,
+    stay_categories_id bigint,
     prefecture_other text,
     city text,
     address text,
@@ -388,6 +415,7 @@ CREATE TABLE
     created_at timestamptz NOT NULL DEFAULT now (),
     updated_at timestamptz,
     is_delete boolean,
+    FOREIGN KEY (stay_categories_id) REFERENCES stay_categories (id),
     FOREIGN KEY (prefecture_id) REFERENCES prefectures (id),
     FOREIGN KEY (belong_id) REFERENCES belongs (id),
     FOREIGN KEY (job_id) REFERENCES jobs (id),
