@@ -54,6 +54,33 @@ const eslintConfig = [
     },
   },
   {
+    files: [
+      "app/\\[locale\\]/\\(registration\\)/**/*.tsx",
+      "app/components/**/*.tsx",
+      "app/hooks/**/*.tsx",
+    ],
+    rules: {
+      // Consistently import navigation APIs from `@/i18n/navigation`
+      "no-restricted-imports": [
+        "error",
+        {
+          name: "next/link",
+          message: "Please import from `@/i18n/navigation` instead.",
+        },
+        {
+          name: "next/navigation",
+          importNames: [
+            "redirect",
+            "permanentRedirect",
+            "useRouter",
+            "usePathname",
+          ],
+          message: "Please import from `@/i18n/navigation` instead.",
+        },
+      ],
+    },
+  },
+  {
     files: ["**/*.test.ts", "**/*.test.tsx"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",

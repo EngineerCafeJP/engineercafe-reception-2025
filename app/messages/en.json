@@ -1,0 +1,98 @@
+{
+  "MultiStepForm": {
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit"
+  },
+  "Registration": {
+    "consent": {
+      "health": "Please confirm that you are in good health.",
+      "term": "You must agree to the terms of service."
+    },
+    "nameAddress": {
+      "name": "Please enter your full name.",
+      "pronunciation": "Please enter the phonetic reading of your name.",
+      "prefectureId": "Please select one prefecture.",
+      "prefectureOther": "Please enter the name of the prefecture (Other).",
+      "city": "Please enter your city, ward, town, or village.",
+      "address": "Please enter your address (chome)."
+    },
+    "contact": {
+      "phone": "Please enter your phone number.",
+      "email": {
+        "empty": "Please enter your email address.",
+        "invalid": "Invalid email address format."
+      },
+      "belongId": "Please select one affiliation.",
+      "belongOther": "Please enter your affiliation (Other).",
+      "jobId": "Please select one occupation.",
+      "jobOther": "Please enter your occupation (Other)."
+    },
+    "survey": {
+      "foundId": "Please select one option for how you heard about Engineer Cafe.",
+      "foundOther": "Please enter how you heard about Engineer Cafe (Other)."
+    },
+    "errorTitle": "An error has occurred",
+    "errorMessage": "Please refresh the page."
+  },
+  "RegistrationSteps": {
+    "basicInfo": "Basic Information",
+    "contact": "Contact",
+    "survey": "Survey",
+    "confirm": "Confirmation",
+    "complete": "Complete"
+  },
+  "ConsentForm": {
+    "title": "Welcome to Engineer Cafe",
+    "subTitle": "New Member Registration",
+    "healthCheck": "Health Check Confirmation",
+    "healthCheckLabel": "I confirm that I do not have any of the symptoms listed above.",
+    "personalInformationConsent": "Consent for Handling of Personal Information",
+    "personalInformationConsentLabel": "I agree to the use of my personal information for the purposes described above."
+  },
+  "NameAddressForm": {
+    "required": "Required",
+    "name": "Full Name",
+    "pronunciation": "Name (Phonetic Reading)",
+    "postalCode": "Postal Code",
+    "addressAutoFill": "Auto-fill Address",
+    "prefecture": "Prefecture",
+    "prefectureSelect": "Select Prefecture",
+    "city": "City / Ward / Town / Village",
+    "address": "Chome",
+    "other": "Other (Please provide details)"
+  },
+  "ContactForm": {
+    "required": "Required",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "belong": "Affiliation",
+    "belongDetail": "Affiliation Details",
+    "belongDetailDescription": "e.g., Community or Company Name",
+    "job": "Occupation",
+    "selectJob": "Select Occupation",
+    "jobOther": "Other (Please provide details)"
+  },
+  "SurveyForm": {
+    "required": "Required",
+    "found": "How did you hear about Engineer Cafe?"
+  },
+  "RegistrationConfirmation": {
+    "title": "Registration Details",
+    "name": "Name",
+    "pronunciation": "Name (Phonetic Reading)",
+    "address": "Address",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "belong": "Affiliation",
+    "belongDetail": "Affiliation Detail",
+    "job": "Occupation",
+    "found": "How did you hear about Engineer Cafe?"
+  },
+  "RegistrationComplete": {
+    "title": "User Registration Complete",
+    "userId": "User ID",
+    "alertTitle": "Please make a note of your User ID",
+    "alertMessage": "The User ID is required for NFC registration."
+  }
+}
