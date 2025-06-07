@@ -1,7 +1,7 @@
 import humps from "humps";
 import { useEffect, useState } from "react";
-import { fetchInUseSeatUsageLogs } from "@/app/[locale]/(reception)/queries/seat-usages-queries";
-import { SeatUsage } from "@/app/types";
+import { fetchInUseSeatUsageLogs } from "@/[locale]/(reception)/queries/seat-usages-queries";
+import { SeatUsage } from "@/types";
 
 export const useInUseSeatUsages = () => {
   const [seatUsages, setSeatUsages] = useState<SeatUsage[]>([]);

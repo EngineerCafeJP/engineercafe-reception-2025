@@ -2,8 +2,8 @@
 
 import React from "react";
 import { useKey } from "react-use";
-import { AssignSeatConfirmBox } from "@/app/[locale]/(reception)/home/client-components/AssignSeatConfirmBox";
-import { Seat, User } from "@/app/types";
+import { AssignSeatConfirmBox } from "@/[locale]/(reception)/home/client-components/AssignSeatConfirmBox";
+import { Seat, User } from "@/types";
 
 interface AssignSeatConfirmModalProps {
   isOpen: boolean;

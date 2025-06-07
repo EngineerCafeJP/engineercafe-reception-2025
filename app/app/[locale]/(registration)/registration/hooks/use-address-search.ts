@@ -1,5 +1,5 @@
 import { useTransition } from "react";
-import { ZIPCLOUD_API_URL } from "@/app/[locale]/(registration)/registration/constants/zipcloud";
+import { ZIPCLOUD_API_URL } from "@/[locale]/(registration)/registration/constants/zipcloud";
 
 type ZipcloudResponse = {
   status: number;

@@ -1,7 +1,7 @@
 import camelcaseKeys from "camelcase-keys";
 import { useState } from "react";
-import { fetchUserIdByNfcId } from "@/app/[locale]/(reception)/queries/nfcs-queries";
-import { Nfc } from "@/app/types";
+import { fetchUserIdByNfcId } from "@/[locale]/(reception)/queries/nfcs-queries";
+import { Nfc } from "@/types";
 
 export const useSearchNfc = () => {
   const [isLoading, setIsLoading] = useState(false);

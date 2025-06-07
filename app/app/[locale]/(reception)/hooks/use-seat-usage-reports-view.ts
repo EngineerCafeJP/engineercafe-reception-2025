@@ -5,8 +5,8 @@ import {
   fetchSeatUsageDailyReports,
   fetchSeatUsageMonthlyReports,
   fetchSeatUsageYearlyReports,
-} from "@/app/[locale]/(reception)/queries/seat-usage-report-queries";
-import { SeatUsageReport } from "@/app/types/seat-usage-report";
+} from "@/[locale]/(reception)/queries/seat-usage-report-queries";
+import { SeatUsageReport } from "@/types/seat-usage-report";
 
 const NO_RECORDS_ERROR_CODE = "PGRST116";
 

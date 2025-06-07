@@ -1,6 +1,6 @@
-import { User } from "@/app/types";
-import { SearchUserParams } from "@/app/types/search-users-params";
-import client from "@/app/utils/supabase/client";
+import { User } from "@/types";
+import { SearchUserParams } from "@/types/search-users-params";
+import client from "@/utils/supabase/client";
 
 export const fetchUsersBySearchParams = (params?: SearchUserParams) => {
   if (

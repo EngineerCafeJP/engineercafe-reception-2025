@@ -3,11 +3,11 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import clsx from "clsx";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import CardReaderControlButton from "@/app/[locale]/(reception)/components/CardReaderControlButton";
-import LatestRegisteredUserId from "@/app/[locale]/(reception)/nfc-registration/components/LatestRegisteredUserId";
-import { nfcRegistrationSchema } from "@/app/[locale]/(reception)/nfc-registration/schemas/nfc-registration-schema";
-import { NfcRegistrationSchema } from "@/app/[locale]/(reception)/nfc-registration/types";
-import { User } from "@/app/types";
+import CardReaderControlButton from "@/[locale]/(reception)/components/CardReaderControlButton";
+import LatestRegisteredUserId from "@/[locale]/(reception)/nfc-registration/components/LatestRegisteredUserId";
+import { nfcRegistrationSchema } from "@/[locale]/(reception)/nfc-registration/schemas/nfc-registration-schema";
+import { NfcRegistrationSchema } from "@/[locale]/(reception)/nfc-registration/types";
+import { User } from "@/types";
 
 type NfcRegistrationFormProps = {
   defaultUserId?: number;

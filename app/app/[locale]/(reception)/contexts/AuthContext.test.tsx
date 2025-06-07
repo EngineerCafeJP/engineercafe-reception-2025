@@ -1,10 +1,10 @@
 import { Session, Subscription, User } from "@supabase/supabase-js";
 import { render, screen, act, renderHook } from "@testing-library/react";
 import { redirect } from "next/navigation";
-import supabase from "@/app/utils/supabase/client";
+import supabase from "@/utils/supabase/client";
 import { AuthProvider, useAuth } from "./AuthContext";
 
-jest.mock("@/app/utils/supabase/client");
+jest.mock("@/utils/supabase/client");
 jest.mock("next/navigation", () => ({
   redirect: jest.fn(),
 }));

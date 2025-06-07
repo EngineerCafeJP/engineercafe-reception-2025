@@ -1,4 +1,4 @@
-import { SeatUsage } from "@/app/types";
+import { SeatUsage } from "@/types";
 
 /**
  * ステータス名の取得

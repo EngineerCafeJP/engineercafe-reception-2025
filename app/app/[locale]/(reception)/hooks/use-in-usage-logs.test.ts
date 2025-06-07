@@ -1,13 +1,13 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { useSeatUsageLogsByDate } from "@/app/[locale]/(reception)/hooks/use-in-usage-logs";
+import { useSeatUsageLogsByDate } from "@/[locale]/(reception)/hooks/use-in-usage-logs";
 import {
   fetchInUseSeatUsageLogs,
   fetchSeatUsageLogsByDate,
   fetchSeatUsageLogById,
   updateSeatUsageIsDeleted,
-} from "@/app/[locale]/(reception)/queries/seat-usages-queries";
+} from "@/[locale]/(reception)/queries/seat-usages-queries";
 
-jest.mock("@/app/[locale]/(reception)/queries/seat-usages-queries");
+jest.mock("@/[locale]/(reception)/queries/seat-usages-queries");
 const mockSeatsData = [
   {
     id: 1002,

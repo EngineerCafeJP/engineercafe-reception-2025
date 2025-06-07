@@ -3,10 +3,10 @@
 import React, { useCallback, useRef, useState } from "react";
 import { MdClose, MdComment, MdWarning } from "react-icons/md";
 import { useKey } from "react-use";
-import CardReaderControlButton from "@/app/[locale]/(reception)/components/CardReaderControlButton";
-import AssignSeatConfirmModal from "@/app/[locale]/(reception)/home/client-components/AssignSeatConfirmModal";
-import UserIcon from "@/app/components/icons/UserIcon";
-import { Seat, User } from "@/app/types";
+import CardReaderControlButton from "@/[locale]/(reception)/components/CardReaderControlButton";
+import AssignSeatConfirmModal from "@/[locale]/(reception)/home/client-components/AssignSeatConfirmModal";
+import UserIcon from "@/components/icons/UserIcon";
+import { Seat, User } from "@/types";
 
 interface ReceptionFormProps {
   searchWord: string;

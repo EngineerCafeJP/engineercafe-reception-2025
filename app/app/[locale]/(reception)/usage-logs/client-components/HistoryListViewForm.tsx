@@ -1,7 +1,7 @@
 "use client";
 
-import HistoryListViewItemForm from "@/app/[locale]/(reception)/usage-logs/client-components/HistoryListViewItemForm";
-import { SeatUsage } from "@/app/types";
+import HistoryListViewItemForm from "@/[locale]/(reception)/usage-logs/client-components/HistoryListViewItemForm";
+import { SeatUsage } from "@/types";
 
 interface Props {
   isItemDeletable: boolean;

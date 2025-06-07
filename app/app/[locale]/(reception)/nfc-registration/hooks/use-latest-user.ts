@@ -1,6 +1,6 @@
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import camelcaseKeys from "camelcase-keys";
-import { fetchLatestRegisteredUserId } from "@/app/[locale]/(reception)/queries/users-queries";
+import { fetchLatestRegisteredUserId } from "@/[locale]/(reception)/queries/users-queries";
 
 export function useLatestRegisteredUser() {
   const { isLoading, isError, error, data } = useQuery(

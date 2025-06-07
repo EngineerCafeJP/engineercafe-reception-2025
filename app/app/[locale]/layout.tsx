@@ -3,9 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, Locale, NextIntlClientProvider } from "next-intl";
 import { ReactNode } from "react";
-import NfcPortLibLoader from "@/app/components/NfcPortLibLoader";
-import ReactQueryClientProvider from "@/app/components/ReactQueryClientProvider";
-import { routing } from "@/i18n/routing";
+import NfcPortLibLoader from "@/components/NfcPortLibLoader";
+import ReactQueryClientProvider from "@/components/ReactQueryClientProvider";
+import { routing } from "~/i18n/routing";
 import "./globals.css";
 
 const geistSans = Geist({

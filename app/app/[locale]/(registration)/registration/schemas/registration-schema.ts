@@ -1,9 +1,9 @@
 import { useTranslations } from "next-intl";
 import { z } from "zod";
-import { BELONG_OTHER_ID } from "@/app/constants/belongs";
-import { FOUND_OTHER_ID } from "@/app/constants/founds";
-import { JOB_OTHER_ID } from "@/app/constants/jobs";
-import { PREFECTURE_OTHER_ID } from "@/app/constants/prefectures";
+import { BELONG_OTHER_ID } from "@/constants/belongs";
+import { FOUND_OTHER_ID } from "@/constants/founds";
+import { JOB_OTHER_ID } from "@/constants/jobs";
+import { PREFECTURE_OTHER_ID } from "@/constants/prefectures";
 
 export const registrationSchema = (
   t: ReturnType<typeof useTranslations<"Registration">>,

@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import ClockIcon from "@/app/components/icons/ClockIcon";
-import SeatIcon from "@/app/components/icons/SeatIcon";
-import UserIcon from "@/app/components/icons/UserIcon";
-import { Seat } from "@/app/types";
+import ClockIcon from "@/components/icons/ClockIcon";
+import SeatIcon from "@/components/icons/SeatIcon";
+import UserIcon from "@/components/icons/UserIcon";
+import { Seat } from "@/types";
 
 interface EmptySeatModalBoxProps {
   seat: Seat;

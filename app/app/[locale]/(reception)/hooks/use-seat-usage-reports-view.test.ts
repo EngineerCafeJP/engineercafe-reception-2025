@@ -4,14 +4,14 @@ import {
   useSeatUsageDailyReports,
   useSeatUsageMonthlyReports,
   useSeatUsageYearlyReports,
-} from "@/app/[locale]/(reception)/hooks/use-seat-usage-reports-view";
+} from "@/[locale]/(reception)/hooks/use-seat-usage-reports-view";
 import {
   fetchSeatUsageDailyReports,
   fetchSeatUsageMonthlyReports,
   fetchSeatUsageYearlyReports,
-} from "@/app/[locale]/(reception)/queries/seat-usage-report-queries";
+} from "@/[locale]/(reception)/queries/seat-usage-report-queries";
 
-jest.mock("@/app/[locale]/(reception)/queries/seat-usage-report-queries");
+jest.mock("@/[locale]/(reception)/queries/seat-usage-report-queries");
 
 const mockSeatUsageReportData = {
   total_users: 1,

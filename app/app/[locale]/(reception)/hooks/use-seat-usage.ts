@@ -5,8 +5,8 @@ import {
   fetchInUseSeatUsageLogsBySeatId,
   fetchSeatUsageLogById,
   updateSeatUsageEndtime,
-} from "@/app/[locale]/(reception)/queries/seat-usages-queries";
-import { SeatUsage } from "@/app/types";
+} from "@/[locale]/(reception)/queries/seat-usages-queries";
+import { SeatUsage } from "@/types";
 
 export const useSeatUsage = () => {
   const [isLoading, setIsLoading] = useState(false);

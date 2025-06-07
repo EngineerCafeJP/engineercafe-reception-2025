@@ -4,15 +4,15 @@ import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import UserEditModal, {
   UserFormData,
-} from "@/app/[locale]/(reception)/components/UserEditModal";
-import { useInUseSeatUsages } from "@/app/[locale]/(reception)/hooks/use-in-use-seat-usages";
-import { useSearchNfc } from "@/app/[locale]/(reception)/hooks/use-search-nfc";
-import { useSearchUsers } from "@/app/[locale]/(reception)/hooks/use-search-users";
-import { useSeatUsage } from "@/app/[locale]/(reception)/hooks/use-seat-usage";
-import { useSeatsWithCategory } from "@/app/[locale]/(reception)/hooks/use-seats-with-category";
-import { useUpdateUser } from "@/app/[locale]/(reception)/hooks/use-update-user";
-import { useRegistrationOptions } from "@/app/hooks/use-registration-options";
-import { Seat, SeatUsage, User } from "@/app/types";
+} from "@/[locale]/(reception)/components/UserEditModal";
+import { useInUseSeatUsages } from "@/[locale]/(reception)/hooks/use-in-use-seat-usages";
+import { useSearchNfc } from "@/[locale]/(reception)/hooks/use-search-nfc";
+import { useSearchUsers } from "@/[locale]/(reception)/hooks/use-search-users";
+import { useSeatUsage } from "@/[locale]/(reception)/hooks/use-seat-usage";
+import { useSeatsWithCategory } from "@/[locale]/(reception)/hooks/use-seats-with-category";
+import { useUpdateUser } from "@/[locale]/(reception)/hooks/use-update-user";
+import { useRegistrationOptions } from "@/hooks/use-registration-options";
+import { Seat, SeatUsage, User } from "@/types";
 import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
 

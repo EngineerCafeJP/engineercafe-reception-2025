@@ -2,9 +2,9 @@ import { ErrorMessage } from "@hookform/error-message";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { UseFormReturn } from "react-hook-form";
-import { RegistrationSchema } from "@/app/[locale]/(registration)/registration/types";
-import { FOUND_OTHER_ID } from "@/app/constants/founds";
-import { Found } from "@/app/types";
+import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
+import { FOUND_OTHER_ID } from "@/constants/founds";
+import { Found } from "@/types";
 
 type SurveyFormProps = {
   methods: UseFormReturn<RegistrationSchema>;

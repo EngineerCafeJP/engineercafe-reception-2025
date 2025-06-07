@@ -1,6 +1,6 @@
 import { useInsertMutation } from "@supabase-cache-helpers/postgrest-react-query";
-import { RegistrationSchema } from "@/app/[locale]/(registration)/registration/types";
-import supabase from "@/app/utils/supabase/client";
+import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
+import supabase from "@/utils/supabase/client";
 
 export function useSubmitRegistration(options: {
   onSuccess: (userId: number) => void;

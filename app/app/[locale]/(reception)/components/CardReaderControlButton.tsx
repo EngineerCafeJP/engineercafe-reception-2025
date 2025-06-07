@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { TbNfc, TbNfcOff } from "react-icons/tb";
-import { useNfcDetectCard } from "@/app/hooks/use-nfc-detect-card";
+import { useNfcDetectCard } from "@/hooks/use-nfc-detect-card";
 
 type CardReaderControlButtonProps = {
   className?: string;

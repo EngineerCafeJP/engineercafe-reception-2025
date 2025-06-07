@@ -1,7 +1,7 @@
 import humps from "humps";
 import { useEffect, useState } from "react";
-import { fetchUsersBySearchParams } from "@/app/[locale]/(reception)/queries/users-queries";
-import { User } from "@/app/types";
+import { fetchUsersBySearchParams } from "@/[locale]/(reception)/queries/users-queries";
+import { User } from "@/types";
 
 export const useSearchUsers = (keyword?: string) => {
   const [users, setUsers] = useState<User[]>([]);

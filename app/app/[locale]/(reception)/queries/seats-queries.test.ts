@@ -1,10 +1,10 @@
 import {
   getSeats,
   getSeatsWithCategory,
-} from "@/app/[locale]/(reception)/queries/seats-queries";
-import supabase from "@/app/utils/supabase/client";
+} from "@/[locale]/(reception)/queries/seats-queries";
+import supabase from "@/utils/supabase/client";
 
-jest.mock("@/app/utils/supabase/client");
+jest.mock("@/utils/supabase/client");
 
 describe("getSeats", () => {
   const mockSeatsData = [

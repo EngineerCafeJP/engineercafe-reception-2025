@@ -1,9 +1,9 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { fetchUsersBySearchParams } from "@/app/[locale]/(reception)/queries/users-queries";
+import { fetchUsersBySearchParams } from "@/[locale]/(reception)/queries/users-queries";
 import { useSearchUsers } from "./use-search-users";
 
-jest.mock("@/app/utils/supabase/client");
-jest.mock("@/app/[locale]/(reception)/queries/users-queries");
+jest.mock("@/utils/supabase/client");
+jest.mock("@/[locale]/(reception)/queries/users-queries");
 
 describe("useSearchUsers", () => {
   const mockUsers = [

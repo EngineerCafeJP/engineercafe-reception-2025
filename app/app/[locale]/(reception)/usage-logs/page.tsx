@@ -2,10 +2,10 @@
 
 import { format } from "date-fns";
 import { useMemo, useState } from "react";
-import { useSeatUsageLogsByDate } from "@/app/[locale]/(reception)/hooks/use-in-usage-logs";
-import DeleteHistoryItemConfirmModal from "@/app/[locale]/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
-import { SeatUsage } from "@/app/types";
-import { formatDate } from "@/app/utils/format-date";
+import { useSeatUsageLogsByDate } from "@/[locale]/(reception)/hooks/use-in-usage-logs";
+import DeleteHistoryItemConfirmModal from "@/[locale]/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
+import { SeatUsage } from "@/types";
+import { formatDate } from "@/utils/format-date";
 import DateSelectorForm from "./client-components/DateSelectorForm";
 import HistoryListViewForm from "./client-components/HistoryListViewForm";
 import ScoreDisplayForm from "./client-components/ScoreDisplayForm";

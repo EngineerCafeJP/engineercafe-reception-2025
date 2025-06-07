@@ -1,8 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
-import * as userQueries from "@/app/[locale]/(reception)/queries/users-queries";
+import * as userQueries from "@/[locale]/(reception)/queries/users-queries";
 import { useUpdateUser } from "./use-update-user";
 
-jest.mock("@/app/[locale]/(reception)/queries/users-queries");
+jest.mock("@/[locale]/(reception)/queries/users-queries");
 
 describe("useUpdateUser", () => {
   const userData = {

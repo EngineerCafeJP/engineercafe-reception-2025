@@ -1,6 +1,6 @@
 import { Locale } from "next-intl";
 import { use } from "react";
-import { redirect } from "@/i18n/navigation";
+import { redirect } from "~/i18n/navigation";
 
 export default function IndexPage({
   params,

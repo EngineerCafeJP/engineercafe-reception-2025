@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { fetchUsers } from "@/app/queries/user-search-queries";
-import supabase from "@/app/utils/supabase/client";
-import { Tables } from "@/app/utils/supabase/database.types";
+import { fetchUsers } from "@/queries/user-search-queries";
+import supabase from "@/utils/supabase/client";
+import { Tables } from "@/utils/supabase/database.types";
 import SearchFilters, { Filters } from "./components/SearchFilters";
 import SearchInput from "./components/SearchInput";
 import UserList from "./components/UserList";

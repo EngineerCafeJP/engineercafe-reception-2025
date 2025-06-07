@@ -1,4 +1,4 @@
-import client from "@/app/utils/supabase/client";
+import client from "@/utils/supabase/client";
 
 export const fetchUserIdByNfcId = (nfcId: string) => {
   return client

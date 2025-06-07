@@ -2,10 +2,10 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { LuIdCard } from "react-icons/lu";
-import NfcRegistrationError from "@/app/[locale]/(reception)/nfc-registration/components/NfcRegistrationError";
-import NfcRegistrationForm from "@/app/[locale]/(reception)/nfc-registration/components/NfcRegistrationForm";
-import { useLatestRegisteredUser } from "@/app/[locale]/(reception)/nfc-registration/hooks/use-latest-user";
-import { useSubmitNfcRegistration } from "@/app/[locale]/(reception)/nfc-registration/hooks/use-submit-nfc-registration";
+import NfcRegistrationError from "@/[locale]/(reception)/nfc-registration/components/NfcRegistrationError";
+import NfcRegistrationForm from "@/[locale]/(reception)/nfc-registration/components/NfcRegistrationForm";
+import { useLatestRegisteredUser } from "@/[locale]/(reception)/nfc-registration/hooks/use-latest-user";
+import { useSubmitNfcRegistration } from "@/[locale]/(reception)/nfc-registration/hooks/use-submit-nfc-registration";
 
 export default function NfcRegistrationPage() {
   const searchParams = useSearchParams();

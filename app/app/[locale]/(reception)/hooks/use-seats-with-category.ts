@@ -1,7 +1,7 @@
 import humps from "humps";
 import { useEffect, useState } from "react";
-import { getSeatsWithCategory } from "@/app/[locale]/(reception)/queries/seats-queries";
-import { SeatWithCategory } from "@/app/types";
+import { getSeatsWithCategory } from "@/[locale]/(reception)/queries/seats-queries";
+import { SeatWithCategory } from "@/types";
 
 export const useSeatsWithCategory = () => {
   const [seats, setSeats] = useState<SeatWithCategory[]>([]);

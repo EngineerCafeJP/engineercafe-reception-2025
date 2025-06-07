@@ -3,7 +3,7 @@
 import { Session } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-import supabase from "@/app/utils/supabase/client";
+import supabase from "@/utils/supabase/client";
 
 interface AuthContextType {
   session: Session | null;

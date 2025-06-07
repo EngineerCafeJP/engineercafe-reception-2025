@@ -1,7 +1,7 @@
 "use client";
 
-import { getUsageStatus } from "@/app/[locale]/(reception)/utils/seat-status-utility";
-import { SeatUsage } from "@/app/types";
+import { getUsageStatus } from "@/[locale]/(reception)/utils/seat-status-utility";
+import { SeatUsage } from "@/types";
 
 interface Props {
   isOpen: boolean;

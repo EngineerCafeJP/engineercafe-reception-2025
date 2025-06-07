@@ -7,10 +7,10 @@ import {
   fetchSeatUsageLogsByDate,
   updateSeatUsageEndtime,
   updateSeatUsageIsDeleted,
-} from "@/app/[locale]/(reception)/queries/seat-usages-queries";
-import supabase from "@/app/utils/supabase/client";
+} from "@/[locale]/(reception)/queries/seat-usages-queries";
+import supabase from "@/utils/supabase/client";
 
-jest.mock("@/app/utils/supabase/client");
+jest.mock("@/utils/supabase/client");
 
 describe("fetchSeatUsageLogById", () => {
   const mockSeatUsageLogData = {

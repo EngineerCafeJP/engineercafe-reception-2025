@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useKey } from "react-use";
-import { Seat } from "@/app/types";
+import { Seat } from "@/types";
 import { EmptySeatModalBox } from "./EmptySeatModalBox";
 
 interface SeatModalProps {

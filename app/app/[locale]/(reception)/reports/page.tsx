@@ -5,15 +5,15 @@ import {
   useSeatUsageDailyReports,
   useSeatUsageMonthlyReports,
   useSeatUsageYearlyReports,
-} from "@/app/[locale]/(reception)/hooks/use-seat-usage-reports-view";
-import DateSelectForm from "@/app/[locale]/(reception)/reports/client-components/DateSelectForm";
-import SeatUsageReportTable from "@/app/[locale]/(reception)/reports/client-components/SeatUsageReportsTable";
+} from "@/[locale]/(reception)/hooks/use-seat-usage-reports-view";
+import DateSelectForm from "@/[locale]/(reception)/reports/client-components/DateSelectForm";
+import SeatUsageReportTable from "@/[locale]/(reception)/reports/client-components/SeatUsageReportsTable";
 import {
   formatEndDateOfMonth,
   formatStartDateOfMonth,
   formatYear,
   formatYearMonth,
-} from "@/app/utils/format-date";
+} from "@/utils/format-date";
 
 export default function ReportsPage() {
   const [date, setDate] = useState<string>(

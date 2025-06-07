@@ -2,13 +2,13 @@ import { Messages, useTranslations } from "next-intl";
 import { UseFormReturn } from "react-hook-form";
 import { MdOutlineEdit } from "react-icons/md";
 import { z } from "zod";
-import { MultiStepFormStep } from "@/app/[locale]/(registration)/registration/components/MultiStepForm";
-import { RegistrationSchema } from "@/app/[locale]/(registration)/registration/types";
-import { BELONG_OTHER_ID } from "@/app/constants/belongs";
-import { FOUND_OTHER_ID } from "@/app/constants/founds";
-import { JOB_OTHER_ID } from "@/app/constants/jobs";
-import { PREFECTURE_OTHER_ID } from "@/app/constants/prefectures";
-import { Belong, Found, Job, Prefecture } from "@/app/types";
+import { MultiStepFormStep } from "@/[locale]/(registration)/registration/components/MultiStepForm";
+import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
+import { BELONG_OTHER_ID } from "@/constants/belongs";
+import { FOUND_OTHER_ID } from "@/constants/founds";
+import { JOB_OTHER_ID } from "@/constants/jobs";
+import { PREFECTURE_OTHER_ID } from "@/constants/prefectures";
+import { Belong, Found, Job, Prefecture } from "@/types";
 
 type FormValues = {
   name: string;

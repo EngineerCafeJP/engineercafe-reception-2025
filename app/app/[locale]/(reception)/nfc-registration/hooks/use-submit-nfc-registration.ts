@@ -1,6 +1,6 @@
 import { useInsertMutation } from "@supabase-cache-helpers/postgrest-react-query";
-import { NfcRegistrationSchema } from "@/app/[locale]/(reception)/nfc-registration/types";
-import supabase from "@/app/utils/supabase/client";
+import { NfcRegistrationSchema } from "@/[locale]/(reception)/nfc-registration/types";
+import supabase from "@/utils/supabase/client";
 
 export function useSubmitNfcRegistration(options?: {
   onSuccess?: (id: number) => void;

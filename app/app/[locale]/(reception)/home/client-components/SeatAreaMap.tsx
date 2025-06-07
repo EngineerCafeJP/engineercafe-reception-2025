@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
-import { Seat, SeatUsage, SeatWithCategory } from "@/app/types";
+import { Seat, SeatUsage, SeatWithCategory } from "@/types";
 import { AreaBox } from "./AreaBox";
 import EmptySeatModal from "./EmptySeatModal";
 import InUseSeatModal from "./InUseSeatModal";

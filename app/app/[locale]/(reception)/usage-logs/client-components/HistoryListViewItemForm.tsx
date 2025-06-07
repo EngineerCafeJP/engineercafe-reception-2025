@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { getUsageStatus } from "@/app/[locale]/(reception)/utils/seat-status-utility";
-import ClockIcon from "@/app/components/icons/ClockIcon";
-import SeatIcon from "@/app/components/icons/SeatIcon";
-import UserIcon from "@/app/components/icons/UserIcon";
-import { SeatUsage } from "@/app/types";
-import { formatTimeWithQuarter } from "@/app/utils/format-time";
+import { getUsageStatus } from "@/[locale]/(reception)/utils/seat-status-utility";
+import ClockIcon from "@/components/icons/ClockIcon";
+import SeatIcon from "@/components/icons/SeatIcon";
+import UserIcon from "@/components/icons/UserIcon";
+import { SeatUsage } from "@/types";
+import { formatTimeWithQuarter } from "@/utils/format-time";
 
 interface Props {
   isItemDeletable: boolean;

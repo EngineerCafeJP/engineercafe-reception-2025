@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { LuClipboardCopy } from "react-icons/lu";
-import { User } from "@/app/types";
-import { formatDateTime } from "@/app/utils/format-date-time";
+import { User } from "@/types";
+import { formatDateTime } from "@/utils/format-date-time";
 
 type LatestRegisteredUserIdProps = {
   className?: string;

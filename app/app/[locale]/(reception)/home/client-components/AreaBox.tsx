@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import SeatCardSkeleton from "@/app/[locale]/(reception)/home/client-components/SeatCardSkeleton";
-import { Seat, SeatUsage } from "@/app/types";
+import SeatCardSkeleton from "@/[locale]/(reception)/home/client-components/SeatCardSkeleton";
+import { Seat, SeatUsage } from "@/types";
 import SeatCard from "./SeatCard";
 
 export interface AreaBoxProps {

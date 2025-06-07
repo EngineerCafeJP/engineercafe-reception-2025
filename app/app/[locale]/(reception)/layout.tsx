@@ -1,5 +1,5 @@
-import Header from "@/app/[locale]/(reception)/components/Header";
-import { AuthProvider } from "@/app/[locale]/(reception)/contexts/AuthContext";
+import Header from "@/[locale]/(reception)/components/Header";
+import { AuthProvider } from "@/[locale]/(reception)/contexts/AuthContext";
 
 export default function ReceptionLayout({
   children,

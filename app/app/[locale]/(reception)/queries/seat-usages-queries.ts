@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import client from "@/app/utils/supabase/client";
+import client from "@/utils/supabase/client";
 
 export const fetchSeatUsageLogById = async (id: number) => {
   return client.from("seat_usage_logs").select("*").eq("id", id).single();

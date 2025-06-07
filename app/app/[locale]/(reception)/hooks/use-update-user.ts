@@ -3,8 +3,8 @@ import { useState } from "react";
 import {
   updateUser,
   fetchUser,
-} from "@/app/[locale]/(reception)/queries/users-queries";
-import { User } from "@/app/types";
+} from "@/[locale]/(reception)/queries/users-queries";
+import { User } from "@/types";
 
 export const useUpdateUser = () => {
   const [isLoading, setIsLoading] = useState(false);

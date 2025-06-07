@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Tables } from "@/app/utils/supabase/database.types";
+import { Tables } from "@/utils/supabase/database.types";
 
 type User = Tables<"users">;
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Seat, SeatUsage } from "@/app/types";
+import { Seat, SeatUsage } from "@/types";
 import { ExtendSeatConfirmModalBox } from "./ExtendSeatConfirmModalBox";
 import { InUseSeatModalBox } from "./InUseSeatModalBox";
 import { LeaveSeatConfirmModalBox } from "./LeaveSeatConfirmModalBox";

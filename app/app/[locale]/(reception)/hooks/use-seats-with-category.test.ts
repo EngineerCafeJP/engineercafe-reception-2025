@@ -1,8 +1,8 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { getSeatsWithCategory } from "@/app/[locale]/(reception)/queries/seats-queries";
+import { getSeatsWithCategory } from "@/[locale]/(reception)/queries/seats-queries";
 import { useSeatsWithCategory } from "./use-seats-with-category";
 
-jest.mock("@/app/[locale]/(reception)/queries/seats-queries");
+jest.mock("@/[locale]/(reception)/queries/seats-queries");
 
 const mockSeatsData = [
   {

@@ -2,10 +2,10 @@ import { ErrorMessage } from "@hookform/error-message";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { UseFormReturn } from "react-hook-form";
-import { RegistrationSchema } from "@/app/[locale]/(registration)/registration/types";
-import { BELONG_OTHER_ID } from "@/app/constants/belongs";
-import { JOB_OTHER_ID } from "@/app/constants/jobs";
-import { Belong, Job } from "@/app/types";
+import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
+import { BELONG_OTHER_ID } from "@/constants/belongs";
+import { JOB_OTHER_ID } from "@/constants/jobs";
+import { Belong, Job } from "@/types";
 
 type ContactFormProps = {
   methods: UseFormReturn<RegistrationSchema>;

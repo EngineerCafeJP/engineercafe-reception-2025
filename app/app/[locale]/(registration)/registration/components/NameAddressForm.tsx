@@ -2,9 +2,9 @@ import { ErrorMessage } from "@hookform/error-message";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { UseFormReturn } from "react-hook-form";
-import { RegistrationSchema } from "@/app/[locale]/(registration)/registration/types";
-import { PREFECTURE_OTHER_ID } from "@/app/constants/prefectures";
-import { Prefecture } from "@/app/types";
+import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
+import { PREFECTURE_OTHER_ID } from "@/constants/prefectures";
+import { Prefecture } from "@/types";
 
 type NameAddressFormProps = {
   methods: UseFormReturn<RegistrationSchema>;

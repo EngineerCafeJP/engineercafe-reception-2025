@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Nfc } from "@/app/utils/nfc";
-import { sleep } from "@/app/utils/sleep";
+import { Nfc } from "@/utils/nfc";
+import { sleep } from "@/utils/sleep";
 
 export function useNfcDetectCard({
   onSuccess,

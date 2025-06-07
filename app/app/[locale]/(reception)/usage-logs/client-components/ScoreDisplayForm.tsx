@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SeatUsage } from "@/app/types";
+import { SeatUsage } from "@/types";
 
 interface Props {
   seatUsages: SeatUsage[];

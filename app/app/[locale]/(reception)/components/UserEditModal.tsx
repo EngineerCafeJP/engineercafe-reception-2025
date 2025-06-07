@@ -4,10 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { BELONG_OTHER_ID } from "@/app/constants/belongs";
-import { JOB_OTHER_ID } from "@/app/constants/jobs";
-import { PREFECTURE_OTHER_ID } from "@/app/constants/prefectures";
-import { Belong, Job, Prefecture, User } from "@/app/types";
+import { BELONG_OTHER_ID } from "@/constants/belongs";
+import { JOB_OTHER_ID } from "@/constants/jobs";
+import { PREFECTURE_OTHER_ID } from "@/constants/prefectures";
+import { Belong, Job, Prefecture, User } from "@/types";
 
 const userFormSchema = z.object({
   id: z.number().min(1, { message: "IDを入力してください" }),

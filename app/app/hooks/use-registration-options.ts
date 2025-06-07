@@ -1,11 +1,11 @@
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import camelcaseKeys from "camelcase-keys";
 import { Locale } from "next-intl";
-import { fetchBelongTranslationsByLocale } from "@/app/queries/belong-translations-queries";
-import { fetchFoundTranslationsByLocale } from "@/app/queries/found-translations-queries";
-import { fetchJobTranslationsByLocale } from "@/app/queries/job-translations-queries";
-import { fetchPrefectureTranslationsByLocale } from "@/app/queries/prefecture-translations-queries";
-import supabase from "@/app/utils/supabase/client";
+import { fetchBelongTranslationsByLocale } from "@/queries/belong-translations-queries";
+import { fetchFoundTranslationsByLocale } from "@/queries/found-translations-queries";
+import { fetchJobTranslationsByLocale } from "@/queries/job-translations-queries";
+import { fetchPrefectureTranslationsByLocale } from "@/queries/prefecture-translations-queries";
+import supabase from "@/utils/supabase/client";
 
 export function useRegistrationOptions(locale: Locale) {
   const {

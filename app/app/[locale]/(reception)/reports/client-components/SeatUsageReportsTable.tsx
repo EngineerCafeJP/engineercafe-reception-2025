@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { SeatUsageReport } from "@/app/types/seat-usage-report";
+import { SeatUsageReport } from "@/types/seat-usage-report";
 
 interface SeatUsageReportTableProps {
   seatUsageReports: SeatUsageReport[];

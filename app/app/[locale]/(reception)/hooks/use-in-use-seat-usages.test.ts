@@ -1,9 +1,9 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { useInUseSeatUsages } from "@/app/[locale]/(reception)/hooks/use-in-use-seat-usages";
-import { fetchInUseSeatUsageLogs } from "@/app/[locale]/(reception)/queries/seat-usages-queries";
+import { useInUseSeatUsages } from "@/[locale]/(reception)/hooks/use-in-use-seat-usages";
+import { fetchInUseSeatUsageLogs } from "@/[locale]/(reception)/queries/seat-usages-queries";
 
-jest.mock("@/app/utils/supabase/client");
-jest.mock("@/app/[locale]/(reception)/queries/seat-usages-queries");
+jest.mock("@/utils/supabase/client");
+jest.mock("@/[locale]/(reception)/queries/seat-usages-queries");
 describe("useInUseSeatUsages", () => {
   const mockSeatUsages = [
     {

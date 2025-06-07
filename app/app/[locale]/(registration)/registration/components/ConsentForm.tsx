@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { Locale, useLocale, useTranslations } from "next-intl";
 import { ComponentType } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { RegistrationSchema } from "@/app/[locale]/(registration)/registration/types";
+import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
 import type { MDXProps } from "mdx/types";
 
 type ConsentFormProps = {
@@ -13,12 +13,12 @@ type ConsentFormProps = {
 const registrationTermsMap: Record<Locale, ComponentType<MDXProps>> = {
   ja: dynamic<MDXProps>(() =>
     import(
-      "@/app/[locale]/(registration)/registration/markdown/registration-terms/ja.mdx"
+      "@/[locale]/(registration)/registration/markdown/registration-terms/ja.mdx"
     ).then((mod) => mod.default),
   ),
   en: dynamic<MDXProps>(() =>
     import(
-      "@/app/[locale]/(registration)/registration/markdown/registration-terms/en.mdx"
+      "@/[locale]/(registration)/registration/markdown/registration-terms/en.mdx"
     ).then((mod) => mod.default),
   ),
 };

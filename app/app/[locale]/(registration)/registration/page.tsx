@@ -5,21 +5,21 @@ import { Locale, useTranslations } from "next-intl";
 import { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdErrorOutline } from "react-icons/md";
-import ConsentForm from "@/app/[locale]/(registration)/registration/components/ConsentForm";
-import ContactForm from "@/app/[locale]/(registration)/registration/components/ContactForm";
+import ConsentForm from "@/[locale]/(registration)/registration/components/ConsentForm";
+import ContactForm from "@/[locale]/(registration)/registration/components/ContactForm";
 import MultiStepForm, {
   MultiStepFormStep,
-} from "@/app/[locale]/(registration)/registration/components/MultiStepForm";
-import NameAddressForm from "@/app/[locale]/(registration)/registration/components/NameAddressForm";
-import RegistrationComplete from "@/app/[locale]/(registration)/registration/components/RegistrationComplete";
-import RegistrationConfirmation from "@/app/[locale]/(registration)/registration/components/RegistrationConfirmation";
-import RegistrationSteps from "@/app/[locale]/(registration)/registration/components/RegistrationSteps";
-import SurveyForm from "@/app/[locale]/(registration)/registration/components/SurveyForm";
-import { useAddressSearch } from "@/app/[locale]/(registration)/registration/hooks/use-address-search";
-import { useSubmitRegistration } from "@/app/[locale]/(registration)/registration/hooks/use-submit-registration";
-import { registrationSchema } from "@/app/[locale]/(registration)/registration/schemas/registration-schema";
-import { RegistrationSchema } from "@/app/[locale]/(registration)/registration/types";
-import { useRegistrationOptions } from "@/app/hooks/use-registration-options";
+} from "@/[locale]/(registration)/registration/components/MultiStepForm";
+import NameAddressForm from "@/[locale]/(registration)/registration/components/NameAddressForm";
+import RegistrationComplete from "@/[locale]/(registration)/registration/components/RegistrationComplete";
+import RegistrationConfirmation from "@/[locale]/(registration)/registration/components/RegistrationConfirmation";
+import RegistrationSteps from "@/[locale]/(registration)/registration/components/RegistrationSteps";
+import SurveyForm from "@/[locale]/(registration)/registration/components/SurveyForm";
+import { useAddressSearch } from "@/[locale]/(registration)/registration/hooks/use-address-search";
+import { useSubmitRegistration } from "@/[locale]/(registration)/registration/hooks/use-submit-registration";
+import { registrationSchema } from "@/[locale]/(registration)/registration/schemas/registration-schema";
+import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
+import { useRegistrationOptions } from "@/hooks/use-registration-options";
 
 export default function Registration({
   params,

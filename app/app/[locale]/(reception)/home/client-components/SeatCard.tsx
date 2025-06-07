@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import ClockIcon from "@/app/components/icons/ClockIcon";
-import SeatIcon from "@/app/components/icons/SeatIcon";
-import UserIcon from "@/app/components/icons/UserIcon";
-import { Seat, SeatUsage } from "@/app/types";
-import { addHours, formatTimeWithQuarter } from "@/app/utils/format-time";
+import ClockIcon from "@/components/icons/ClockIcon";
+import SeatIcon from "@/components/icons/SeatIcon";
+import UserIcon from "@/components/icons/UserIcon";
+import { Seat, SeatUsage } from "@/types";
+import { addHours, formatTimeWithQuarter } from "@/utils/format-time";
 
 export interface SeatProps {
   seat: Seat;
