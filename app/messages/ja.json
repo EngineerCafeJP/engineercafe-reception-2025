@@ -1,0 +1,98 @@
+{
+  "MultiStepForm": {
+    "back": "前へ",
+    "next": "次へ",
+    "submit": "登録する"
+  },
+  "Registration": {
+    "consent": {
+      "health": "体調に問題がないことを確認して下さい。",
+      "term": "利用規約に同意する必要があります。"
+    },
+    "nameAddress": {
+      "name": "氏名を入力して下さい。",
+      "pronunciation": "氏名（ふりがな）を入力して下さい。",
+      "prefectureId": "都道府県を1つ選択して下さい。",
+      "prefectureOther": "都道府県（その他）を入力して下さい。",
+      "city": "市区町村を入力して下さい。",
+      "address": "丁目を入力して下さい。"
+    },
+    "contact": {
+      "phone": "電話番号を入力して下さい。",
+      "email": {
+        "empty": "メールアドレスを入力して下さい。",
+        "invalid": "メールアドレスの形式が正しくありません。"
+      },
+      "belongId": "所属を1つ選択して下さい。",
+      "belongOther": "所属（その他）を入力して下さい。",
+      "jobId": "職業を1つ選択して下さい。",
+      "jobOther": "職業（その他）を入力して下さい。"
+    },
+    "survey": {
+      "foundId": "エンジニアカフェをどこで知ったかを1つ選択して下さい。",
+      "foundOther": "エンジニアカフェをどこで知ったか（その他）を入力して下さい。"
+    },
+    "errorTitle": "エラーが発生しました",
+    "errorMessage": "画面を更新して下さい。"
+  },
+  "RegistrationSteps": {
+    "basicInfo": "基本情報",
+    "contact": "連絡先",
+    "survey": "アンケート",
+    "confirm": "確認",
+    "complete": "登録完了"
+  },
+  "ConsentForm": {
+    "title": "エンジニアカフェへようこそ",
+    "subTitle": "新規会員登録",
+    "healthCheck": "体調チェックの確認",
+    "healthCheckLabel": "上記の症状がないことを確認しました",
+    "personalInformationConsent": "個人情報の取扱いに関する同意",
+    "personalInformationConsentLabel": "上記の個人情報の利用目的に同意します"
+  },
+  "NameAddressForm": {
+    "required": "必須",
+    "name": "氏名",
+    "pronunciation": "氏名（ふりがな）",
+    "postalCode": "郵便番号",
+    "addressAutoFill": "住所自動入力",
+    "prefecture": "都道府県",
+    "prefectureSelect": "都道府県を選択",
+    "city": "市区町村",
+    "address": "丁目",
+    "other": "その他（具体的に記入して下さい）"
+  },
+  "ContactForm": {
+    "required": "必須",
+    "phone": "電話番号",
+    "email": "メールアドレス",
+    "belong": "所属",
+    "belongDetail": "所属詳細",
+    "belongDetailDescription": "コミュニティー名や企業名",
+    "job": "職業",
+    "selectJob": "職業を選択",
+    "jobOther": "その他（具体的に記入して下さい）"
+  },
+  "SurveyForm": {
+    "required": "必須",
+    "found": "エンジニアカフェをどこで知りましたか？"
+  },
+  "RegistrationConfirmation": {
+    "title": "登録内容",
+    "name": "名前",
+    "pronunciation": "名前（ふりがな）",
+    "address": "住所",
+    "phone": "電話番号",
+    "email": "メールアドレス",
+    "belong": "所属",
+    "belongDetail": "所属詳細",
+    "job": "職種",
+    "found": "エンジニアカフェをどこで知りましたか？"
+  },
+  "RegistrationComplete": {
+    "title": "ユーザー登録完了",
+    "userId": "ユーザーID",
+    "alertTitle": "ユーザーIDをメモして下さい",
+    "alertMessage": "ユーザーIDは、NFCの登録に必要です。"
+  }
+}

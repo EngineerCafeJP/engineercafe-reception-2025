@@ -4,7 +4,7 @@
 
 [リポジトリ](https://github.com/EngineerCafeJP/engineercafe-reception-2025)
 
-[Github Project](https://github.com/orgs/EngineerCafeJP/projects/2)
+[GitHub Project](https://github.com/orgs/EngineerCafeJP/projects/2)
 
 ## 技術スタック
 
@@ -45,13 +45,13 @@ cp .env.example .env.local
 npm run dev
 ```
 
-## supabase セットアップ
+## Supabase セットアップ
 
 ### CLI インストール
 
 https://supabase.com/docs/guides/local-development/cli/getting-started
 
-### supabase local 起動
+### Supabase local 起動
 
 ```bash
 cd supabase/
@@ -64,13 +64,13 @@ npx supabase start
 supabase db query --file supabase/scripts/mock.sql
 ```
 
-### supabase studio にアクセス
+### Supabase studio にアクセス
 
 http://127.0.0.1:54323
 
-### supabase Authentication の設定
+### Supabase Authentication の設定
 
-supabase local 起動時に表示される
+Supabase local 起動時に表示される
 API URL と anon key を環境変数に設定する
 
 ```.env.local
@@ -83,7 +83,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhxxxxx...
 ```
 cd app
 npx supabase db reset
-npx supabase gen types typescript --local > ./utils/supabase/database.types.ts
+npx supabase gen types typescript --local > ./app/utils/supabase/database.types.ts
 npm run format:fix
 ```
 
@@ -91,15 +91,24 @@ npm run format:fix
 
 ```
 engineercafe-reception-2025
-├── 📂 app    # ソースコード
-│   ├── 📂 (reception)  # 受付に関するコード
-│   ├── 📂 (registration)    # 会員登録に関するコード
-│   ├── 📂 components   # 共通のUIコンポーネント
-│   ├── 📂 hooks        # React Hook
-│   ├── 📂 lib          # API クライアント・DB接続
-│   ├── 📂 supabase     # Supabase
-│   ├── 📄 .env.example     # 環境変数サンプル
-│   ├── 📄 package.json     # 依存関係
-├── 📂 documents        # ドキュメント
-├── 📄 README.md        # 本ファイル
+├── 📂 app                          # ソースコード
+│   ├── 📂 app
+│   │   ├── 📂 [locale]
+│   │   │   ├── 📂 (reception)      # 受付に関するコード
+│   │   │   ├── 📂 (registration)   # 会員登録に関するコード
+│   │   │   .
+│   │   ├── 📂 components           # 共通のUIコンポーネント
+│   │   ├── 📂 constants            # 共通の定数
+│   │   ├── 📂 hooks                # 共通のReact Hook
+│   │   ├── 📂 queries              # 共通のSupabaseクエリ
+│   │   ├── 📂 types                # 共通の型
+│   │   ├── 📂 utils                # 共通の関数等
+│   │   .
+│   ├── 📄 .env.example             # 環境変数サンプル
+│   ├── 📄 package.json             # 依存関係
+│   .
+├── 📂 documents                    # ドキュメント
+├── 📂 supabase                     # Supabase
+├── 📄 README.md                    # 本ファイル
+.
 ```
