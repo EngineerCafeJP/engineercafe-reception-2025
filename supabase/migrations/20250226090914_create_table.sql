@@ -168,16 +168,16 @@ INSERT INTO stay_categories (created_at)
 SELECT now()
 FROM generate_series(1, 2);
 
-CREATE TABLE IF NOT EXISTS stay_categories_translations (
-  stay_categories_id bigint NOT NULL,
+CREATE TABLE IF NOT EXISTS stay_category_translations (
+  stay_category_id bigint NOT NULL,
   locale text NOT NULL,
   name text NOT NULL,
   created_at timestamptz DEFAULT now (),
-  PRIMARY KEY (stay_categories_id, locale),
-  FOREIGN KEY (stay_categories_id) REFERENCES stay_categories(id)
+  PRIMARY KEY (stay_category_id, locale),
+  FOREIGN KEY (stay_category_id) REFERENCES stay_categories(id)
 );
 
-INSERT INTO stay_categories_translations (stay_categories_id, locale, name)
+INSERT INTO stay_category_translations (stay_category_id, locale, name)
 VALUES
   (1, 'ja', '日本在住'),
   (1, 'en', 'Individual'),
@@ -395,7 +395,7 @@ CREATE TABLE
     email text,
     phone text,
     prefecture_id bigint,
-    stay_categories_id bigint,
+    stay_category_id bigint,
     prefecture_other text,
     city text,
     address text,
@@ -415,7 +415,7 @@ CREATE TABLE
     created_at timestamptz NOT NULL DEFAULT now (),
     updated_at timestamptz,
     is_delete boolean,
-    FOREIGN KEY (stay_categories_id) REFERENCES stay_categories (id),
+    FOREIGN KEY (stay_category_id) REFERENCES stay_categories (id),
     FOREIGN KEY (prefecture_id) REFERENCES prefectures (id),
     FOREIGN KEY (belong_id) REFERENCES belongs (id),
     FOREIGN KEY (job_id) REFERENCES jobs (id),
