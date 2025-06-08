@@ -36,6 +36,7 @@ export default function Registration({
   const {
     isLoading: isRegistrationOptionsLoading,
     isError: isRegistrationOptionsError,
+    stayCategories,
     prefectures,
     belongs,
     jobs,
@@ -144,6 +145,7 @@ export default function Registration({
           isPendingSearchAddress={isAddressSearchPending}
           methods={methods}
           prefectures={prefectures}
+          stayCategories={stayCategories}
           onAddressSearch={handleAddressSearch}
         />
       ),
@@ -176,6 +178,7 @@ export default function Registration({
               jobs={jobs}
               methods={methods}
               prefectures={prefectures}
+              stayCategories={stayCategories}
               steps={steps}
               onStepChange={handleGoToStep}
             />

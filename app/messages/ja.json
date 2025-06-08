@@ -12,6 +12,7 @@
     "nameAddress": {
       "name": "氏名を入力して下さい。",
       "pronunciation": "氏名（ふりがな）を入力して下さい。",
+      "stayCategoryId": "滞在区分を1つ選択して下さい。",
       "prefectureId": "都道府県を1つ選択して下さい。",
       "prefectureOther": "都道府県（その他）を入力して下さい。",
       "city": "市区町村を入力して下さい。",
@@ -54,13 +55,15 @@
     "required": "必須",
     "name": "氏名",
     "pronunciation": "氏名（ふりがな）",
+    "stayCategory": "滞在区分",
     "postalCode": "郵便番号",
     "addressAutoFill": "住所自動入力",
     "prefecture": "都道府県",
     "prefectureSelect": "都道府県を選択",
     "city": "市区町村",
     "address": "丁目",
-    "other": "その他（具体的に記入して下さい）"
+    "other": "その他（具体的に記入して下さい）",
+    "otherDescription": "例：国名など"
   },
   "ContactForm": {
     "required": "必須",
@@ -68,7 +71,7 @@
     "email": "メールアドレス",
     "belong": "所属",
     "belongDetail": "所属詳細",
-    "belongDetailDescription": "コミュニティー名や企業名",
+    "belongDetailDescription": "例：コミュニティー名や企業名",
     "job": "職業",
     "selectJob": "職業を選択",
     "jobOther": "その他（具体的に記入して下さい）"
@@ -81,6 +84,7 @@
     "title": "登録内容",
     "name": "名前",
     "pronunciation": "名前（ふりがな）",
+    "stayCategory": "滞在区分",
     "address": "住所",
     "phone": "電話番号",
     "email": "メールアドレス",

@@ -1,6 +1,7 @@
 import { useInsertMutation } from "@supabase-cache-helpers/postgrest-react-query";
 import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
 import supabase from "@/utils/supabase/client";
+import { Database } from "@/utils/supabase/database.types";
 
 export function useSubmitRegistration(options: {
   onSuccess: (userId: number) => void;
@@ -28,7 +29,9 @@ export function useSubmitRegistration(options: {
   };
 }
 
-function transformRegistrationValues(data: RegistrationSchema) {
+function transformRegistrationValues(
+  data: RegistrationSchema,
+): Database["public"]["Tables"]["users"]["Insert"] {
   const { nameAddress, contact, survey } = data;
 
   return {
@@ -37,6 +40,7 @@ function transformRegistrationValues(data: RegistrationSchema) {
     email: contact.email,
     phone: contact.phone,
     prefecture_id: Number(nameAddress.prefectureId),
+    stay_category_id: Number(nameAddress.stayCategoryId),
     prefecture_other: nameAddress.prefectureOther,
     city: nameAddress.city,
     address: nameAddress.address,

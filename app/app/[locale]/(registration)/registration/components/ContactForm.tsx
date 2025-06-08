@@ -97,9 +97,9 @@ export default function ContactForm({
                       type="radio"
                       value={belong.belongId}
                       onChange={(e) => {
+                        methods.register("contact.belongId").onChange(e);
+
                         methods.resetField("contact.belongOther");
-                        methods.clearErrors("contact.belongOther");
-                        methods.register("contact.jobId").onChange(e);
                       }}
                     />
                     <label

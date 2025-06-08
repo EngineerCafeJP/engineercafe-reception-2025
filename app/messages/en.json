@@ -12,6 +12,7 @@
     "nameAddress": {
       "name": "Please enter your full name.",
       "pronunciation": "Please enter the phonetic reading of your name.",
+      "stayCategoryId": "Please select one stay type.",
       "prefectureId": "Please select one prefecture.",
       "prefectureOther": "Please enter the name of the prefecture (Other).",
       "city": "Please enter your city, ward, town, or village.",
@@ -54,13 +55,15 @@
     "required": "Required",
     "name": "Full Name",
     "pronunciation": "Name (Phonetic Reading)",
+    "stayCategory": "Stay Type",
     "postalCode": "Postal Code",
     "addressAutoFill": "Auto-fill Address",
     "prefecture": "Prefecture",
     "prefectureSelect": "Select Prefecture",
     "city": "City / Ward / Town / Village",
     "address": "Chome",
-    "other": "Other (Please provide details)"
+    "other": "Other (Please provide details)",
+    "otherDescription": "e.g., Country name"
   },
   "ContactForm": {
     "required": "Required",
@@ -81,6 +84,7 @@
     "title": "Registration Details",
     "name": "Name",
     "pronunciation": "Name (Phonetic Reading)",
+    "stayCategory": "Stay Type",
     "address": "Address",
     "phone": "Phone Number",
     "email": "Email Address",
