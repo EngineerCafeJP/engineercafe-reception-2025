@@ -23,6 +23,9 @@ export const registrationSchema = (
         pronunciation: z
           .string()
           .nonempty({ message: t("nameAddress.pronunciation") }),
+        stayCategoryId: z
+          .string({ message: t("nameAddress.stayCategoryId") })
+          .regex(/^\d+$/, { message: t("nameAddress.stayCategoryId") }),
         postalCode: z.string().optional(),
         prefectureId: z
           .string()

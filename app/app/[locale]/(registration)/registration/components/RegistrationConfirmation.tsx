@@ -9,10 +9,12 @@ import { FOUND_OTHER_ID } from "@/constants/founds";
 import { JOB_OTHER_ID } from "@/constants/jobs";
 import { PREFECTURE_OTHER_ID } from "@/constants/prefectures";
 import { Belong, Found, Job, Prefecture } from "@/types";
+import { StayCategory } from "@/types/stay-category";
 
 type FormValues = {
   name: string;
   pronunciation: string;
+  stayCategory: string;
   address: string;
   phone: string;
   email: string;
@@ -25,6 +27,7 @@ type FormValues = {
 const labelKeys = [
   "name",
   "pronunciation",
+  "stayCategory",
   "address",
   "phone",
   "email",
@@ -40,6 +43,7 @@ const DEFINITION_TERMS: Record<
 > = {
   name: "name",
   pronunciation: "pronunciation",
+  stayCategory: "stayCategory",
   address: "address",
   phone: "phone",
   email: "email",
@@ -52,6 +56,7 @@ const DEFINITION_TERMS: Record<
 type RegistrationConfirmationProps<T extends z.ZodType> = {
   methods: UseFormReturn<RegistrationSchema>;
   steps: MultiStepFormStep<T>[];
+  stayCategories: StayCategory[] | null;
   prefectures: Prefecture[] | null;
   belongs: Belong[] | null;
   jobs: Job[] | null;
@@ -62,6 +67,7 @@ type RegistrationConfirmationProps<T extends z.ZodType> = {
 export default function RegistrationConfirmation<T extends z.ZodType>({
   methods,
   steps,
+  stayCategories,
   prefectures,
   belongs,
   jobs,
@@ -72,6 +78,7 @@ export default function RegistrationConfirmation<T extends z.ZodType>({
 
   const stepMapping: { [K in keyof FormValues]: number } = {
     name: steps.findIndex((step) => step.schemaName === "nameAddress"),
+    stayCategory: steps.findIndex((step) => step.schemaName === "nameAddress"),
     pronunciation: steps.findIndex((step) => step.schemaName === "nameAddress"),
     address: steps.findIndex((step) => step.schemaName === "nameAddress"),
     phone: steps.findIndex((step) => step.schemaName === "contact"),
@@ -85,6 +92,7 @@ export default function RegistrationConfirmation<T extends z.ZodType>({
   const formValues: FormValues = {
     name: methods.getValues("nameAddress.name"),
     pronunciation: methods.getValues("nameAddress.pronunciation"),
+    stayCategory: getStayCategoryFromFormValue(methods, stayCategories) || "",
     address: getAddressFromFormValue(methods, prefectures) || "",
     phone: methods.getValues("contact.phone"),
     email: methods.getValues("contact.email"),
@@ -136,6 +144,17 @@ export default function RegistrationConfirmation<T extends z.ZodType>({
       </div>
     </div>
   );
+}
+
+function getStayCategoryFromFormValue(
+  methods: UseFormReturn<RegistrationSchema>,
+  stayCategories: StayCategory[] | null,
+) {
+  return stayCategories?.find(
+    (stayCategory) =>
+      stayCategory.stayCategoryId ===
+      Number(methods.getValues("nameAddress.stayCategoryId")),
+  )?.name;
 }
 
 function getAddressFromFormValue(

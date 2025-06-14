@@ -472,29 +472,29 @@ export type Database = {
         };
         Relationships: [];
       };
-      stay_categories_translations: {
+      stay_category_translations: {
         Row: {
           created_at: string | null;
           locale: string;
           name: string;
-          stay_categories_id: number;
+          stay_category_id: number;
         };
         Insert: {
           created_at?: string | null;
           locale: string;
           name: string;
-          stay_categories_id: number;
+          stay_category_id: number;
         };
         Update: {
           created_at?: string | null;
           locale?: string;
           name?: string;
-          stay_categories_id?: number;
+          stay_category_id?: number;
         };
         Relationships: [
           {
-            foreignKeyName: "stay_categories_translations_stay_categories_id_fkey";
-            columns: ["stay_categories_id"];
+            foreignKeyName: "stay_category_translations_stay_category_id_fkey";
+            columns: ["stay_category_id"];
             isOneToOne: false;
             referencedRelation: "stay_categories";
             referencedColumns: ["id"];
@@ -523,7 +523,7 @@ export type Database = {
           prefecture_id: number | null;
           prefecture_other: string | null;
           pronunciation: string | null;
-          stay_categories_id: number | null;
+          stay_category_id: number | null;
           updated_at: string | null;
           warnings: string | null;
         };
@@ -548,7 +548,7 @@ export type Database = {
           prefecture_id?: number | null;
           prefecture_other?: string | null;
           pronunciation?: string | null;
-          stay_categories_id?: number | null;
+          stay_category_id?: number | null;
           updated_at?: string | null;
           warnings?: string | null;
         };
@@ -573,7 +573,7 @@ export type Database = {
           prefecture_id?: number | null;
           prefecture_other?: string | null;
           pronunciation?: string | null;
-          stay_categories_id?: number | null;
+          stay_category_id?: number | null;
           updated_at?: string | null;
           warnings?: string | null;
         };
@@ -607,8 +607,8 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "users_stay_categories_id_fkey";
-            columns: ["stay_categories_id"];
+            foreignKeyName: "users_stay_category_id_fkey";
+            columns: ["stay_category_id"];
             isOneToOne: false;
             referencedRelation: "stay_categories";
             referencedColumns: ["id"];

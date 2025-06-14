@@ -4,10 +4,16 @@ import { useTranslations } from "next-intl";
 import { UseFormReturn } from "react-hook-form";
 import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
 import { PREFECTURE_OTHER_ID } from "@/constants/prefectures";
+import {
+  STAY_CATEGORY_DEFAULT_VALUE_ID,
+  STAY_CATEGORY_VISITING_JAPAN_ID,
+} from "@/constants/stay-category";
 import { Prefecture } from "@/types";
+import { StayCategory } from "@/types/stay-category";
 
 type NameAddressFormProps = {
   methods: UseFormReturn<RegistrationSchema>;
+  stayCategories?: StayCategory[] | null;
   prefectures?: Prefecture[] | null;
   isPendingSearchAddress: boolean;
   onAddressSearch: (postalCode?: string) => void;
@@ -15,11 +21,13 @@ type NameAddressFormProps = {
 
 export default function NameAddressForm({
   methods,
+  stayCategories,
   prefectures,
   isPendingSearchAddress,
   onAddressSearch,
 }: NameAddressFormProps) {
   const t = useTranslations("NameAddressForm");
+  const stayCategoryId = methods.watch("nameAddress.stayCategoryId");
   const prefectureId = methods.watch("nameAddress.prefectureId");
 
   return (
@@ -81,42 +89,105 @@ export default function NameAddressForm({
       </div>
       <div className="sm:col-span-full">
         <fieldset className="fieldset">
-          <label
-            className="fieldset-label"
-            htmlFor={methods.register("nameAddress.postalCode").name}
-          >
-            {t("postalCode")}
+          <label className="fieldset-label">
+            {t("stayCategory")}
+            <span className="ml-1 text-xs text-red-400">{t("required")}</span>
           </label>
-          <div className="flex items-center gap-x-3">
-            <input
-              {...methods.register("nameAddress.postalCode")}
-              autoComplete="postal-code"
-              className="input w-full sm:w-1/3"
-              id={methods.register("nameAddress.postalCode").name}
-              inputMode="numeric"
-              type="text"
-            />
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                onAddressSearch(methods.getValues("nameAddress.postalCode"));
-              }}
-            >
-              {isPendingSearchAddress && (
-                <span className="loading loading-spinner" />
-              )}
-              {t("addressAutoFill")}
-            </button>
+          <div className="mt-3 space-y-4">
+            {stayCategories?.map((stayCategory) => (
+              <div
+                key={stayCategory.stayCategoryId}
+                className="flex items-center gap-x-3"
+              >
+                <input
+                  {...methods.register("nameAddress.stayCategoryId")}
+                  className="radio"
+                  defaultChecked={
+                    stayCategory.stayCategoryId === Number(stayCategoryId) ||
+                    stayCategory.stayCategoryId ===
+                      STAY_CATEGORY_DEFAULT_VALUE_ID
+                  }
+                  id={`${methods.register("nameAddress.stayCategoryId").name}-${stayCategory.stayCategoryId}`}
+                  type="radio"
+                  value={stayCategory.stayCategoryId}
+                  onChange={(e) => {
+                    const value = e.target.value;
+
+                    methods.register("nameAddress.stayCategoryId").onChange(e);
+
+                    methods.clearErrors("nameAddress.prefectureId");
+                    methods.setValue("nameAddress.prefectureId", "");
+                    methods.resetField("nameAddress.postalCode");
+                    methods.resetField("nameAddress.prefectureOther");
+                    methods.resetField("nameAddress.city");
+                    methods.resetField("nameAddress.address");
+
+                    if (Number(value) === STAY_CATEGORY_VISITING_JAPAN_ID) {
+                      methods.setValue(
+                        "nameAddress.prefectureId",
+                        PREFECTURE_OTHER_ID.toString(),
+                      );
+                    }
+                  }}
+                />
+                <label
+                  className="fieldset-label"
+                  htmlFor={`${methods.register("nameAddress.stayCategoryId").name}-${stayCategory.stayCategoryId}`}
+                >
+                  {stayCategory.name}
+                </label>
+              </div>
+            ))}
           </div>
           <ErrorMessage
             errors={methods.formState.errors}
-            name={methods.register("nameAddress.postalCode").name}
+            name={methods.register("nameAddress.stayCategoryId").name}
             render={({ message }) => (
               <span className="text-error text-xs">{message}</span>
             )}
           />
         </fieldset>
       </div>
+      {Number(stayCategoryId) !== STAY_CATEGORY_VISITING_JAPAN_ID && (
+        <div className="sm:col-span-full">
+          <fieldset className="fieldset">
+            <label
+              className="fieldset-label"
+              htmlFor={methods.register("nameAddress.postalCode").name}
+            >
+              {t("postalCode")}
+            </label>
+            <div className="flex items-center gap-x-3">
+              <input
+                {...methods.register("nameAddress.postalCode")}
+                autoComplete="postal-code"
+                className="input w-full sm:w-1/3"
+                id={methods.register("nameAddress.postalCode").name}
+                inputMode="numeric"
+                type="text"
+              />
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  onAddressSearch(methods.getValues("nameAddress.postalCode"));
+                }}
+              >
+                {isPendingSearchAddress && (
+                  <span className="loading loading-spinner" />
+                )}
+                {t("addressAutoFill")}
+              </button>
+            </div>
+            <ErrorMessage
+              errors={methods.formState.errors}
+              name={methods.register("nameAddress.postalCode").name}
+              render={({ message }) => (
+                <span className="text-error text-xs">{message}</span>
+              )}
+            />
+          </fieldset>
+        </div>
+      )}
       <div className="sm:col-span-full">
         <fieldset className="fieldset">
           <label
@@ -149,7 +220,13 @@ export default function NameAddressForm({
             <option value="" disabled>
               {t("prefectureSelect")}
             </option>
-            {prefectures?.map((prefecture) => (
+            {(Number(stayCategoryId) === STAY_CATEGORY_VISITING_JAPAN_ID
+              ? prefectures?.filter(
+                  (prefecture) =>
+                    prefecture.prefectureId === PREFECTURE_OTHER_ID,
+                )
+              : prefectures
+            )?.map((prefecture) => (
               <option
                 key={prefecture.prefectureId}
                 value={prefecture.prefectureId}
@@ -241,6 +318,7 @@ export default function NameAddressForm({
               {t("other")}
               <span className="ml-1 text-xs text-red-400">{t("required")}</span>
             </label>
+            <span className="text-xs">{t("otherDescription")}</span>
             <input
               {...methods.register("nameAddress.prefectureOther")}
               autoComplete="address-level1"
