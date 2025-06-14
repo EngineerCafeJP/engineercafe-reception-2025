@@ -179,10 +179,10 @@ CREATE TABLE IF NOT EXISTS stay_category_translations (
 
 INSERT INTO stay_category_translations (stay_category_id, locale, name)
 VALUES
-  (1, 'ja', '日本在住'),
-  (1, 'en', 'Individual'),
-  (2, 'ja', '一時滞在（観光・ビザなど）'),
-  (2, 'en', 'Visiting Japan (tourist\, visa\, etc.)');
+  (1, 'ja', '日本国籍'),
+  (1, 'en', 'Japanese'),
+  (2, 'ja', '外国籍（ビザ・一時滞在含む）'),
+  (2, 'en', 'Non-Japanese (including visa holders)');
 
 -- 所属テーブル
 CREATE TABLE IF NOT EXISTS belongs (
