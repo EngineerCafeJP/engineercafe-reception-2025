@@ -71,10 +71,12 @@ export class Nfc {
     }
   }
 
-  async detectCardId(): Promise<string | undefined> {
+  async detectCardId(protocol: "A" | "F"): Promise<string | undefined> {
     try {
-      return (
-        (await this.detectCard(
+      if (protocol === "A") {
+        return await this.detectCard("Type Aカード", "iso14443-3A");
+      } else {
+        return await this.detectCard(
           "FeliCaカード",
           "iso18092",
           new window.DetectionOption(
@@ -83,8 +85,8 @@ export class Nfc {
             true,
             false,
           ),
-        )) || (await this.detectCard("Type Aカード", "iso14443-3A"))
-      );
+        );
+      }
     } catch (e) {
       this.log("カード検出中にエラーが発生:", e);
     }

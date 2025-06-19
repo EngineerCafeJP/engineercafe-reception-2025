@@ -12,6 +12,7 @@ export function useNfcDetectCard({
   const [isPolling, setIsPolling] = useState(false);
   const detectCardIdPromiseRef = useRef<Promise<void> | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const nextRef = useRef<"A" | "F">("A");
 
   const detectCardId = async () => {
     if (pollingRef.current) {
@@ -25,7 +26,9 @@ export function useNfcDetectCard({
     const promise = (async () => {
       try {
         while (pollingRef.current) {
-          const id = await nfcRef.current.detectCardId();
+          const proto = nextRef.current;
+          nextRef.current = proto === "A" ? "F" : "A";
+          const id = await nfcRef.current.detectCardId(proto);
 
           if (id) {
             onSuccess(id);
