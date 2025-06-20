@@ -17,6 +17,7 @@ interface InUseSeatModalProps {
   onMoveSeat: (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => void;
   onExtendSeatUsage: (seatUsage: SeatUsage) => void;
   seats: Seat[];
+  emptySeats: Seat[];
 }
 
 type InUseSeatModalType =
@@ -34,6 +35,7 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
   onMoveSeat,
   onExtendSeatUsage,
   seats,
+  emptySeats,
 }) => {
   const [modalType, setModalType] = useState<InUseSeatModalType | null>(null);
   const [nextSeat, setNextSeat] = useState<Seat | null>(null);
@@ -98,8 +100,8 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
     } else if (modalType == "moveSeatSelect") {
       return (
         <MoveSeatSelectModalBox
+          emptySeats={emptySeats}
           seatUsage={seatUsage}
-          seats={seats}
           onClose={handleClose}
           onNextButtonClick={handleMoveSeatClick}
         />

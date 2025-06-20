@@ -9,14 +9,14 @@ interface MoveSeatSelectModalBoxProps {
   seatUsage: SeatUsage;
   onClose: () => void;
   onNextButtonClick: (nextSeat: Seat) => void;
-  seats: Seat[];
+  emptySeats: Seat[];
 }
 
 export const MoveSeatSelectModalBox: React.FC<MoveSeatSelectModalBoxProps> = ({
   seatUsage,
   onClose,
   onNextButtonClick,
-  seats,
+  emptySeats,
 }) => {
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
@@ -33,14 +33,16 @@ export const MoveSeatSelectModalBox: React.FC<MoveSeatSelectModalBoxProps> = ({
     [onNextButtonClick, selectedSeat],
   );
 
-  const areaList = seats
+  const areaList = emptySeats
     .map((seat: Seat) => seat.seatCategory.name)
     .filter(
       (seatCategoryName: string, index: number, self: string[]) =>
         self.indexOf(seatCategoryName) === index,
     );
   const seatList = (seatCategoryName: string) =>
-    seats.filter((seat: Seat) => seat.seatCategory.name === seatCategoryName);
+    emptySeats.filter(
+      (seat: Seat) => seat.seatCategory.name === seatCategoryName,
+    );
 
   return (
     <div className="modal-box border-2 border-black p-[0]">
