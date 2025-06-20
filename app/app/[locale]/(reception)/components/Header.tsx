@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
 import { MdMenu } from "react-icons/md";
-import { useAuth } from "@/[locale]/(reception)/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
   {
