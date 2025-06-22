@@ -91,6 +91,9 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
       </div>
       {selectedSeat && selectedSeatUsage ? (
         <InUseSeatModal
+          emptySeats={seats.filter(
+            (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
+          )}
           isOpen={Boolean(selectedSeat)}
           seat={selectedSeat}
           seatUsage={selectedSeatUsage}
