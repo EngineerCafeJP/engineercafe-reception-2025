@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useRef, useState } from "react";
-import { MdClose, MdComment, MdWarning } from "react-icons/md";
+import { MdClose, MdComment, MdEdit, MdWarning } from "react-icons/md";
 import { useKey } from "react-use";
 import CardReaderControlButton from "@/[locale]/(reception)/components/CardReaderControlButton";
 import AssignSeatConfirmModal from "@/[locale]/(reception)/home/client-components/AssignSeatConfirmModal";
@@ -213,10 +213,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           {selectedUser && (
             <div className="mt-8 flex flex-col gap-[1rem]">
               <ul className="list bg-base-100 rounded-box px-1">
-                <li
-                  className="list-row rounded-4 hover:bg-base-300/30 border p-[0]"
-                  onClick={() => handleEditUser(selectedUser.id)}
-                >
+                <li className="list-row rounded-4 border p-[0]">
                   <div className="m-auto">
                     <UserIcon size={40} />
                   </div>
@@ -234,6 +231,14 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                       <MdWarning className="mr-1" size={20} />
                     </div>
                   )}
+                  <div className="flex justify-end pe-2">
+                    <button
+                      className="btn btn-sm btn-primary m-auto"
+                      onClick={() => handleEditUser(selectedUser.id)}
+                    >
+                      <MdEdit size={20} />
+                    </button>
+                  </div>
                 </li>
               </ul>
 
