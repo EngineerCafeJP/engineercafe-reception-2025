@@ -5,6 +5,7 @@ import { hasLocale, Locale, NextIntlClientProvider } from "next-intl";
 import { ReactNode } from "react";
 import NfcPortLibLoader from "@/components/NfcPortLibLoader";
 import ReactQueryClientProvider from "@/components/ReactQueryClientProvider";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { routing } from "~/i18n/routing";
 import "./globals.css";
 
@@ -45,10 +46,12 @@ export default async function LocaleLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NfcPortLibLoader />
-        <NextIntlClientProvider>
-          <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NfcPortLibLoader />
+          <NextIntlClientProvider>
+            <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   );
