@@ -1,15 +1,19 @@
 "use client";
 
+import humps from "humps";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import UserEditModal, {
+  UserFormData,
+} from "@/[locale]/(reception)/components/UserEditModal";
+import { useUpdateUser } from "@/[locale]/(reception)/hooks/use-update-user";
+import { useRegistrationOptions } from "@/hooks/use-registration-options";
 import { fetchUsers } from "@/queries/user-search-queries";
+import { User } from "@/types";
 import supabase from "@/utils/supabase/client";
-import { Tables } from "@/utils/supabase/database.types";
 import SearchFilters, { Filters } from "./components/SearchFilters";
 import SearchInput from "./components/SearchInput";
 import UserList from "./components/UserList";
-
-type User = Tables<"users">;
 
 type UserFilters = {
   searchText: string;
@@ -23,6 +27,15 @@ type UserFilters = {
 export default function UserSearchPage() {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const { register, getValues } = useForm<Filters>();
+  const [editUser, setEditUser] = useState<Partial<User> | null>(null);
+
+  const { prefectures, belongs, jobs } = useRegistrationOptions("ja");
+
+  const {
+    update: updateUser,
+    isLoading: isUpdateUserLoading,
+    error: updateUserError,
+  } = useUpdateUser();
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -36,7 +49,7 @@ export default function UserSearchPage() {
         console.error("ユーザ取得に失敗しました:", error.message);
         return;
       }
-      setFilteredUsers(data);
+      setFilteredUsers(humps.camelizeKeys(data) as User[]);
     };
     loadUsers();
   }, []);
@@ -47,7 +60,7 @@ export default function UserSearchPage() {
       console.error("検索に失敗しました:", error.message);
       return;
     }
-    setFilteredUsers(data);
+    setFilteredUsers(humps.camelizeKeys(data) as User[]);
   };
 
   const handleSearch = () => {
@@ -65,6 +78,20 @@ export default function UserSearchPage() {
     applySearchFilters(filters);
   };
 
+  const handleUpdateUser = async (userData: UserFormData) => {
+    const updatedUser = await updateUser(userData.id, {
+      ...userData,
+      prefectureId: Number(userData.prefectureId),
+      belongId: Number(userData.belongId),
+      jobId: Number(userData.jobId),
+    } as Partial<User>);
+
+    if (updatedUser != null) {
+      // ユーザー情報を再取得する
+      handleSearch();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-lg">
@@ -72,8 +99,23 @@ export default function UserSearchPage() {
 
         <SearchFilters register={register} />
         <SearchInput register={register} onSubmit={handleSearch} />
-        <UserList users={filteredUsers} />
+        <UserList users={filteredUsers} onEditClicked={setEditUser} />
       </div>
+
+      {isUpdateUserLoading && <div>Loading...</div>}
+      {updateUserError && <div>Error: {updateUserError.message}</div>}
+
+      {editUser && prefectures && belongs && jobs && (
+        <UserEditModal
+          belongs={belongs}
+          initialValues={editUser}
+          isOpen={Boolean(editUser)}
+          jobs={jobs}
+          prefectures={prefectures}
+          onClose={() => setEditUser(null)}
+          onSave={handleUpdateUser}
+        />
+      )}
     </div>
   );
 }

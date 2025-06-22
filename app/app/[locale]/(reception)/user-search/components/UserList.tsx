@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { Tables } from "@/utils/supabase/database.types";
-
-type User = Tables<"users">;
+import { MdEdit, MdNfc } from "react-icons/md";
+import { User } from "@/types";
 
 type Props = {
   users: User[];
+  onEditClicked: (user: User) => void;
 };
 
-export default function UserList({ users }: Props) {
+export default function UserList({ users, onEditClicked }: Props) {
   return (
     <div className="mt-6">
       <h2 className="mb-4 text-xl font-bold">検索結果</h2>
@@ -25,12 +25,22 @@ export default function UserList({ users }: Props) {
                 <p className="text-gray-600">Email: {user.email}</p>
                 <p className="text-gray-500">電話番号: {user.phone}</p>
               </div>
-              <Link
-                className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                href={`/nfc-registration?userId=${user.id}`}
-              >
-                編集
-              </Link>
+              <div className="flex flex-col gap-2">
+                <button
+                  className="btn btn-sm btn-primary"
+                  onClick={() => onEditClicked(user)}
+                >
+                  <MdEdit size={20} />
+                  編集
+                </button>
+                <Link
+                  className="btn btn-sm btn-accent"
+                  href={`/nfc-registration?userId=${user.id}`}
+                >
+                  <MdNfc size={20} />
+                  NFC登録
+                </Link>
+              </div>
             </li>
           ))}
         </ul>
