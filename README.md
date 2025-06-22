@@ -87,6 +87,20 @@ npx supabase gen types typescript --local > ./app/utils/supabase/database.types.
 npm run format:fix
 ```
 
+### supabase DB 　マイグレーション
+
+マイグレーションファイルの追加
+
+```
+npx supabase migration new add_xxx_xxx
+```
+
+マイグレーションを適用する
+
+```
+npx supabase migration up
+```
+
 ## ディレクトリの構成
 
 ```
