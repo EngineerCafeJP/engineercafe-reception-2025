@@ -1,27 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import supabase from "@/utils/supabase/client";
 
 export function useLatestRegistrationUserId() {
-  const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["latest-registration-user-id"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("latest_registration_user_view")
-        .select("id")
-        .single();
-
-      if (error) {
-        throw error;
-      }
-
-      return data?.id;
-    },
-  });
+  const { data, isLoading, isError, refetch } = useQuery(
+    supabase.from("latest_registration_user_view").select("id").single(),
+  );
 
   return {
-    latestUserId: data,
+    latestUserId: data?.id,
     isLoading,
     isError,
-    refetch,
+    refetch: async () => {
+      const { data } = await refetch();
+      return { data: data?.data?.id };
+    },
   };
 }
