@@ -16,6 +16,7 @@ import RegistrationConfirmation from "@/[locale]/(registration)/registration/com
 import RegistrationSteps from "@/[locale]/(registration)/registration/components/RegistrationSteps";
 import SurveyForm from "@/[locale]/(registration)/registration/components/SurveyForm";
 import { useAddressSearch } from "@/[locale]/(registration)/registration/hooks/use-address-search";
+import { useLatestRegistrationUserId } from "@/[locale]/(registration)/registration/hooks/use-latest-registration-userid";
 import { useSubmitRegistration } from "@/[locale]/(registration)/registration/hooks/use-submit-registration";
 import { registrationSchema } from "@/[locale]/(registration)/registration/schemas/registration-schema";
 import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
@@ -55,6 +56,7 @@ export default function Registration({
   });
   const { isPending: isAddressSearchPending, searchAddress } =
     useAddressSearch();
+  const { refetch: refetchLatestUserId } = useLatestRegistrationUserId();
 
   if (isRegistrationOptionsLoading) {
     return (
@@ -162,6 +164,12 @@ export default function Registration({
 
   const handleSubmit = async (data: RegistrationSchema) => {
     await insert(data);
+    const { data: latestUserId } = await refetchLatestUserId();
+
+    if (latestUserId) {
+      setCreatedUserId(latestUserId);
+      setCurrentStepIndex((prev) => prev + 1);
+    }
   };
 
   return (
