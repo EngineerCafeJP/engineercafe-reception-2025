@@ -34,6 +34,24 @@ export type Database = {
   };
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          id: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [];
+      };
       belong_translations: {
         Row: {
           belong_id: number;
@@ -617,6 +635,12 @@ export type Database = {
       };
     };
     Views: {
+      latest_registration_user_view: {
+        Row: {
+          id: number | null;
+        };
+        Relationships: [];
+      };
       seat_usage_daily_reports_view: {
         Row: {
           date: string | null;
@@ -673,7 +697,10 @@ export type Database = {
       };
     };
     Functions: {
-      [_ in never]: never;
+      get_latest_registration_user_id: {
+        Args: Record<PropertyKey, never>;
+        Returns: number;
+      };
     };
     Enums: {
       [_ in never]: never;

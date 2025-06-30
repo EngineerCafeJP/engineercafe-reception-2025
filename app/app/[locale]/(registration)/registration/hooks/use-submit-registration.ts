@@ -9,14 +9,6 @@ export function useSubmitRegistration(options: {
   const { isPending, isError, isSuccess, mutateAsync } = useInsertMutation(
     supabase.from("users"),
     ["id"],
-    "id",
-    {
-      onSuccess: (data) => {
-        if (data) {
-          options.onSuccess(data[0].id);
-        }
-      },
-    },
   );
 
   return {
