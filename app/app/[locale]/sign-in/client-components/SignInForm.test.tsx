@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import SignInForm from "@/[locale]/(reception)/sign-in/client-components/SignInForm";
+import SignInForm from "./SignInForm";
 
 describe("SignInForm", () => {
   const mockSignIn = jest.fn();
