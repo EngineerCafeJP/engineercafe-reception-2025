@@ -15,6 +15,7 @@ interface ReceptionFormProps {
   emptySeats: Seat[];
   onChangeSearchWord: (input: string) => void;
   onClose: () => void;
+  onConnectUsbDevice: () => void;
   onDetectCard: (cardId: string) => void;
   onDisconnectUsbDevice: () => void;
   assignSeat: (seat: Seat, user: User) => void;
@@ -28,6 +29,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   emptySeats,
   onChangeSearchWord,
   onClose,
+  onConnectUsbDevice,
   onDetectCard,
   onDisconnectUsbDevice,
   assignSeat,
@@ -83,6 +85,10 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     setSelectedSeat(null);
     setIsConfirmModalOpen(false);
     onClose();
+  };
+
+  const handleConnectUsbDevice = () => {
+    onConnectUsbDevice();
   };
 
   const handleDetectCard = (cardId: string) => {
@@ -167,6 +173,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
         <div className="bg-base-200 w-2xl px-4 py-2">
           <div className="flex justify-between">
             <CardReaderControlButton
+              onConnectUsbDevice={handleConnectUsbDevice}
               onDetectCard={handleDetectCard}
               onDisconnectUsbDevice={handleDisconnectUsbDevice}
             />

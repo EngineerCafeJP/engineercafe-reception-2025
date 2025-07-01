@@ -68,11 +68,14 @@ export default function HomePage() {
     error: updateUserError,
   } = useUpdateUser();
 
+  const handleConnectUsbDevice = () => {
+    setSearchUserKeyword("");
+  };
+
   const handleDetectCard = async (cardId: string) => {
     const userId = await searchNfc(cardId);
 
     if (userId === null) {
-      setSearchUserKeyword("");
       return;
     }
 
@@ -152,11 +155,12 @@ export default function HomePage() {
           emptySeats={seats.filter(
             (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
           )}
-          searchNfcError={searchNfcError}
+          searchNfcError={searchUserKeyword ? null : searchNfcError}
           searchUserList={users}
           searchWord={searchUserKeyword}
           onChangeSearchWord={handleChangeSearchWord}
-          onClose={() => {}}
+          onClose={() => clearSearchNfcError()}
+          onConnectUsbDevice={handleConnectUsbDevice}
           onDetectCard={handleDetectCard}
           onDisconnectUsbDevice={clearSearchNfcError}
           onEditUser={setEditUser}
