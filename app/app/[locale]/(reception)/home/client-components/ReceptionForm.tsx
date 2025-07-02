@@ -212,6 +212,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                   <div className="flex items-center gap-2">
                     <div className="w-16 text-sm font-bold">{user.id}</div>
                     <div className="text-sm">{user.name}</div>
+                    <div className="ml-2 text-sm">({user.pronunciation})</div>
                   </div>
                 </li>
               ))}
