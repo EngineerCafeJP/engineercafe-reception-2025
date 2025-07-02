@@ -51,6 +51,7 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
                 <div>{seatUsage.userId}</div>
+                <div className="ml-2">{seatUsage.user?.name}</div>
               </div>
               <button className="btn" onClick={onLeaveSeatClick}>
                 退席
