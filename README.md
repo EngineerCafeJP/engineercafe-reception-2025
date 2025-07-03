@@ -6,14 +6,14 @@
 
 ## 概要
 
-このプロジェクトは、エンジニアカフェの受付業務を効率化・自動化するための多機能なウェブアプリケーションです。ユーザー登録から NFC カードを利用したチェックイン、座席管理、利用状況のレポーティングまで、受付業務に必要な機能を包括的に提供します。
+このプロジェクトは、エンジニアカフェの受付業務を効率化・自動化するための多機能なウェブアプリケーションです。ユーザー登録からNFCカードを利用したチェックイン、座席管理、利用状況のレポーティングまで、受付業務に必要な機能を包括的に提供します。
 
-より詳細なプロジェクトの全体像については、[プロジェクト概要](./app/PROJECT_SUMMARY.md)をご覧ください。
+より詳細なプロジェクトの全体像については、[プロジェクト概要](./PROJECT_SUMMARY.md)をご覧ください。
 
 ### 主な機能
 
 - **ユーザー登録機能:** 新規ユーザーが詳細情報を登録できます。
-- **NFC カード連携による受付:** NFC カードを登録・利用し、スムーズなチェックインを実現します。
+- **NFC カード連携による受付:** NFCカードを登録・利用し、スムーズなチェックインを実現します。
 - **座席管理機能:** カフェ内の座席利用状況をリアルタイムで視覚的に管理します。
 - **ユーザー検索機能:** 登録済みのユーザーをキーワードで検索・編集できます。
 - **レポート機能:** 日次、月次、年次での座席利用状況に関する統計レポートを生成します。
@@ -25,15 +25,15 @@
 
 開発に参加される方は、以下のドキュメントをご一読ください。
 
-- **[コントリビューションガイド](./app/CONTRIBUTING.md):** 開発環境のセットアップ、開発フロー、コーディング規約、Pull Request の作成方法など、開発に関する詳細なガイドラインです。
-- **[Issue 作成ガイド](./app/ISSUE_GUIDE.md):** バグ報告や機能要望を行う際のガイドラインです。
-- **[行動規範](./app/CODE_OF_CONDUCT.md):** すべての参加者が快適に活動できるよう、敬意と思いやりのあるコミュニケーションを心がけるための規範です。
+- **[コントリビューションガイド](./CONTRIBUTING.md):** 開発環境のセットアップ、開発フロー、コーディング規約、Pull Requestの作成方法など、開発に関する詳細なガイドラインです。
+- **[Issue 作成ガイド](./ISSUE_GUIDE.md):** バグ報告や機能要望を行う際のガイドラインです。
+- **[行動規範](./CODE_OF_CONDUCT.md):** すべての参加者が快適に活動できるよう、敬意と思いやりのあるコミュニケーションを心がけるための規範です。
 
 ## 技術スタック
 
 - **フロントエンド:** Next.js (React), TypeScript
 - **バックエンド & データベース:** Supabase
-- **UI:** Material-UI, daisyUI
+- **UI:** Tailwind CSS, daisyUI
 - **状態管理:** React Query
 - **テスト:** Jest, Testing Library
 - **リンティング & フォーマット:** ESLint, Prettier
@@ -42,11 +42,13 @@
 
 ## 環境構築
 
-### 1. リポジトリのクローン
+### 1. プロジェクトのフォークとクローン
+
+まず、このリポジトリを自身のGitHubアカウントにフォークし、ローカルにクローンします。
 
 ```bash
-git clone https://github.com/EngineerCafeJP/engineercafe-reception-2025.git
-cd engineercafe-reception-2025
+git clone https://github.com/<YOUR_USERNAME>/engineercafe-reception-2025.git
+cd engineercafe-reception-2025/app
 ```
 
 ### 2. 依存関係のインストール
@@ -60,13 +62,13 @@ npm install
 
 ### 3. 環境変数の設定
 
-`app`ディレクトリ内で、`.env.example` をコピーして `.env` を作成し、Supabase の接続情報などを設定してください。
+`app`ディレクトリ内で、`.env.example` をコピーして `.env` を作成し、Supabaseの接続情報などを設定してください。
 
 ```bash
 cp .env.example .env
 ```
 
-詳細な手順は[コントリビューションガイド](./app/CONTRIBUTING.md#3-supabase-のセットアップ)を参照してください。
+詳細な手順は[コントリビューションガイド](./CONTRIBUTING.md#3-supabase-のセットアップ)を参照してください。
 
 ### 4. 開発サーバーの起動
 
@@ -74,13 +76,13 @@ cp .env.example .env
 npm run dev
 ```
 
-## Supabase セットアップ
+## Supabaseセットアップ
 
 ### CLI インストール
 
-[公式ドキュメント](https://supabase.com/docs/guides/local-development/cli/getting-started)を参考に、Supabase CLI をインストールしてください。
+[公式ドキュメント](https://supabase.com/docs/guides/local-development/cli/getting-started)を参考に、Supabase CLIをインストールしてください。
 
-### Supabase ローカル環境の起動
+### Supabaseローカル環境の起動
 
 ```bash
 cd supabase/
@@ -93,7 +95,7 @@ npx supabase start
 supabase db query --file supabase/scripts/mock.sql
 ```
 
-### Supabase Studio へのアクセス
+### Supabase Studioへのアクセス
 
 http://127.0.0.1:54323
 
@@ -108,7 +110,7 @@ npx supabase gen types typescript --local > ./app/utils/supabase/database.types.
 npm run format:fix
 ```
 
-### Supabase DB マイグレーション
+### Supabase DBマイグレーション
 
 マイグレーションファイルの作成:
 
