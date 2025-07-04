@@ -8,7 +8,7 @@
 
 - **フロントエンド:** Next.js (React), TypeScript
 - **バックエンド & データベース:** Supabase
-- **UI:** Material-UI
+- **UI:** Tailwind CSS, daisyUI
 - **状態管理:** React Query
 - **テスト:** Jest, Testing Library
 - **リンティング & フォーマット:** ESLint, Prettier
