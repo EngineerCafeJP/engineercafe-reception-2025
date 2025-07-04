@@ -4,6 +4,7 @@ export type User = {
   pronunciation: string;
   email: string;
   phone: string;
+  nonJapanese: boolean;
   prefectureId: number;
   prefectureOther: string;
   city: string;

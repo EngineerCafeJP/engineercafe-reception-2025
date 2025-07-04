@@ -53,6 +53,7 @@ export const updateUser = (userId: number, user: Partial<User>) => {
     pronunciation: user.pronunciation,
     email: user.email,
     phone: user.phone,
+    non_japanese: user.nonJapanese,
     prefecture_id: user.prefectureId,
     prefecture_other: user.prefectureOther,
     city: user.city,
