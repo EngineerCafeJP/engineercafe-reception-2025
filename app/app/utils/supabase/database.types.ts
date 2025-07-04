@@ -537,6 +537,7 @@ export type Database = {
           job_id: number | null;
           job_other: string | null;
           name: string | null;
+          non_japanese: boolean | null;
           phone: string | null;
           prefecture_id: number | null;
           prefecture_other: string | null;
@@ -562,6 +563,7 @@ export type Database = {
           job_id?: number | null;
           job_other?: string | null;
           name?: string | null;
+          non_japanese?: boolean | null;
           phone?: string | null;
           prefecture_id?: number | null;
           prefecture_other?: string | null;
@@ -587,6 +589,7 @@ export type Database = {
           job_id?: number | null;
           job_other?: string | null;
           name?: string | null;
+          non_japanese?: boolean | null;
           phone?: string | null;
           prefecture_id?: number | null;
           prefecture_other?: string | null;

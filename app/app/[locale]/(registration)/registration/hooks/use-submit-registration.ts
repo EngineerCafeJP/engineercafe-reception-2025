@@ -1,5 +1,6 @@
 import { useInsertMutation } from "@supabase-cache-helpers/postgrest-react-query";
 import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
+import { STAY_CATEGORY_DEFAULT_VALUE_ID } from "@/constants/stay-category";
 import supabase from "@/utils/supabase/client";
 import { Database } from "@/utils/supabase/database.types";
 
@@ -32,7 +33,9 @@ function transformRegistrationValues(
     email: contact.email,
     phone: contact.phone,
     prefecture_id: Number(nameAddress.prefectureId),
-    stay_category_id: Number(nameAddress.stayCategoryId),
+    stay_category_id: Number(nameAddress.stayCategoryId), // TODO non_japaneseと被っているので整理する
+    non_japanese:
+      Number(nameAddress.stayCategoryId) !== STAY_CATEGORY_DEFAULT_VALUE_ID, // 外国人かどうかのフラグ
     prefecture_other: nameAddress.prefectureOther,
     city: nameAddress.city,
     address: nameAddress.address,

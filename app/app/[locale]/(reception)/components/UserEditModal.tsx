@@ -20,6 +20,7 @@ const userFormSchema = z.object({
     .string()
     .min(1, { message: "電話番号を入力してください" })
     .regex(/^[0-9-]+$/, { message: "有効な電話番号を入力してください" }),
+  nonJapanese: z.boolean().optional(),
   prefectureId: z
     .string()
     .min(1, { message: "都道府県を選択してください" })
@@ -78,6 +79,7 @@ export const UserEditModal: React.FC<UserEditModalProps> = ({
       pronunciation: initialValues?.pronunciation,
       email: initialValues?.email,
       phone: initialValues?.phone,
+      nonJapanese: initialValues?.nonJapanese,
       prefectureId: initialValues?.prefectureId?.toString(),
       prefectureOther: initialValues?.prefectureOther,
       city: initialValues?.city,
@@ -94,6 +96,7 @@ export const UserEditModal: React.FC<UserEditModalProps> = ({
   });
 
   const submit = (data: UserFormData) => {
+    debugger;
     onSave(data);
     reset();
     onClose();
@@ -197,6 +200,26 @@ export const UserEditModal: React.FC<UserEditModalProps> = ({
                 <label className="label">
                   <span className="label-text-alt text-error">
                     {errors.phone.message}
+                  </span>
+                </label>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="form-control">
+              <input
+                className="checkbox"
+                type="checkbox"
+                {...register("nonJapanese")}
+              />
+              <label className="label">
+                <span className="label-text ml-2">外国人</span>
+              </label>
+
+              {errors.nonJapanese && (
+                <label className="label">
+                  <span className="label-text-alt text-error">
+                    {errors.nonJapanese.message}
                   </span>
                 </label>
               )}

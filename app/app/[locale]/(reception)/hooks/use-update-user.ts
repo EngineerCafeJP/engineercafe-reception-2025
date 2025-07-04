@@ -20,7 +20,7 @@ export const useUpdateUser = () => {
     try {
       setError(null);
       setIsLoading(true);
-
+      debugger;
       const { error } = await updateUser(userId, user);
       if (error) {
         setError(error);
