@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import ClockIcon from "@/components/icons/ClockIcon";
+import { MdAccessAlarm } from "react-icons/md";
+import { MdAccessTime } from "react-icons/md";
 import SeatIcon from "@/components/icons/SeatIcon";
 import UserIcon from "@/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/types";
@@ -18,6 +19,12 @@ const SeatCard: React.FC<SeatProps> = ({
   seatUsage = null,
   onSeatClick,
 }) => {
+  const endTime = seatUsage?.startTime
+    ? addHours(seatUsage.startTime, 2)
+    : null;
+
+  const isOver = endTime ? new Date(endTime) < new Date() : false;
+
   return (
     <div
       className={`card card-xs card-border ${seatUsage?.userId ? "border-accent bg-accent/30" : "border-primary"} h-[8rem] w-[7rem] cursor-pointer`}
@@ -37,9 +44,16 @@ const SeatCard: React.FC<SeatProps> = ({
               <UserIcon />
               <div className="text-base">{seatUsage.userId}</div>
             </div>
-            <div className="flex flex-row items-center gap-[0.125rem]">
-              <ClockIcon />
-              <div className="text-xs">
+            <div
+              className={`flex flex-row items-center gap-[0.125rem] ${isOver ? "text-error" : ""}`}
+            >
+              {isOver ? (
+                <MdAccessAlarm className="text-error text-base" />
+              ) : (
+                <MdAccessTime className="text-base" />
+              )}
+
+              <div className="ml-0.5 text-xs">
                 {`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}
               </div>
             </div>
