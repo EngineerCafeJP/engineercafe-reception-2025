@@ -1,5 +1,6 @@
 "use client";
 
+import { addHours } from "date-fns";
 import React, { useState } from "react";
 import { Seat, SeatUsage } from "@/types";
 import { ExtendSeatConfirmModalBox } from "./ExtendSeatConfirmModalBox";
@@ -81,7 +82,7 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
   const handleExtendSeatClicked = () => {
     setNextSeatUsage({
       ...seatUsage,
-      startTime: new Date().toISOString(),
+      startTime: addHours(new Date(seatUsage.startTime), 2).toISOString(),
       endTime: null,
     });
     setModalType("extendConfirm");

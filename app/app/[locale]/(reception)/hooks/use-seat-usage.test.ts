@@ -103,7 +103,7 @@ describe("useSeatUsage", () => {
           1,
           expect.any(String),
         );
-        expect(createSeatUsage).toHaveBeenCalledWith(1, 1);
+        expect(createSeatUsage).toHaveBeenCalledWith(1, 1, expect.any(String));
       });
     });
 
