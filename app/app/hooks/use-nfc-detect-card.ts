@@ -12,7 +12,7 @@ export function useNfcDetectCard({
   const [isPolling, setIsPolling] = useState(false);
   const detectCardIdPromiseRef = useRef<Promise<void> | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const nextRef = useRef<"A" | "F">("A");
+  const nextRef = useRef<"A" | "F">("F");
 
   const detectCardId = async () => {
     if (pollingRef.current) {
@@ -27,7 +27,9 @@ export function useNfcDetectCard({
       try {
         while (pollingRef.current) {
           const proto = nextRef.current;
-          nextRef.current = proto === "A" ? "F" : "A";
+          // iPhoneのときに、交互に読み取る不具合があるため暫定対応として無効にする
+          // nextRef.current = proto === "A" ? "F" : "A";
+
           const id = await nfcRef.current.detectCardId(proto);
 
           if (id) {
