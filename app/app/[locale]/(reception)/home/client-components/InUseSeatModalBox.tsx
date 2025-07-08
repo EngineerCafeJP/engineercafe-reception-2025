@@ -41,7 +41,10 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
               <div className="flex items-center align-[middle] text-[1.25rem]">
                 <div>{seat.name}</div>
               </div>
-              <button className="btn" onClick={onMoveSeatClick}>
+              <button
+                className="btn bg-black text-white"
+                onClick={onMoveSeatClick}
+              >
                 移動
               </button>
             </li>
@@ -53,7 +56,10 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
                 <div>{seatUsage.userId}</div>
                 <div className="ml-2">{seatUsage.user?.name}</div>
               </div>
-              <button className="btn" onClick={onLeaveSeatClick}>
+              <button
+                className="btn bg-warning text-white"
+                onClick={onLeaveSeatClick}
+              >
                 退席
               </button>
             </li>
@@ -64,7 +70,10 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
               <div className="flex items-center align-[middle] text-[1.25rem]">
                 <div>{`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}</div>
               </div>
-              <button className="btn" onClick={onExtendSeatClick}>
+              <button
+                className="btn bg-accent text-white"
+                onClick={onExtendSeatClick}
+              >
                 延長
               </button>
             </li>
