@@ -227,7 +227,12 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                   </div>
                   <div className="items-center align-[middle] text-[1.25rem]">
                     <div>id: {`${selectedUser?.id}`}</div>
-                    <div>name: {`${selectedUser?.name}`}</div>
+                    <div>
+                      name: {`${selectedUser?.name}`}
+                      <small className="ml-2">
+                        ({`${selectedUser?.pronunciation}`})
+                      </small>
+                    </div>
                   </div>
                   {selectedUser?.comments && (
                     <div className="text-warning m-1 flex items-center">
