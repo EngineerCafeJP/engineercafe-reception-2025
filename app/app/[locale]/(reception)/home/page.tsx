@@ -104,8 +104,12 @@ export default function HomePage() {
     await fetchInUseSeatUsage();
   };
 
-  const handleAssignSeat = async (seat: Seat, user: User) => {
-    await create(seat.id, user.id);
+  const handleAssignSeat = async (
+    seat: Seat,
+    user: User,
+    startTime?: string,
+  ) => {
+    await create(seat.id, user.id, startTime);
     await fetchInUseSeatUsage();
   };
 

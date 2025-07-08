@@ -18,7 +18,7 @@ interface ReceptionFormProps {
   onConnectUsbDevice: () => void;
   onDetectCard: (cardId: string) => void;
   onDisconnectUsbDevice: () => void;
-  assignSeat: (seat: Seat, user: User) => void;
+  assignSeat: (seat: Seat, user: User, startTime?: string) => void;
   onEditUser: (user: User) => void;
 }
 
@@ -70,9 +70,13 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     setSelectedSeat(null);
   };
 
-  const handleAssignSeat = async () => {
-    if (selectedUser && selectedSeat) {
-      await assignSeat(selectedSeat, selectedUser);
+  const handleAssignSeat = async (
+    seat: Seat,
+    user: User,
+    startTime?: string,
+  ) => {
+    if (seat && user) {
+      await assignSeat(seat, user, startTime);
       handleClose();
     }
   };
@@ -331,7 +335,9 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           isOpen={isConfirmModalOpen}
           seat={selectedSeat}
           user={selectedUser}
-          onAssignSeat={handleAssignSeat}
+          onAssignSeat={(startTime: string) =>
+            handleAssignSeat(selectedSeat, selectedUser, startTime)
+          }
           onClose={() => setIsConfirmModalOpen(false)}
         />
       )}

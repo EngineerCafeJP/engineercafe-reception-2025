@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useKey } from "react-use";
 import { AssignSeatConfirmBox } from "@/[locale]/(reception)/home/client-components/AssignSeatConfirmBox";
 import { Seat, User } from "@/types";
@@ -8,7 +8,7 @@ import { Seat, User } from "@/types";
 interface AssignSeatConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAssignSeat: () => void;
+  onAssignSeat: (startTime: string) => void;
   user: User;
   seat: Seat;
 }
@@ -20,11 +20,13 @@ export const AssignSeatConfirmModal: React.FC<AssignSeatConfirmModalProps> = ({
   user,
   seat,
 }) => {
+  const [startTime, setStartTime] = useState<string>(new Date().toISOString());
+
   const handleClose = () => {
     onClose();
   };
 
-  useKey("Enter", onAssignSeat, undefined, [isOpen, onAssignSeat]);
+  useKey("Enter", () => onAssignSeat(startTime), undefined, [isOpen]);
   useKey("Escape", handleClose, undefined, [isOpen, handleClose]);
 
   return (
@@ -34,8 +36,10 @@ export const AssignSeatConfirmModal: React.FC<AssignSeatConfirmModalProps> = ({
     >
       <AssignSeatConfirmBox
         seat={seat}
+        startTime={startTime}
         user={user}
-        onAssignSeat={onAssignSeat}
+        onAssignSeat={(startTime: string) => onAssignSeat(startTime)}
+        onChangeStartTime={(startTime: string) => setStartTime(startTime)}
         onClose={onClose}
       />
 

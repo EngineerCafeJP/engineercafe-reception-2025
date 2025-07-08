@@ -9,17 +9,29 @@ import { addHours, formatTimeWithQuarter } from "@/utils/format-time";
 interface AssignSeatConfirmBoxProps {
   user: User;
   seat: Seat;
+  startTime: string;
+  onChangeStartTime: (startTime: string) => void;
   onClose: () => void;
-  onAssignSeat: () => void;
+  onAssignSeat: (startTime: string) => void;
 }
 
 export const AssignSeatConfirmBox: React.FC<AssignSeatConfirmBoxProps> = ({
   user,
   seat,
+  startTime,
+  onChangeStartTime,
   onClose,
   onAssignSeat,
 }) => {
-  const startTime = new Date().toISOString();
+  const handleChangeStartTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [hours, minutes] = e.target.value.split(":");
+    const date = new Date();
+    date.setHours(Number(hours));
+    date.setMinutes(Number(minutes));
+
+    onChangeStartTime(date.toISOString());
+  };
+
   return (
     <div className="modal-box border-primary border-2 p-[0]">
       <div className="flex h-[50px] items-center justify-center text-[1.25rem] font-[800]">
@@ -40,7 +52,7 @@ export const AssignSeatConfirmBox: React.FC<AssignSeatConfirmBoxProps> = ({
               <div>
                 <UserIcon size={40} />
               </div>
-              <div className="flex items-center align-[middle] text-[1.25rem]">
+              <div className="text-base-content flex items-center align-[middle] text-[1.25rem]">
                 <div>{`${user.id} ${user.name}`}</div>
               </div>
             </li>
@@ -49,7 +61,18 @@ export const AssignSeatConfirmBox: React.FC<AssignSeatConfirmBoxProps> = ({
                 <ClockIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${formatTimeWithQuarter(startTime)} - ${formatTimeWithQuarter(addHours(startTime, 2))}`}</div>
+                <div>
+                  <input
+                    className="input input-bordered mr-8 cursor-pointer text-xl"
+                    type="time"
+                    value={formatTimeWithQuarter(startTime)}
+                    onChange={(e) => handleChangeStartTime(e)}
+                  />
+                </div>
+                <div className="mx-4">-</div>
+                <div className="text-base-content">
+                  {`${formatTimeWithQuarter(addHours(startTime, 2))}`}
+                </div>
               </div>
             </li>
           </ul>
@@ -59,7 +82,10 @@ export const AssignSeatConfirmBox: React.FC<AssignSeatConfirmBoxProps> = ({
           <button className="btn btn-secondary" onClick={onClose}>
             閉じる
           </button>
-          <button className="btn btn-primary" onClick={onAssignSeat}>
+          <button
+            className="btn btn-primary"
+            onClick={() => onAssignSeat(startTime)}
+          >
             はい
           </button>
         </div>
