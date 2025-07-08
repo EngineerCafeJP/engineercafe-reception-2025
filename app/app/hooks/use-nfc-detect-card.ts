@@ -15,6 +15,7 @@ export function useNfcDetectCard({
   const nextRef = useRef<"A" | "F">("F");
 
   const detectCardId = async () => {
+    let previousDetectedId: string | null = null;
     if (pollingRef.current) {
       return;
     }
@@ -27,16 +28,34 @@ export function useNfcDetectCard({
       try {
         while (pollingRef.current) {
           const proto = nextRef.current;
-          // iPhoneのときに、交互に読み取る不具合があるため暫定対応として無効にする
-          // nextRef.current = proto === "A" ? "F" : "A";
 
           const id = await nfcRef.current.detectCardId(proto);
 
-          if (id) {
-            onSuccess(id);
-            await sleep(500);
-          } else {
-            await sleep(100);
+          // iPhoneのときに、交互に読み取る不具合があるため2回読み取りを行う
+          // 2回のIDが一致した場合を成功とする
+          if (id && previousDetectedId) {
+            if (previousDetectedId === id) {
+              onSuccess(id);
+              await sleep(1000);
+            } else {
+              nextRef.current = proto === "A" ? "F" : "A";
+              previousDetectedId = null;
+              await sleep(200);
+            }
+            continue;
+          }
+
+          if (id && !previousDetectedId) {
+            previousDetectedId = id;
+            await sleep(200);
+            continue;
+          }
+
+          if (!id) {
+            previousDetectedId = null;
+            nextRef.current = proto === "A" ? "F" : "A";
+            await sleep(200);
+            continue;
           }
         }
       } catch (e) {
