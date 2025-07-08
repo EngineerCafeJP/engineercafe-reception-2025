@@ -36,25 +36,32 @@ export function useNfcDetectCard({
           if (id && previousDetectedId) {
             if (previousDetectedId === id) {
               onSuccess(id);
-              await sleep(1000);
+              await sleep(500);
             } else {
-              nextRef.current = proto === "A" ? "F" : "A";
+              // iPhoneのときに発生するため、Type-Fにする
+              nextRef.current = "F";
               previousDetectedId = null;
-              await sleep(200);
+              await sleep(100);
             }
             continue;
           }
 
           if (id && !previousDetectedId) {
             previousDetectedId = id;
-            await sleep(200);
+            await sleep(100);
+            continue;
+          }
+
+          if (!id && !previousDetectedId) {
+            previousDetectedId = null;
+            nextRef.current = proto === "A" ? "F" : "A";
+            await sleep(100);
             continue;
           }
 
           if (!id) {
             previousDetectedId = null;
-            nextRef.current = proto === "A" ? "F" : "A";
-            await sleep(200);
+            await sleep(100);
             continue;
           }
         }
