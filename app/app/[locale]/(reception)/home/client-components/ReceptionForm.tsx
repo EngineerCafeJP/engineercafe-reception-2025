@@ -303,7 +303,12 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                 </div>
               </div>
               <div className="flex justify-around">
-                <button className="btn btn-secondary" onClick={handleClose}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    setSelectedUser(null);
+                  }}
+                >
                   閉じる
                 </button>
                 <button
@@ -329,12 +334,6 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           onAssignSeat={handleAssignSeat}
           onClose={() => setIsConfirmModalOpen(false)}
         />
-      )}
-      {searchUserList && searchUserList.length > 0 && selectedUser === null && (
-        <div
-          className="modal-backdrop fixed inset-0 z-[1] h-screen w-screen"
-          onClick={handleClose}
-        ></div>
       )}
     </>
   );
