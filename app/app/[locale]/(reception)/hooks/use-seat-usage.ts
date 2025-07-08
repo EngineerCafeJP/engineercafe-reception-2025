@@ -16,7 +16,7 @@ export const useSeatUsage = () => {
   //@param seatId 座席ID
   //@param userId ユーザーID
   //@returns 更新後の座席使用データ
-  const create = async (seatId: number, userId: number) => {
+  const create = async (seatId: number, userId: number, startTime?: string) => {
     setIsLoading(true);
 
     // validate duplicate
@@ -28,7 +28,7 @@ export const useSeatUsage = () => {
       return;
     }
 
-    const { data, error } = await createSeatUsage(seatId, userId);
+    const { data, error } = await createSeatUsage(seatId, userId, startTime);
     if (error) {
       setError(error);
       setIsLoading(false);

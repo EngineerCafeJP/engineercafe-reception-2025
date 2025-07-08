@@ -46,8 +46,8 @@ describe("useSeatUsage", () => {
       const { result } = renderHook(() => useSeatUsage());
 
       await act(async () => {
-        await result.current.create(1, 1);
-        expect(createSeatUsage).toHaveBeenCalledWith(1, 1);
+        await result.current.create(1, 1, "2025-03-14 10:00:00");
+        expect(createSeatUsage).toHaveBeenCalledWith(1, 1, expect.any(String));
       });
     });
 
