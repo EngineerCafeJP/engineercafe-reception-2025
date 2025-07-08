@@ -61,7 +61,11 @@ export const useSeatUsage = () => {
       return;
     }
     const { data: nextSeatUsageData, error: createNextSeatUsageError } =
-      await createSeatUsage(seatUsage.seatId, seatUsage.userId);
+      await createSeatUsage(
+        seatUsage.seatId,
+        seatUsage.userId,
+        new Date(seatUsage.startTime).toISOString(),
+      );
     if (createNextSeatUsageError) {
       setError(createNextSeatUsageError);
       setIsLoading(false);
