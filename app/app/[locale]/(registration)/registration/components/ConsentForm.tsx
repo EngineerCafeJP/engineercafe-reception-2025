@@ -4,6 +4,7 @@ import { Locale, useLocale, useTranslations } from "next-intl";
 import { ComponentType } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 import type { MDXProps } from "mdx/types";
 
 type ConsentFormProps = {
@@ -34,7 +35,10 @@ export default function ConsentForm({ methods }: ConsentFormProps) {
         {t("title")}
       </h1>
       <p className="text-center text-xl text-gray-400">{t("subTitle")}</p>
-      <div className="bg-base-100 border-base-300 my-6 rounded-lg border p-4">
+      <div className="mx-auto my-1 w-fit">
+        <LocaleSwitcher />
+      </div>
+      <div className="bg-base-100 border-base-300 my-2 rounded-lg border p-4">
         <div className="h-96 overflow-auto">
           <article className="prose prose-sm prose-h1:text-xl prose-h2:text-lg prose-h3:text-base">
             <RegistrationTerms />
