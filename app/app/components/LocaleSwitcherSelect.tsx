@@ -1,19 +1,20 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Locale } from "next-intl";
-import { ChangeEvent, ReactNode, useTransition } from "react";
+import { Locale, useTranslations } from "next-intl";
+import { ChangeEvent, useTransition } from "react";
 import { usePathname, useRouter } from "~/i18n/navigation";
 
 type LocaleSwitcherSelectProps = {
-  children: ReactNode;
+  locales: Readonly<Locale[]>;
   defaultValue: Locale;
 };
 
 export default function LocaleSwitcherSelect({
-  children,
+  locales,
   defaultValue,
 }: LocaleSwitcherSelectProps) {
+  const t = useTranslations("LocaleSwitcher");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
@@ -29,12 +30,17 @@ export default function LocaleSwitcherSelect({
 
   return (
     <select
-      className="select select-ghost select-xs"
+      className="select select-xs border-base-300"
       defaultValue={defaultValue}
       disabled={isPending}
+      id="locale-switcher"
       onChange={handleSelectChange}
     >
-      {children}
+      {locales.map((locale) => (
+        <option key={locale} value={locale}>
+          {t("locale", { locale })}
+        </option>
+      ))}
     </select>
   );
 }

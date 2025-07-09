@@ -31,14 +31,14 @@ export default function ConsentForm({ methods }: ConsentFormProps) {
 
   return (
     <>
+      <div className="mb-2 ml-auto flex w-fit justify-end">
+        <LocaleSwitcher />
+      </div>
       <h1 className="text-center text-2xl font-extrabold sm:text-3xl">
         {t("title")}
       </h1>
       <p className="text-center text-xl text-gray-400">{t("subTitle")}</p>
-      <div className="mx-auto my-1 w-fit">
-        <LocaleSwitcher />
-      </div>
-      <div className="bg-base-100 border-base-300 my-2 rounded-lg border p-4">
+      <div className="bg-base-100 border-base-300 my-6 rounded-lg border p-4">
         <div className="h-96 overflow-auto">
           <article className="prose prose-sm prose-h1:text-xl prose-h2:text-lg prose-h3:text-base">
             <RegistrationTerms />
