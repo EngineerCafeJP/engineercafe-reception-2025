@@ -47,16 +47,17 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     setSelectedUser(user);
   };
 
-  const areaList = React.useMemo(
-    () =>
-      emptySeats
-        .map((seat: Seat) => seat.seatCategory.name)
-        .filter(
-          (categoryName: string, index: number, self: string[]) =>
-            self.indexOf(categoryName) === index,
-        ),
-    [emptySeats],
-  );
+  const areaList = React.useMemo(() => {
+    const categories = emptySeats.map((seat: Seat) => seat.seatCategory);
+
+    return categories
+      .sort((a, b) => a.order - b.order)
+      .map((category) => category.name)
+      .filter(
+        (categoryName: string, index: number, self: string[]) =>
+          self.indexOf(categoryName) === index,
+      );
+  }, [emptySeats]);
 
   const seatList = (categoryName: string) =>
     emptySeats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
