@@ -160,7 +160,7 @@ export default function HomePage() {
             (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
           )}
           searchNfcError={searchUserKeyword ? null : searchNfcError}
-          searchUserList={users}
+          searchUserList={isLoading ? [] : users}
           searchWord={searchUserKeyword}
           onChangeSearchWord={handleChangeSearchWord}
           onClose={() => clearSearchNfcError()}
