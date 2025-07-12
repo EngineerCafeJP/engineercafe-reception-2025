@@ -1,4 +1,7 @@
 {
+  "LocaleSwitcher": {
+    "locale": "{locale, select, ja {日本語} en {English} other {不明}}"
+  },
   "MultiStepForm": {
     "back": "前へ",
     "next": "次へ",
