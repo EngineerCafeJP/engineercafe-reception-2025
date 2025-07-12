@@ -33,12 +33,18 @@ export const MoveSeatSelectModalBox: React.FC<MoveSeatSelectModalBoxProps> = ({
     [onNextButtonClick, selectedSeat],
   );
 
-  const areaList = emptySeats
-    .map((seat: Seat) => seat.seatCategory.name)
-    .filter(
-      (seatCategoryName: string, index: number, self: string[]) =>
-        self.indexOf(seatCategoryName) === index,
-    );
+  const areaList = React.useMemo(() => {
+    const categories = emptySeats.map((seat: Seat) => seat.seatCategory);
+
+    return categories
+      .sort((a, b) => a.order - b.order)
+      .map((category) => category.name)
+      .filter(
+        (categoryName: string, index: number, self: string[]) =>
+          self.indexOf(categoryName) === index,
+      );
+  }, [emptySeats]);
+
   const seatList = (seatCategoryName: string) =>
     emptySeats.filter(
       (seat: Seat) => seat.seatCategory.name === seatCategoryName,
