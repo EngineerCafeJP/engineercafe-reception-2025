@@ -47,6 +47,7 @@ export default function HomePage() {
     isLoading: usersLoading,
     error: usersError,
     fetch: fetchUsers,
+    clear: clearSearchUsers,
   } = useSearchUsers(debouncedChangeSearchWord);
   const {
     search: searchNfc,
@@ -83,6 +84,7 @@ export default function HomePage() {
   };
 
   const handleChangeSearchWord = (searchWord: string) => {
+    clearSearchUsers();
     setSearchUserKeyword(searchWord);
   };
 
@@ -160,7 +162,7 @@ export default function HomePage() {
             (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
           )}
           searchNfcError={searchUserKeyword ? null : searchNfcError}
-          searchUserList={isLoading ? [] : users}
+          searchUserList={users}
           searchWord={searchUserKeyword}
           onChangeSearchWord={handleChangeSearchWord}
           onClose={() => clearSearchNfcError()}
