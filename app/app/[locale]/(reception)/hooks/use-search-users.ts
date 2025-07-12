@@ -46,5 +46,11 @@ export const useSearchUsers = (keyword?: string) => {
     setIsLoading(false);
   };
 
-  return { users, isLoading, error, fetch };
+  const clear = () => {
+    setUsers([]);
+    setError(null);
+    setIsLoading(false);
+  };
+
+  return { users, isLoading, error, fetch, clear };
 };
