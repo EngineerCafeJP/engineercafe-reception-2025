@@ -84,7 +84,6 @@ export default function HomePage() {
   };
 
   const handleChangeSearchWord = (searchWord: string) => {
-    clearSearchUsers();
     setSearchUserKeyword(searchWord);
   };
 
