@@ -13,6 +13,8 @@ interface ReceptionFormProps {
   searchUserList: User[] | null;
   searchNfcError: string | null;
   emptySeats: Seat[];
+  selectedUser: User | null;
+  onSelectUser: (user: User) => void;
   onChangeSearchWord: (input: string) => void;
   onClose: () => void;
   onConnectUsbDevice: () => void;
@@ -27,6 +29,8 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   searchUserList,
   searchNfcError,
   emptySeats,
+  selectedUser,
+  onSelectUser,
   onChangeSearchWord,
   onClose,
   onConnectUsbDevice,
@@ -39,12 +43,10 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleSelectUser = (user: User) => {
-    setSelectedUser(user);
+    onSelectUser(user);
   };
 
   const areaList = React.useMemo(() => {
@@ -85,7 +87,6 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const handleClose = () => {
     handleChangeSearchWord("");
     setSelectedUserIndex(0);
-    setSelectedUser(null);
     setSelectedArea(null);
     setSelectedSeat(null);
     setIsConfirmModalOpen(false);
@@ -121,10 +122,10 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
       ) {
         setIsConfirmModalOpen(true);
       } else if (searchUserList && selectedUser === null) {
-        setSelectedUser(searchUserList[selectedUserIndex]);
+        onSelectUser(searchUserList[selectedUserIndex]);
       }
     },
-    [selectedUser, selectedUserIndex, searchUserList],
+    [selectedUser, searchUserList, onSelectUser, selectedUserIndex],
   );
 
   const handleArrowDownKeyDown = useCallback(
@@ -308,12 +309,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                 </div>
               </div>
               <div className="flex justify-around">
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => {
-                    setSelectedUser(null);
-                  }}
-                >
+                <button className="btn btn-secondary" onClick={handleClose}>
                   閉じる
                 </button>
                 <button

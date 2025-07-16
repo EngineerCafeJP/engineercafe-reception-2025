@@ -1,16 +1,28 @@
 import Link from "next/link";
 import { MdEdit, MdNfc } from "react-icons/md";
+import DisplayLimitInput from "@/[locale]/(reception)/user-search/components/DisplayLimitInput";
+import SeatIcon from "@/components/icons/SeatIcon";
 import { User } from "@/types";
 
 type Props = {
   users: User[];
   onEditClicked: (user: User) => void;
+  limit: number;
+  setLimit: (limit: number) => void;
 };
 
-export default function UserList({ users, onEditClicked }: Props) {
+export default function UserList({
+  users,
+  onEditClicked,
+  limit,
+  setLimit,
+}: Props) {
   return (
     <div className="mt-6">
-      <h2 className="mb-4 text-xl font-bold">検索結果</h2>
+      <div className="flex justify-between">
+        <h2 className="mb-4 text-xl font-bold">検索結果</h2>
+        <DisplayLimitInput limit={limit} onLimitChange={setLimit} />
+      </div>
       {users.length > 0 ? (
         <ul className="space-y-4">
           {users.map((user) => (
@@ -33,6 +45,13 @@ export default function UserList({ users, onEditClicked }: Props) {
                   <MdEdit size={20} />
                   編集
                 </button>
+                <Link
+                  className="btn btn-sm btn-secondary"
+                  href={`/home?userId=${user.id}`}
+                >
+                  <SeatIcon size={20} />
+                  受付
+                </Link>
                 <Link
                   className="btn btn-sm btn-accent"
                   href={`/nfc-registration?userId=${user.id}`}

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import UserEditModal, {
   UserFormData,
@@ -11,15 +12,23 @@ import { useSearchUsers } from "@/[locale]/(reception)/hooks/use-search-users";
 import { useSeatUsage } from "@/[locale]/(reception)/hooks/use-seat-usage";
 import { useSeatsWithCategory } from "@/[locale]/(reception)/hooks/use-seats-with-category";
 import { useUpdateUser } from "@/[locale]/(reception)/hooks/use-update-user";
+import { softDeleteUser } from "@/[locale]/(reception)/queries/users-queries";
 import { useRegistrationOptions } from "@/hooks/use-registration-options";
 import { Seat, SeatUsage, User } from "@/types";
 import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
 
 export default function HomePage() {
+  const searchParams = useSearchParams();
+  const searchParamUserId = searchParams.get("userId");
+  const userId =
+    searchParamUserId != null && /^\d+$/.test(searchParamUserId)
+      ? searchParamUserId
+      : undefined;
   const [searchUserKeyword, setSearchUserKeyword] = useState<string>("");
   const [editUser, setEditUser] = useState<User | null>(null);
   const [debouncedChangeSearchWord] = useDebounce(searchUserKeyword, 500);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const {
     seats,
     isLoading: seatsLoading,
@@ -69,6 +78,16 @@ export default function HomePage() {
     error: updateUserError,
   } = useUpdateUser();
 
+  useEffect(() => {
+    if (userId != null) {
+      setSearchUserKeyword(userId.toString());
+      // query string を削除
+      const url = new URL(window.location.href);
+      url.searchParams.delete("userId");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [userId]);
+
   const handleConnectUsbDevice = () => {
     setSearchUserKeyword("");
   };
@@ -112,6 +131,7 @@ export default function HomePage() {
   ) => {
     await create(seat.id, user.id, startTime);
     await fetchInUseSeatUsage();
+    handleClose();
   };
 
   const handleUpdateUser = async (userData: UserFormData) => {
@@ -125,7 +145,20 @@ export default function HomePage() {
     if (updatedUser != null) {
       // ユーザー情報を再取得する
       fetchUsers(searchUserKeyword);
+      handleClose();
     }
+  };
+
+  const handleDeleteUser = async (userId: number) => {
+    await softDeleteUser(userId);
+    setSearchUserKeyword("");
+    setEditUser(null);
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setSelectedUser(null);
+    setEditUser(null);
   };
 
   const isLoading =
@@ -163,12 +196,14 @@ export default function HomePage() {
           searchNfcError={searchUserKeyword ? null : searchNfcError}
           searchUserList={users}
           searchWord={searchUserKeyword}
+          selectedUser={selectedUser}
           onChangeSearchWord={handleChangeSearchWord}
-          onClose={() => clearSearchNfcError()}
+          onClose={handleClose}
           onConnectUsbDevice={handleConnectUsbDevice}
           onDetectCard={handleDetectCard}
           onDisconnectUsbDevice={clearSearchNfcError}
           onEditUser={setEditUser}
+          onSelectUser={setSelectedUser}
         />
 
         <div className="h-12"></div>
@@ -187,7 +222,8 @@ export default function HomePage() {
           isOpen={Boolean(editUser)}
           jobs={jobs}
           prefectures={prefectures}
-          onClose={() => setEditUser(null)}
+          onClose={handleClose}
+          onDelete={handleDeleteUser}
           onSave={handleUpdateUser}
         />
       )}

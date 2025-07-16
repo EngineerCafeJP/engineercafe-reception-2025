@@ -11,15 +11,17 @@ export function fetchUsers(
     email?: boolean;
     phone?: boolean;
   },
+  limit: number = 100,
 ) {
-  let query = client.from("users").select("*").order("id", { ascending: true });
+  let query = client
+    .from("users")
+    .select("*")
+    .order("id", { ascending: false })
+    .is("is_delete", null)
+    .limit(limit);
 
   const conditions: string[] = [];
   const keyword = filters.searchText.trim();
-
-  if (keyword.length === 0) {
-    return Promise.resolve({ data: [], error: null }); //空を返す
-  }
 
   if (filters.id && keyword !== "" && !isNaN(Number(keyword))) {
     conditions.push(`id.eq.${Number(keyword)}`);
