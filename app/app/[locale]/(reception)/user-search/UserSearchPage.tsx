@@ -7,6 +7,7 @@ import UserEditModal, {
   UserFormData,
 } from "@/[locale]/(reception)/components/UserEditModal";
 import { useUpdateUser } from "@/[locale]/(reception)/hooks/use-update-user";
+import { softDeleteUser } from "@/[locale]/(reception)/queries/users-queries";
 import { useRegistrationOptions } from "@/hooks/use-registration-options";
 import { fetchUsers } from "@/queries/user-search-queries";
 import { User } from "@/types";
@@ -31,6 +32,8 @@ export default function UserSearchPage() {
 
   const { prefectures, belongs, jobs } = useRegistrationOptions("ja");
 
+  const [limit, setLimit] = useState(100);
+
   const {
     update: updateUser,
     isLoading: isUpdateUserLoading,
@@ -39,20 +42,26 @@ export default function UserSearchPage() {
 
   useEffect(() => {
     const loadUsers = async () => {
-      const { data, error } = await fetchUsers(supabase, {
-        searchText: "", // 初期値
-        id: false,
-        email: false,
-        phone: false,
-      });
+      const { data, error } = await fetchUsers(
+        supabase,
+        {
+          searchText: "", // 初期値
+          id: false,
+          email: false,
+          phone: false,
+        },
+        limit,
+      );
+
       if (error) {
         console.error("ユーザ取得に失敗しました:", error.message);
         return;
       }
+
       setFilteredUsers(humps.camelizeKeys(data) as User[]);
     };
     loadUsers();
-  }, []);
+  }, [limit]);
 
   const applySearchFilters = async (filters: UserFilters) => {
     const { data, error } = await fetchUsers(supabase, filters);
@@ -92,6 +101,11 @@ export default function UserSearchPage() {
     }
   };
 
+  const handleDeleteUser = async (userId: number) => {
+    await softDeleteUser(userId);
+    handleSearch();
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-lg">
@@ -99,7 +113,12 @@ export default function UserSearchPage() {
 
         <SearchFilters register={register} />
         <SearchInput register={register} onSubmit={handleSearch} />
-        <UserList users={filteredUsers} onEditClicked={setEditUser} />
+        <UserList
+          limit={limit}
+          setLimit={setLimit}
+          users={filteredUsers}
+          onEditClicked={setEditUser}
+        />
       </div>
 
       {isUpdateUserLoading && <div>Loading...</div>}
@@ -113,6 +132,7 @@ export default function UserSearchPage() {
           jobs={jobs}
           prefectures={prefectures}
           onClose={() => setEditUser(null)}
+          onDelete={handleDeleteUser}
           onSave={handleUpdateUser}
         />
       )}

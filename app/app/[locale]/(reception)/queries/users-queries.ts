@@ -78,3 +78,10 @@ export const updateUser = (userId: number, user: Partial<User>) => {
 
   return client.from("users").update(filteredUpdateData).eq("id", userId);
 };
+
+export const softDeleteUser = (userId: number) => {
+  return client
+    .from("users")
+    .update({ is_delete: true, updated_at: new Date().toISOString() })
+    .eq("id", userId);
+};

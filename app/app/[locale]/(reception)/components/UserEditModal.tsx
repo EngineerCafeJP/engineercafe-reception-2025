@@ -50,6 +50,7 @@ interface UserEditModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (userData: UserFormData) => void;
+  onDelete: (userId: number) => void;
   initialValues?: Partial<User>;
   prefectures: Prefecture[];
   belongs: Belong[];
@@ -60,6 +61,7 @@ export const UserEditModal: React.FC<UserEditModalProps> = ({
   isOpen,
   onClose,
   onSave,
+  onDelete,
   initialValues,
   prefectures,
   belongs,
@@ -96,10 +98,21 @@ export const UserEditModal: React.FC<UserEditModalProps> = ({
   });
 
   const submit = (data: UserFormData) => {
-    debugger;
     onSave(data);
     reset();
     onClose();
+  };
+
+  const handleDelete = () => {
+    if (initialValues?.id) {
+      const confirmed = confirm("本当に削除しますか？");
+      if (!confirmed) {
+        return;
+      }
+      onDelete(initialValues?.id);
+      reset();
+      onClose();
+    }
   };
 
   return (
@@ -424,20 +437,31 @@ export const UserEditModal: React.FC<UserEditModalProps> = ({
             />
           </div>
 
-          <div className="modal-action">
-            <button
-              className="btn"
-              type="button"
-              onClick={() => {
-                reset();
-                onClose();
-              }}
-            >
-              閉じる
-            </button>
-            <button className="btn btn-primary" type="submit">
-              保存
-            </button>
+          <div className="modal-action justify-between">
+            <div>
+              <button
+                className="btn btn-error text-white"
+                type="button"
+                onClick={handleDelete}
+              >
+                削除
+              </button>
+            </div>
+            <div className="flex gap-4">
+              <button
+                className="btn"
+                type="button"
+                onClick={() => {
+                  reset();
+                  onClose();
+                }}
+              >
+                閉じる
+              </button>
+              <button className="btn btn-primary" type="submit">
+                保存
+              </button>
+            </div>
           </div>
         </form>
       </div>
