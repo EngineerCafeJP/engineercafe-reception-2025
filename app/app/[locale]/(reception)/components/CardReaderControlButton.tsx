@@ -38,7 +38,7 @@ export default function CardReaderControlButton({
       )}
     >
       <button
-        className="btn btn-primary btn-sm col-span-full sm:col-span-2"
+        className="btn btn-primary btn-sm col-span-full px-2 sm:col-span-2"
         disabled={isPolling}
         type="button"
         onClick={handleConnect}
