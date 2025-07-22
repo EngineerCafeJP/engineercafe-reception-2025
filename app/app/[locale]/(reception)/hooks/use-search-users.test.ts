@@ -1,4 +1,4 @@
-import { act, renderHook, waitFor } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 import { fetchUsersBySearchParams } from "@/[locale]/(reception)/queries/users-queries";
 import { useSearchUsers } from "./use-search-users";
 
@@ -32,12 +32,23 @@ describe("useSearchUsers", () => {
     });
   });
 
-  it("should return the users by search params id", async () => {
-    const { result } = renderHook(() => useSearchUsers());
+  it("should return the users by search params", async () => {
+    const { result } = renderHook(() => useSearchUsers("word"));
 
-    await act(async () => {
-      await result.current.fetch("1");
+    await waitFor(() => {
+      expect(result.current.users).toEqual(mockUsers);
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.error).toBeNull();
+      expect(fetchUsersBySearchParams).toHaveBeenCalledWith({
+        name: "word",
+        email: "word",
+        phone: "word",
+      });
     });
+  });
+
+  it("should return the users by search params id", async () => {
+    const { result } = renderHook(() => useSearchUsers("1"));
 
     await waitFor(() => {
       expect(result.current.users).toEqual(mockUsers);
@@ -56,16 +67,11 @@ describe("useSearchUsers", () => {
     });
 
     it("should return empty array", async () => {
-      const { result } = renderHook(() => useSearchUsers());
-
-      await act(async () => {
-        await result.current.fetch("1");
-      });
+      const { result } = renderHook(() => useSearchUsers("word"));
 
       await waitFor(() => {
         expect(result.current.users).toEqual([]);
         expect(result.current.isLoading).toBe(false);
-        expect(result.current.error).toBeInstanceOf(Error);
       });
     });
   });
@@ -73,18 +79,13 @@ describe("useSearchUsers", () => {
   describe("when fetch users returns error", () => {
     beforeEach(() => {
       (fetchUsersBySearchParams as jest.Mock).mockResolvedValue({
-        data: null,
+        data: mockUsers,
         error: new Error("Failed to fetch users"),
       });
     });
 
     it("should return empty array", async () => {
-      const { result } = renderHook(() => useSearchUsers());
-
-      await act(async () => {
-        await result.current.fetch("1");
-        expect(fetchUsersBySearchParams).toHaveBeenCalledWith({ id: 1 });
-      });
+      const { result } = renderHook(() => useSearchUsers("word"));
 
       await waitFor(() => {
         expect(result.current.users).toEqual([]);
