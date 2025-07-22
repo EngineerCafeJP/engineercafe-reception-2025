@@ -1,8 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
+import React, { useCallback, useEffect, useState } from "react";
 import UserEditModal, {
   UserFormData,
 } from "@/[locale]/(reception)/components/UserEditModal";
@@ -27,7 +26,6 @@ export default function HomePage() {
       : undefined;
   const [searchUserKeyword, setSearchUserKeyword] = useState<string>("");
   const [editUser, setEditUser] = useState<User | null>(null);
-  const [debouncedChangeSearchWord] = useDebounce(searchUserKeyword, 500);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const {
     seats,
@@ -57,7 +55,7 @@ export default function HomePage() {
     error: usersError,
     fetch: fetchUsers,
     clear: clearSearchUsers,
-  } = useSearchUsers(debouncedChangeSearchWord);
+  } = useSearchUsers();
   const {
     search: searchNfc,
     error: searchNfcError,
@@ -102,64 +100,85 @@ export default function HomePage() {
     setSearchUserKeyword(userId.toString());
   };
 
-  const handleChangeSearchWord = (searchWord: string) => {
-    setSearchUserKeyword(searchWord);
-  };
+  const handleChangeSearchWord = useCallback(
+    async (searchWord: string) => {
+      console.log("searchWord", searchWord);
+      if (searchWord === "") {
+        clearSearchUsers();
+        setSearchUserKeyword("");
+      } else {
+        setSearchUserKeyword(searchWord);
+        await fetchUsers(searchWord);
+      }
+    },
+    [clearSearchUsers, fetchUsers],
+  );
 
-  const handleExtendSeatUsage = async (seatUsage: SeatUsage) => {
-    await extendSeatUsage(seatUsage);
-    await fetchInUseSeatUsage();
-  };
-
-  const handleFinishSeatUsage = async (seatUsage: SeatUsage) => {
-    await finishSeatUsage(seatUsage);
-    await fetchInUseSeatUsage();
-  };
-
-  const handleMoveSeat = async (
-    prevSeatUsage: SeatUsage,
-    nextSeatUsage: SeatUsage,
-  ) => {
-    await moveSeat(prevSeatUsage, nextSeatUsage);
-    await fetchInUseSeatUsage();
-  };
-
-  const handleAssignSeat = async (
-    seat: Seat,
-    user: User,
-    startTime?: string,
-  ) => {
-    await create(seat.id, user.id, startTime);
-    await fetchInUseSeatUsage();
-    handleClose();
-  };
-
-  const handleUpdateUser = async (userData: UserFormData) => {
-    const updatedUser = await updateUser(userData.id, {
-      ...userData,
-      prefectureId: Number(userData.prefectureId),
-      belongId: Number(userData.belongId),
-      jobId: Number(userData.jobId),
-    } as Partial<User>);
-
-    if (updatedUser != null) {
-      // ユーザー情報を再取得する
-      fetchUsers(searchUserKeyword);
-      handleClose();
-    }
-  };
-
-  const handleDeleteUser = async (userId: number) => {
-    await softDeleteUser(userId);
-    setSearchUserKeyword("");
-    setEditUser(null);
-    handleClose();
-  };
-
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setSelectedUser(null);
     setEditUser(null);
-  };
+  }, [setSelectedUser, setEditUser]);
+
+  const handleExtendSeatUsage = useCallback(
+    async (seatUsage: SeatUsage) => {
+      await extendSeatUsage(seatUsage);
+      await fetchInUseSeatUsage();
+    },
+    [extendSeatUsage, fetchInUseSeatUsage],
+  );
+
+  const handleFinishSeatUsage = useCallback(
+    async (seatUsage: SeatUsage) => {
+      await finishSeatUsage(seatUsage);
+      await fetchInUseSeatUsage();
+    },
+    [finishSeatUsage, fetchInUseSeatUsage],
+  );
+
+  const handleMoveSeat = useCallback(
+    async (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => {
+      await moveSeat(prevSeatUsage, nextSeatUsage);
+      await fetchInUseSeatUsage();
+    },
+    [moveSeat, fetchInUseSeatUsage],
+  );
+
+  const handleAssignSeat = useCallback(
+    async (seat: Seat, user: User, startTime?: string) => {
+      await create(seat.id, user.id, startTime);
+      await fetchInUseSeatUsage();
+      handleClose();
+    },
+    [create, fetchInUseSeatUsage, handleClose],
+  );
+
+  const handleUpdateUser = useCallback(
+    async (userData: UserFormData) => {
+      const updatedUser = await updateUser(userData.id, {
+        ...userData,
+        prefectureId: Number(userData.prefectureId),
+        belongId: Number(userData.belongId),
+        jobId: Number(userData.jobId),
+      } as Partial<User>);
+
+      if (updatedUser != null) {
+        // ユーザー情報を再取得する
+        fetchUsers(searchUserKeyword);
+        handleClose();
+      }
+    },
+    [updateUser, fetchUsers, searchUserKeyword, handleClose],
+  );
+
+  const handleDeleteUser = useCallback(
+    async (userId: number) => {
+      await softDeleteUser(userId);
+      setSearchUserKeyword("");
+      setEditUser(null);
+      handleClose();
+    },
+    [setSearchUserKeyword, setEditUser, handleClose],
+  );
 
   const isLoading =
     seatsLoading ||
@@ -194,7 +213,7 @@ export default function HomePage() {
             (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
           )}
           searchNfcError={searchUserKeyword ? null : searchNfcError}
-          searchUserList={users}
+          searchUserList={isLoading ? null : users}
           searchWord={searchUserKeyword}
           selectedUser={selectedUser}
           onChangeSearchWord={handleChangeSearchWord}
@@ -228,7 +247,14 @@ export default function HomePage() {
         />
       )}
       {isLoading && (
-        <span className="z-index-1000 loading loading-spinner loading-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></span>
+        <div className="absolute top-1/2 left-1/2 z-[1000] -translate-x-1/2 -translate-y-1/2">
+          <div className="flex h-screen w-screen flex-col items-center bg-white/25">
+            <div className="m-auto flex flex-col items-center">
+              <span className="loading loading-spinner loading-xl"></span>
+              <span className="text-white">Loading...</span>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

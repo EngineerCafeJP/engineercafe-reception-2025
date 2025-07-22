@@ -1,8 +1,15 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
-import { MdClose, MdComment, MdEdit, MdWarning } from "react-icons/md";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+  MdClose,
+  MdComment,
+  MdEdit,
+  MdSearch,
+  MdWarning,
+} from "react-icons/md";
 import { useKey } from "react-use";
+import { useDebounce } from "use-debounce";
 import CardReaderControlButton from "@/[locale]/(reception)/components/CardReaderControlButton";
 import AssignSeatConfirmModal from "@/[locale]/(reception)/home/client-components/AssignSeatConfirmModal";
 import UserIcon from "@/components/icons/UserIcon";
@@ -14,7 +21,7 @@ interface ReceptionFormProps {
   searchNfcError: string | null;
   emptySeats: Seat[];
   selectedUser: User | null;
-  onSelectUser: (user: User) => void;
+  onSelectUser: (user: User | null) => void;
   onChangeSearchWord: (input: string) => void;
   onClose: () => void;
   onConnectUsbDevice: () => void;
@@ -43,7 +50,20 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [searchFormValue, setSearchFormValue] = useState<string>(searchWord);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
+  const [debouncedChangeSearchWord] = useDebounce(searchFormValue, 250);
+
+  // インクリメンタルサーチ
+  useEffect(() => {
+    onChangeSearchWord(debouncedChangeSearchWord);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedChangeSearchWord]);
+
+  // TODO リファクタリング
+  useEffect(() => {
+    setSearchFormValue(searchWord);
+  }, [searchWord]);
 
   const handleSelectUser = (user: User) => {
     onSelectUser(user);
@@ -65,8 +85,13 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     emptySeats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
 
   const handleChangeSearchWord = (word: string) => {
-    onChangeSearchWord(word);
+    setSearchFormValue(word);
   };
+
+  const handleSearch = useCallback(() => {
+    onSelectUser(null);
+    onChangeSearchWord(searchFormValue);
+  }, [onSelectUser, onChangeSearchWord, searchFormValue]);
 
   const handleSelectArea = (area: string) => {
     setSelectedArea(area);
@@ -80,12 +105,17 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   ) => {
     if (seat && user) {
       await assignSeat(seat, user, startTime);
+      setSearchFormValue("");
       handleClose();
     }
   };
 
+  const handleClearSearch = () => {
+    setSearchFormValue("");
+    handleClose();
+  };
+
   const handleClose = () => {
-    handleChangeSearchWord("");
     setSelectedUserIndex(0);
     setSelectedArea(null);
     setSelectedSeat(null);
@@ -117,15 +147,32 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const handleEnterKeyDown = useCallback(
     (_e: KeyboardEvent) => {
       if (
+        searchFormValue &&
+        selectedUser == null &&
+        (searchUserList == null || searchUserList.length === 0)
+      ) {
+        handleSearch();
+      } else if (
         confirmButtonRef.current?.disabled === false &&
         selectedUser !== null
       ) {
         setIsConfirmModalOpen(true);
-      } else if (searchUserList && selectedUser === null) {
+      } else if (
+        searchUserList &&
+        selectedUser == null &&
+        searchUserList.length > 0
+      ) {
         onSelectUser(searchUserList[selectedUserIndex]);
       }
     },
-    [selectedUser, searchUserList, onSelectUser, selectedUserIndex],
+    [
+      searchFormValue,
+      selectedUser,
+      searchUserList,
+      handleSearch,
+      onSelectUser,
+      selectedUserIndex,
+    ],
   );
 
   const handleArrowDownKeyDown = useCallback(
@@ -177,7 +224,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     <>
       <div className="absolute right-0 z-[100]">
         <div className="bg-base-200 w-2xl px-4 py-2">
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between">
             <CardReaderControlButton
               onConnectUsbDevice={handleConnectUsbDevice}
               onDetectCard={handleDetectCard}
@@ -188,19 +235,31 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                 name="code"
                 placeholder="会員番号"
                 type="text"
-                value={searchWord}
+                value={searchFormValue}
                 onChange={(e) => handleChangeSearchWord(e.target.value)}
               />
-              {searchWord && (
-                <button className="cursor-pointer" onClick={handleClose}>
+              {searchFormValue && (
+                <button className="cursor-pointer" onClick={handleClearSearch}>
                   <MdClose size={24} />
                 </button>
               )}
             </label>
+            <button className="btn btn-sm btn-primary" onClick={handleSearch}>
+              <MdSearch size={24} />
+            </button>
           </div>
           {searchNfcError && (
             <span className="text-error text-xs">{searchNfcError}</span>
           )}
+          {searchFormValue !== "" &&
+            searchWord !== "" &&
+            searchUserList &&
+            searchUserList.length === 0 &&
+            selectedUser == null && (
+              <span className="text-error text-xs">
+                会員番号が見つかりません
+              </span>
+            )}
           {searchUserList && selectedUser === null && (
             <ul className="list bg-base-100 my-1 rounded-none px-1">
               {searchUserList.map((user, index) => (
