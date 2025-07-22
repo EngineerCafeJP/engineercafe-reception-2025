@@ -248,7 +248,7 @@ export default function HomePage() {
       )}
       {isLoading && (
         <div className="absolute top-1/2 left-1/2 z-[1000] -translate-x-1/2 -translate-y-1/2">
-          <div className="flex h-screen w-screen flex-col items-center bg-black/50">
+          <div className="flex h-screen w-screen flex-col items-center bg-white/25">
             <div className="m-auto flex flex-col items-center">
               <span className="loading loading-spinner loading-xl"></span>
               <span className="text-white">Loading...</span>
