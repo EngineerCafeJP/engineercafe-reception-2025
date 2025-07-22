@@ -1,12 +1,21 @@
 import humps from "humps";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchUsersBySearchParams } from "@/[locale]/(reception)/queries/users-queries";
 import { User } from "@/types";
 
-export const useSearchUsers = () => {
+export const useSearchUsers = (keyword?: string) => {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (keyword && keyword.length > 0) {
+      fetch(keyword);
+    } else {
+      setUsers([]);
+      setError(null);
+    }
+  }, [keyword]);
 
   const fetch = async (keyword?: string) => {
     setIsLoading(true);
@@ -19,16 +28,16 @@ export const useSearchUsers = () => {
 
     const { data, error } = await fetchUsersBySearchParams(params);
 
+    if (data == null || data.length === 0) {
+      setUsers([]);
+      setIsLoading(false);
+      return;
+    }
+
     if (error) {
       setError(error);
       setIsLoading(false);
       setUsers([]);
-      return;
-    }
-
-    if (data == null || data.length === 0) {
-      setUsers([]);
-      setIsLoading(false);
       return;
     }
 
