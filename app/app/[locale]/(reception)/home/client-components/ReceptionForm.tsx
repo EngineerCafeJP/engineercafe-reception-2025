@@ -60,6 +60,11 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedChangeSearchWord]);
 
+  // TODO リファクタリング
+  useEffect(() => {
+    setSearchFormValue(searchWord);
+  }, [searchWord]);
+
   const handleSelectUser = (user: User) => {
     onSelectUser(user);
   };
@@ -246,7 +251,8 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           {searchNfcError && (
             <span className="text-error text-xs">{searchNfcError}</span>
           )}
-          {searchWord !== "" &&
+          {searchFormValue !== "" &&
+            searchWord !== "" &&
             searchUserList &&
             searchUserList.length === 0 &&
             selectedUser == null && (
