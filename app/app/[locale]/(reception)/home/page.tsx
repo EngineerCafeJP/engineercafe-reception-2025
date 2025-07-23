@@ -10,6 +10,7 @@ import { useSearchNfc } from "@/[locale]/(reception)/hooks/use-search-nfc";
 import { useSearchUsers } from "@/[locale]/(reception)/hooks/use-search-users";
 import { useSeatUsage } from "@/[locale]/(reception)/hooks/use-seat-usage";
 import { useSeatsWithCategory } from "@/[locale]/(reception)/hooks/use-seats-with-category";
+import { useUpdateSeat } from "@/[locale]/(reception)/hooks/use-update-seat";
 import { useUpdateUser } from "@/[locale]/(reception)/hooks/use-update-user";
 import { softDeleteUser } from "@/[locale]/(reception)/queries/users-queries";
 import { useRegistrationOptions } from "@/hooks/use-registration-options";
@@ -31,6 +32,7 @@ export default function HomePage() {
     seats,
     isLoading: seatsLoading,
     error: seatsError,
+    refetch: refetchSeats,
   } = useSeatsWithCategory();
 
   const {
@@ -75,6 +77,12 @@ export default function HomePage() {
     isLoading: isUpdateUserLoading,
     error: updateUserError,
   } = useUpdateUser();
+
+  const {
+    update: updateSeat,
+    isLoading: isUpdateSeatLoading,
+    error: updateSeatError,
+  } = useUpdateSeat();
 
   useEffect(() => {
     if (userId != null) {
@@ -180,6 +188,20 @@ export default function HomePage() {
     [setSearchUserKeyword, setEditUser, handleFormClose],
   );
 
+  const handleUpdateSeat = useCallback(
+    async (
+      seatId: number,
+      seatParams: { outOfService: boolean; attentionMessage: string },
+    ) => {
+      const updatedSeat = await updateSeat(seatId, seatParams);
+
+      if (updatedSeat != null) {
+        refetchSeats();
+      }
+    },
+    [updateSeat],
+  );
+
   const isLoading =
     seatsLoading ||
     seatUsagesLoading ||
@@ -210,7 +232,9 @@ export default function HomePage() {
         <ReceptionForm
           assignSeat={handleAssignSeat}
           emptySeats={seats.filter(
-            (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
+            (seat) =>
+              !seat.outOfService &&
+              !seatUsages.some((usage) => usage.seatId === seat.id),
           )}
           searchNfcError={searchUserKeyword ? null : searchNfcError}
           searchUserList={isLoading ? null : users}
@@ -234,6 +258,7 @@ export default function HomePage() {
           onExtendSeatUsage={handleExtendSeatUsage}
           onFinishSeatUsage={handleFinishSeatUsage}
           onMoveSeat={handleMoveSeat}
+          onUpdateSeat={handleUpdateSeat}
         />
       </div>
       {editUser && prefectures && belongs && jobs && (

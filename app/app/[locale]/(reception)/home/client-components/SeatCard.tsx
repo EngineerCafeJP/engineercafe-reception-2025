@@ -27,10 +27,15 @@ const SeatCard: React.FC<SeatProps> = ({
 
   return (
     <div
-      className={`card card-xs card-border ${seatUsage?.userId ? "border-accent bg-accent/30" : "border-primary"} h-[8rem] w-[7rem] cursor-pointer`}
+      className={`card card-xs card-border ${seatUsage?.userId ? "border-accent bg-accent/30" : "border-primary"} ${seat.outOfService ? "bg-gray-200" : ""} h-[8rem] w-[7rem] cursor-pointer`}
       onClick={() => onSeatClick(seat, seatUsage)}
     >
       <div className="card-body">
+        {seat.outOfService && (
+          <div className="text-error text-center text-xs">
+            <span className="text-error">使用不可</span>
+          </div>
+        )}
         <div className="flex flex-row items-center gap-[0.125rem]">
           <SeatIcon />
           <div>

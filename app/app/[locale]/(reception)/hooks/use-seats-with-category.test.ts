@@ -1,4 +1,5 @@
-import { renderHook, waitFor } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
+import humps from "humps";
 import { getSeatsWithCategory } from "@/[locale]/(reception)/queries/seats-queries";
 import { useSeatsWithCategory } from "./use-seats-with-category";
 
@@ -25,6 +26,8 @@ const mockSeatsData = [
   },
 ];
 
+const camelizedMockSeatsData = humps.camelizeKeys(mockSeatsData);
+
 describe("useSeatsWithCategory", () => {
   beforeEach(() => {
     (getSeatsWithCategory as jest.Mock).mockResolvedValue({
@@ -37,26 +40,7 @@ describe("useSeatsWithCategory", () => {
     const { result } = renderHook(() => useSeatsWithCategory());
 
     await waitFor(() => {
-      expect(result.current.seats).toEqual([
-        {
-          id: 1,
-          name: "座席1",
-          categoryId: 1,
-          seatCategory: { id: 1, name: "カテゴリ1" },
-        },
-        {
-          id: 2,
-          name: "座席2",
-          categoryId: 2,
-          seatCategory: { id: 2, name: "カテゴリ2" },
-        },
-        {
-          id: 3,
-          name: "座席3",
-          categoryId: 1,
-          seatCategory: { id: 1, name: "カテゴリ1" },
-        },
-      ]);
+      expect(result.current.seats).toEqual(camelizedMockSeatsData);
       expect(result.current.isLoading).toBe(false);
       expect(result.current.error).toBeNull();
     });
@@ -78,5 +62,14 @@ describe("useSeatsWithCategory", () => {
         expect(result.current.error).toBeInstanceOf(Error);
       });
     });
+  });
+
+  it("should refetch seats", async () => {
+    const { result } = renderHook(() => useSeatsWithCategory());
+
+    await act(async () => {
+      await result.current.refetch();
+    });
+    expect(result.current.seats).toEqual(camelizedMockSeatsData);
   });
 });

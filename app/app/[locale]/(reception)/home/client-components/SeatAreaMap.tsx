@@ -15,6 +15,13 @@ type SeatAreaMapProps = {
   onFinishSeatUsage: (seatUsage: SeatUsage) => void;
   onMoveSeat: (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => void;
   onAssignSeat: (seat: Seat, user: User, startTime?: string) => void;
+  onUpdateSeat: (
+    seatId: number,
+    seatParams: {
+      outOfService: boolean;
+      attentionMessage: string;
+    },
+  ) => void;
 };
 
 export const SeatAreaMap: FC<SeatAreaMapProps> = ({
@@ -25,6 +32,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
   onFinishSeatUsage,
   onMoveSeat,
   onAssignSeat,
+  onUpdateSeat,
 }) => {
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
   const [selectedSeatUsage, setSelectedSeatUsage] = useState<SeatUsage | null>(
@@ -52,7 +60,9 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
         return (
           <InUseSeatModal
             emptySeats={seats.filter(
-              (seat) => !seatUsages.some((usage) => usage.seatId === seat.id),
+              (seat) =>
+                !seat.outOfService &&
+                !seatUsages.some((usage) => usage.seatId === seat.id),
             )}
             isOpen={Boolean(selectedSeat)}
             seat={selectedSeat}
@@ -89,6 +99,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
             onClose={() => {
               setSelectedSeat(null);
             }}
+            onUpdateSeat={onUpdateSeat}
           />
         );
       }

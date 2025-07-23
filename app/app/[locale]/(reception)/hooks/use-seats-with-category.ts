@@ -9,22 +9,22 @@ export const useSeatsWithCategory = () => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const fetchSeats = async () => {
-      setIsLoading(true);
-      const { data, error } = await getSeatsWithCategory();
-
-      if (error) {
-        setError(error);
-        setIsLoading(false);
-        return;
-      }
-      const camelizedData = humps.camelizeKeys(data);
-      setSeats(camelizedData as SeatWithCategory[]);
-      setIsLoading(false);
-    };
-
     fetchSeats();
   }, []);
 
-  return { seats, isLoading, error };
+  const fetchSeats = async () => {
+    setIsLoading(true);
+    const { data, error } = await getSeatsWithCategory();
+
+    if (error) {
+      setError(error);
+      setIsLoading(false);
+      return;
+    }
+    const camelizedData = humps.camelizeKeys(data);
+    setSeats(camelizedData as SeatWithCategory[]);
+    setIsLoading(false);
+  };
+
+  return { seats, isLoading, error, refetch: fetchSeats };
 };
