@@ -102,7 +102,6 @@ export default function HomePage() {
 
   const handleChangeSearchWord = useCallback(
     async (searchWord: string) => {
-      console.log("searchWord", searchWord);
       if (searchWord === "") {
         clearSearchUsers();
         setSearchUserKeyword("");
@@ -114,7 +113,7 @@ export default function HomePage() {
     [clearSearchUsers, fetchUsers],
   );
 
-  const handleClose = useCallback(() => {
+  const handleFormClose = useCallback(() => {
     setSelectedUser(null);
     setEditUser(null);
   }, [setSelectedUser, setEditUser]);
@@ -147,9 +146,10 @@ export default function HomePage() {
     async (seat: Seat, user: User, startTime?: string) => {
       await create(seat.id, user.id, startTime);
       await fetchInUseSeatUsage();
-      handleClose();
+      setSearchUserKeyword("");
+      handleFormClose();
     },
-    [create, fetchInUseSeatUsage, handleClose],
+    [create, fetchInUseSeatUsage, handleFormClose],
   );
 
   const handleUpdateUser = useCallback(
@@ -164,10 +164,10 @@ export default function HomePage() {
       if (updatedUser != null) {
         // ユーザー情報を再取得する
         fetchUsers(searchUserKeyword);
-        handleClose();
+        handleFormClose();
       }
     },
-    [updateUser, fetchUsers, searchUserKeyword, handleClose],
+    [updateUser, fetchUsers, searchUserKeyword, handleFormClose],
   );
 
   const handleDeleteUser = useCallback(
@@ -175,9 +175,9 @@ export default function HomePage() {
       await softDeleteUser(userId);
       setSearchUserKeyword("");
       setEditUser(null);
-      handleClose();
+      handleFormClose();
     },
-    [setSearchUserKeyword, setEditUser, handleClose],
+    [setSearchUserKeyword, setEditUser, handleFormClose],
   );
 
   const isLoading =
@@ -217,7 +217,7 @@ export default function HomePage() {
           searchWord={searchUserKeyword}
           selectedUser={selectedUser}
           onChangeSearchWord={handleChangeSearchWord}
-          onClose={handleClose}
+          onClose={handleFormClose}
           onConnectUsbDevice={handleConnectUsbDevice}
           onDetectCard={handleDetectCard}
           onDisconnectUsbDevice={clearSearchNfcError}
@@ -227,8 +227,10 @@ export default function HomePage() {
 
         <div className="h-12"></div>
         <SeatAreaMap
+          searchUserList={isLoading ? null : users}
           seatUsages={seatUsages}
           seats={seats}
+          onAssignSeat={handleAssignSeat}
           onExtendSeatUsage={handleExtendSeatUsage}
           onFinishSeatUsage={handleFinishSeatUsage}
           onMoveSeat={handleMoveSeat}
@@ -241,7 +243,7 @@ export default function HomePage() {
           isOpen={Boolean(editUser)}
           jobs={jobs}
           prefectures={prefectures}
-          onClose={handleClose}
+          onClose={handleFormClose}
           onDelete={handleDeleteUser}
           onSave={handleUpdateUser}
         />
