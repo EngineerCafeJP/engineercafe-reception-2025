@@ -232,6 +232,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
             />
             <label className="input" htmlFor="code">
               <input
+                autoComplete="off"
                 name="code"
                 placeholder="会員番号"
                 type="text"
