@@ -1,26 +1,59 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useKey } from "react-use";
 import ClockIcon from "@/components/icons/ClockIcon";
 import SeatIcon from "@/components/icons/SeatIcon";
 import UserIcon from "@/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/types";
-import { addHours, formatTimeWithQuarter } from "@/utils/format-time";
+import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
 
 interface MoveSeatConfirmModalBoxProps {
   prevSeat: Seat;
   nextSeat: Seat;
   nextSeatUsage: SeatUsage;
+  onChangeNextSeatUsage: (nextSeatUsage: SeatUsage) => void;
   onClose: () => void;
   onNextButtonClick: () => void;
 }
 
 export const MoveSeatConfirmModalBox: React.FC<
   MoveSeatConfirmModalBoxProps
-> = ({ prevSeat, nextSeat, nextSeatUsage, onClose, onNextButtonClick }) => {
+> = ({
+  prevSeat,
+  nextSeat,
+  nextSeatUsage,
+  onChangeNextSeatUsage,
+  onClose,
+  onNextButtonClick,
+}) => {
   useKey("Escape", onClose, undefined, [onClose]);
   useKey("Enter", onNextButtonClick, undefined, [onNextButtonClick]);
+
+  const [endTime, setEndTime] = useState<string>(
+    addMinutes(nextSeatUsage.startTime, nextSeatUsage.usageDurationMinutes),
+  );
+
+  const handleChangeEndTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [hours, minutes] = e.target.value.split(":");
+    const endDate = new Date(nextSeatUsage.startTime);
+    endDate.setHours(Number(hours));
+    endDate.setMinutes(Number(minutes));
+
+    // 終了時間が開始時間より前の場合は無効
+    if (endDate.getTime() < new Date(nextSeatUsage.startTime).getTime()) {
+      return;
+    }
+
+    const usageDurationMinutes =
+      (endDate.getTime() - new Date(nextSeatUsage.startTime).getTime()) / 60000;
+
+    setEndTime(endDate.toISOString());
+    onChangeNextSeatUsage({
+      ...nextSeatUsage,
+      usageDurationMinutes,
+    });
+  };
 
   return (
     <div className="modal-box border-accent border-2 p-[0]">
@@ -52,8 +85,25 @@ export const MoveSeatConfirmModalBox: React.FC<
               <div>
                 <ClockIcon size={40} />
               </div>
+
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${formatTimeWithQuarter(nextSeatUsage.startTime)} - ${formatTimeWithQuarter(addHours(nextSeatUsage.startTime, 2))}`}</div>
+                <div>
+                  <input
+                    className="input input-bordered mr-8 cursor-pointer text-xl"
+                    type="time"
+                    value={formatTimeWithQuarter(nextSeatUsage.startTime)}
+                    disabled
+                  />
+                </div>
+                <div className="mx-4">-</div>
+                <div className="text-base-content">
+                  <input
+                    className="input input-bordered mr-8 cursor-pointer text-xl"
+                    type="time"
+                    value={formatTimeWithQuarter(endTime)}
+                    onChange={(e) => handleChangeEndTime(e)}
+                  />
+                </div>
               </div>
             </li>
           </ul>

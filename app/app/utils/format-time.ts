@@ -20,4 +20,10 @@ const addHours = (timeString: string, hours: number) => {
   return date.toISOString();
 };
 
-export { formatTime, formatTimeWithQuarter, addHours };
+const addMinutes = (timeString: string, minutes: number) => {
+  const date = new Date(timeString);
+  date.setMinutes(date.getMinutes() + minutes);
+  return date.toISOString();
+};
+
+export { formatTime, formatTimeWithQuarter, addHours, addMinutes };

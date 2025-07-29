@@ -46,8 +46,13 @@ describe("useSeatUsage", () => {
       const { result } = renderHook(() => useSeatUsage());
 
       await act(async () => {
-        await result.current.create(1, 1, "2025-03-14 10:00:00");
-        expect(createSeatUsage).toHaveBeenCalledWith(1, 1, expect.any(String));
+        await result.current.create(1, 1, "2025-03-14 10:00:00", 120);
+        expect(createSeatUsage).toHaveBeenCalledWith(
+          1,
+          1,
+          expect.any(String),
+          120,
+        );
       });
     });
 
@@ -93,6 +98,7 @@ describe("useSeatUsage", () => {
       startTime: "2025-03-14 10:00:00",
       endTime: null,
       remark: "",
+      usageDurationMinutes: 120,
     };
     it("should update the seat usage endtime", async () => {
       const { result } = renderHook(() => useSeatUsage());
@@ -103,7 +109,12 @@ describe("useSeatUsage", () => {
           1,
           expect.any(String),
         );
-        expect(createSeatUsage).toHaveBeenCalledWith(1, 1, expect.any(String));
+        expect(createSeatUsage).toHaveBeenCalledWith(
+          1,
+          1,
+          expect.any(String),
+          120,
+        );
       });
     });
 
@@ -164,6 +175,7 @@ describe("useSeatUsage", () => {
       startTime: "2025-03-14 10:00:00",
       endTime: null,
       remark: "",
+      usageDurationMinutes: 120,
     };
     it("should update the seat usage endtime", async () => {
       const { result } = renderHook(() => useSeatUsage());
@@ -218,6 +230,7 @@ describe("useSeatUsage", () => {
       startTime: "2025-03-14 10:00:00",
       endTime: null,
       remark: "",
+      usageDurationMinutes: 120,
     };
     const nextSeatUsage = {
       id: 2,
@@ -226,6 +239,7 @@ describe("useSeatUsage", () => {
       startTime: "2025-03-14 10:00:00",
       endTime: null,
       remark: "",
+      usageDurationMinutes: 120,
     };
     it("should update the seat usage endtime", async () => {
       const { result } = renderHook(() => useSeatUsage());
@@ -239,6 +253,8 @@ describe("useSeatUsage", () => {
         expect(createSeatUsage).toHaveBeenCalledWith(
           nextSeatUsage.seatId,
           nextSeatUsage.userId,
+          nextSeatUsage.startTime,
+          nextSeatUsage.usageDurationMinutes,
         );
       });
     });

@@ -6,6 +6,7 @@ export type SeatUsage = {
   startTime: string;
   endTime?: string | null;
   remark: string;
+  usageDurationMinutes: number;
   createdAt?: string;
   updatedAt?: string;
   isDeleted?: boolean;

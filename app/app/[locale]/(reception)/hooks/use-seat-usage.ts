@@ -16,7 +16,12 @@ export const useSeatUsage = () => {
   //@param seatId 座席ID
   //@param userId ユーザーID
   //@returns 更新後の座席使用データ
-  const create = async (seatId: number, userId: number, startTime?: string) => {
+  const create = async (
+    seatId: number,
+    userId: number,
+    startTime?: string,
+    usageDurationMinutes?: number,
+  ) => {
     setIsLoading(true);
 
     // validate duplicate
@@ -28,7 +33,12 @@ export const useSeatUsage = () => {
       return;
     }
 
-    const { data, error } = await createSeatUsage(seatId, userId, startTime);
+    const { data, error } = await createSeatUsage(
+      seatId,
+      userId,
+      startTime,
+      usageDurationMinutes,
+    );
     if (error) {
       setError(error);
       setIsLoading(false);
@@ -42,7 +52,10 @@ export const useSeatUsage = () => {
   // 座席使用終了時間を更新する
   //@param seatUsage 座席使用
   //@returns 更新後の座席使用データ
-  const extendSeatUsage = async (seatUsage: SeatUsage) => {
+  const extendSeatUsage = async (
+    seatUsage: SeatUsage,
+    usageDurationMinutes?: number,
+  ) => {
     setIsLoading(true);
     const { error: seatUsageError } = await fetchSeatUsageLogById(seatUsage.id);
     if (seatUsageError) {
@@ -65,6 +78,7 @@ export const useSeatUsage = () => {
         seatUsage.seatId,
         seatUsage.userId,
         new Date(seatUsage.startTime).toISOString(),
+        usageDurationMinutes || seatUsage.usageDurationMinutes,
       );
     if (createNextSeatUsageError) {
       setError(createNextSeatUsageError);
@@ -131,7 +145,12 @@ export const useSeatUsage = () => {
     }
 
     const { data: nextSeatUsageData, error: createNextSeatUsageError } =
-      await createSeatUsage(nextSeatUsage.seatId, nextSeatUsage.userId);
+      await createSeatUsage(
+        nextSeatUsage.seatId,
+        nextSeatUsage.userId,
+        nextSeatUsage.startTime,
+        nextSeatUsage.usageDurationMinutes,
+      );
     if (createNextSeatUsageError) {
       setError(createNextSeatUsageError);
       setIsLoading(false);

@@ -6,7 +6,7 @@ import { MdAccessTime } from "react-icons/md";
 import SeatIcon from "@/components/icons/SeatIcon";
 import UserIcon from "@/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/types";
-import { addHours, formatTimeWithQuarter } from "@/utils/format-time";
+import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
 
 export interface SeatProps {
   seat: Seat;
@@ -20,7 +20,7 @@ const SeatCard: React.FC<SeatProps> = ({
   onSeatClick,
 }) => {
   const endTime = seatUsage?.startTime
-    ? addHours(seatUsage.startTime, 2)
+    ? addMinutes(seatUsage.startTime, seatUsage.usageDurationMinutes)
     : null;
 
   const isOver = endTime ? new Date(endTime) < new Date() : false;
@@ -64,7 +64,7 @@ const SeatCard: React.FC<SeatProps> = ({
               )}
 
               <div className="ml-0.5 text-xs">
-                {`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}
+                {`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addMinutes(seatUsage.startTime, seatUsage.usageDurationMinutes))}`}
               </div>
             </div>
           </>

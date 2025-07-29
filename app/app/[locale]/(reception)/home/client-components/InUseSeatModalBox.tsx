@@ -5,7 +5,7 @@ import ClockIcon from "@/components/icons/ClockIcon";
 import SeatIcon from "@/components/icons/SeatIcon";
 import UserIcon from "@/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/types";
-import { addHours, formatTimeWithQuarter } from "@/utils/format-time";
+import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
 
 interface InUseSeatModalBoxProps {
   seat: Seat;
@@ -68,7 +68,7 @@ export const InUseSeatModalBox: React.FC<InUseSeatModalBoxProps> = ({
                 <ClockIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addHours(seatUsage.startTime, 2))}`}</div>
+                <div>{`${formatTimeWithQuarter(seatUsage.startTime)} - ${formatTimeWithQuarter(addMinutes(seatUsage.startTime, seatUsage.usageDurationMinutes))}`}</div>
               </div>
               <button
                 className="btn bg-accent text-white"

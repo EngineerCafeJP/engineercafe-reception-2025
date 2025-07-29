@@ -1,18 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import ClockIcon from "@/components/icons/ClockIcon";
 import SeatIcon from "@/components/icons/SeatIcon";
 import UserIcon from "@/components/icons/UserIcon";
 import { Seat, User } from "@/types";
-import { addHours, formatTimeWithQuarter } from "@/utils/format-time";
+import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
 
 interface AssignSeatConfirmBoxProps {
   user: User;
   seat: Seat;
   startTime: string;
   onChangeStartTime: (startTime: string) => void;
+  usageDurationMinutes: number;
+  onChangeUsageDurationMinutes: (minutes: number) => void;
   onClose: () => void;
-  onAssignSeat: (startTime: string) => void;
+  onAssignSeat: (startTime: string, usageDurationMinutes: number) => void;
 }
 
 export const AssignSeatConfirmBox: React.FC<AssignSeatConfirmBoxProps> = ({
@@ -20,9 +23,15 @@ export const AssignSeatConfirmBox: React.FC<AssignSeatConfirmBoxProps> = ({
   seat,
   startTime,
   onChangeStartTime,
+  usageDurationMinutes,
+  onChangeUsageDurationMinutes,
   onClose,
   onAssignSeat,
 }) => {
+  const [endTime, setEndTime] = useState<string>(
+    addMinutes(startTime, usageDurationMinutes),
+  );
+
   const handleChangeStartTime = (e: React.ChangeEvent<HTMLInputElement>) => {
     const [hours, minutes] = e.target.value.split(":");
     const date = new Date();
@@ -30,6 +39,24 @@ export const AssignSeatConfirmBox: React.FC<AssignSeatConfirmBoxProps> = ({
     date.setMinutes(Number(minutes));
 
     onChangeStartTime(date.toISOString());
+  };
+
+  const handleChangeEndTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [hours, minutes] = e.target.value.split(":");
+    const endDate = new Date(startTime);
+    endDate.setHours(Number(hours));
+    endDate.setMinutes(Number(minutes));
+
+    // 終了時間が開始時間より前の場合は無効
+    if (endDate.getTime() < new Date(startTime).getTime()) {
+      return;
+    }
+
+    const usageDurationMinutes =
+      (endDate.getTime() - new Date(startTime).getTime()) / 60000;
+
+    setEndTime(endDate.toISOString());
+    onChangeUsageDurationMinutes(usageDurationMinutes);
   };
 
   return (
@@ -71,7 +98,12 @@ export const AssignSeatConfirmBox: React.FC<AssignSeatConfirmBoxProps> = ({
                 </div>
                 <div className="mx-4">-</div>
                 <div className="text-base-content">
-                  {`${formatTimeWithQuarter(addHours(startTime, 2))}`}
+                  <input
+                    className="input input-bordered mr-8 cursor-pointer text-xl"
+                    type="time"
+                    value={formatTimeWithQuarter(endTime)}
+                    onChange={(e) => handleChangeEndTime(e)}
+                  />
                 </div>
               </div>
             </li>
@@ -84,7 +116,7 @@ export const AssignSeatConfirmBox: React.FC<AssignSeatConfirmBoxProps> = ({
           </button>
           <button
             className="btn btn-primary"
-            onClick={() => onAssignSeat(startTime)}
+            onClick={() => onAssignSeat(startTime, usageDurationMinutes)}
           >
             はい
           </button>

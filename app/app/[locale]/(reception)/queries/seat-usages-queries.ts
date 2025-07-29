@@ -68,11 +68,13 @@ export const createSeatUsage = async (
   seatId: number,
   userId: number,
   startTime?: string,
+  usageDurationMinutes?: number,
 ) => {
   return client.from("seat_usage_logs").insert({
     seat_id: seatId,
     user_id: userId,
     start_time: startTime ?? new Date().toISOString(),
+    usage_duration_minutes: usageDurationMinutes,
     created_at: new Date().toISOString(),
   });
 };
