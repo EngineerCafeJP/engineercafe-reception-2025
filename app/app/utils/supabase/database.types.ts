@@ -17,9 +17,9 @@ export type Database = {
     Functions: {
       graphql: {
         Args: {
+          variables?: Json;
           operationName?: string;
           query?: string;
-          variables?: Json;
           extensions?: Json;
         };
         Returns: Json;
@@ -380,18 +380,21 @@ export type Database = {
           description: string | null;
           id: number;
           name: string;
+          order: number | null;
         };
         Insert: {
           created_at?: string | null;
           description?: string | null;
           id?: never;
           name: string;
+          order?: number | null;
         };
         Update: {
           created_at?: string | null;
           description?: string | null;
           id?: never;
           name?: string;
+          order?: number | null;
         };
         Relationships: [];
       };
@@ -448,22 +451,31 @@ export type Database = {
       };
       seats: {
         Row: {
+          attention_message: string;
           category_id: number;
           created_at: string | null;
           id: number;
           name: string;
+          order: number;
+          out_of_service: boolean;
         };
         Insert: {
+          attention_message?: string;
           category_id: number;
           created_at?: string | null;
           id?: never;
           name: string;
+          order?: number;
+          out_of_service?: boolean;
         };
         Update: {
+          attention_message?: string;
           category_id?: number;
           created_at?: string | null;
           id?: never;
           name?: string;
+          order?: number;
+          out_of_service?: boolean;
         };
         Relationships: [
           {

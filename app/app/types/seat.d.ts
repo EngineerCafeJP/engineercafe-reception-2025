@@ -2,6 +2,9 @@
 export type Seat = {
   id: number;
   name: string;
+  outOfService: boolean;
+  attentionMessage: string;
+  order: number;
   categoryId: number;
   createdAt?: string;
   updatedAt?: string;
