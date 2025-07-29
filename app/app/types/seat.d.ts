@@ -6,6 +6,7 @@ export type Seat = {
   attentionMessage: string;
   order: number;
   categoryId: number;
+  usageDurationMinutes: number;
   createdAt?: string;
   updatedAt?: string;
   seatCategory?: SeatCategory;

@@ -151,8 +151,18 @@ export default function HomePage() {
   );
 
   const handleAssignSeat = useCallback(
-    async (seat: Seat, user: User, startTime?: string) => {
-      await create(seat.id, user.id, startTime);
+    async (
+      seat: Seat,
+      user: User,
+      startTime?: string,
+      usageDurationMinutes?: number,
+    ) => {
+      await create(
+        seat.id,
+        user.id,
+        startTime,
+        usageDurationMinutes || seat.usageDurationMinutes,
+      );
       await fetchInUseSeatUsage();
       setSearchUserKeyword("");
       handleFormClose();

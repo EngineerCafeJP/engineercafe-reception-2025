@@ -8,7 +8,7 @@ import { Seat, User } from "@/types";
 interface AssignSeatConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAssignSeat: (startTime: string) => void;
+  onAssignSeat: (startTime: string, usageDurationMinutes: number) => void;
   user: User;
   seat: Seat;
 }
@@ -21,12 +21,20 @@ export const AssignSeatConfirmModal: React.FC<AssignSeatConfirmModalProps> = ({
   seat,
 }) => {
   const [startTime, setStartTime] = useState<string>(new Date().toISOString());
+  const [usageDurationMinutes, setUsageDurationMinutes] = useState<number>(
+    seat.usageDurationMinutes ?? 120,
+  );
 
   const handleClose = () => {
     onClose();
   };
 
-  useKey("Enter", () => onAssignSeat(startTime), undefined, [isOpen]);
+  useKey(
+    "Enter",
+    () => onAssignSeat(startTime, usageDurationMinutes),
+    undefined,
+    [isOpen],
+  );
   useKey("Escape", handleClose, undefined, [isOpen, handleClose]);
 
   return (
@@ -37,9 +45,15 @@ export const AssignSeatConfirmModal: React.FC<AssignSeatConfirmModalProps> = ({
       <AssignSeatConfirmBox
         seat={seat}
         startTime={startTime}
+        usageDurationMinutes={usageDurationMinutes}
         user={user}
-        onAssignSeat={(startTime: string) => onAssignSeat(startTime)}
+        onAssignSeat={(startTime: string, usageDurationMinutes: number) =>
+          onAssignSeat(startTime, usageDurationMinutes)
+        }
         onChangeStartTime={(startTime: string) => setStartTime(startTime)}
+        onChangeUsageDurationMinutes={(minutes: number) => {
+          setUsageDurationMinutes(minutes);
+        }}
         onClose={onClose}
       />
 

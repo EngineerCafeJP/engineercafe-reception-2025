@@ -14,7 +14,12 @@ type SeatAreaMapProps = {
   onExtendSeatUsage: (seatUsage: SeatUsage) => void;
   onFinishSeatUsage: (seatUsage: SeatUsage) => void;
   onMoveSeat: (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => void;
-  onAssignSeat: (seat: Seat, user: User, startTime?: string) => void;
+  onAssignSeat: (
+    seat: Seat,
+    user: User,
+    startTime?: string,
+    usageDurationMinutes?: number,
+  ) => void;
   onUpdateSeat: (
     seatId: number,
     seatParams: {
@@ -44,8 +49,13 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
     setSelectedSeatUsage(seatUsage);
   };
 
-  const handleAssignSeat = (seat: Seat, user: User, startTime?: string) => {
-    onAssignSeat(seat, user, startTime);
+  const handleAssignSeat = (
+    seat: Seat,
+    user: User,
+    startTime?: string,
+    usageDurationMinutes?: number,
+  ) => {
+    onAssignSeat(seat, user, startTime, usageDurationMinutes);
     setSelectedSeat(null);
     setSelectedSeatUsage(null);
   };
@@ -83,8 +93,13 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
             isOpen={Boolean(selectedSeat)}
             seat={selectedSeat}
             user={searchUserList[0]}
-            onAssignSeat={(startTime: string) =>
-              handleAssignSeat(selectedSeat, searchUserList[0], startTime)
+            onAssignSeat={(startTime: string, usageDurationMinutes: number) =>
+              handleAssignSeat(
+                selectedSeat,
+                searchUserList[0],
+                startTime,
+                usageDurationMinutes,
+              )
             }
             onClose={() => {
               setSelectedSeat(null);

@@ -1,8 +1,8 @@
 "use client";
 
-import { addHours } from "date-fns";
 import React, { useState } from "react";
 import { Seat, SeatUsage } from "@/types";
+import { addMinutes } from "@/utils/format-time";
 import { ExtendSeatConfirmModalBox } from "./ExtendSeatConfirmModalBox";
 import { InUseSeatModalBox } from "./InUseSeatModalBox";
 import { LeaveSeatConfirmModalBox } from "./LeaveSeatConfirmModalBox";
@@ -60,6 +60,7 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
     setNextSeatUsage({
       ...seatUsage,
       startTime: new Date().toISOString(),
+      usageDurationMinutes: nextSeat.usageDurationMinutes,
       endTime: null,
       seatId: nextSeat.id,
     });
@@ -79,10 +80,18 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
     handleClose();
   };
 
+  const handleChangeNextSeatUsage = (nextSeatUsage: SeatUsage) => {
+    setNextSeatUsage(nextSeatUsage);
+  };
+
   const handleExtendSeatClicked = () => {
     setNextSeatUsage({
       ...seatUsage,
-      startTime: addHours(new Date(seatUsage.startTime), 2).toISOString(),
+      startTime: addMinutes(
+        seatUsage.startTime,
+        seatUsage.usageDurationMinutes,
+      ),
+      usageDurationMinutes: seat.usageDurationMinutes,
       endTime: null,
     });
     setModalType("extendConfirm");
@@ -116,6 +125,7 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
           nextSeat={nextSeat}
           nextSeatUsage={nextSeatUsage}
           prevSeat={seat}
+          onChangeNextSeatUsage={handleChangeNextSeatUsage}
           onClose={handleClose}
           onNextButtonClick={handleMoveSeatConfirmClick}
         />
@@ -128,6 +138,7 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
           nextSeatUsage={nextSeatUsage}
           seat={seat}
           seatUsage={seatUsage}
+          onChangeNextSeatUsage={handleChangeNextSeatUsage}
           onClose={handleClose}
           onNextButtonClick={handleExtendSeatUsage}
         />

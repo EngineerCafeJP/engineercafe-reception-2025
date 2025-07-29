@@ -408,28 +408,31 @@ export type Database = {
           seat_id: number;
           start_time: string;
           updated_at: string | null;
+          usage_duration_minutes: number;
           user_id: number;
         };
         Insert: {
           created_at?: string;
           end_time?: string | null;
-          id?: never;
+          id?: number;
           is_delete?: boolean | null;
           remarks?: string | null;
           seat_id: number;
           start_time: string;
           updated_at?: string | null;
+          usage_duration_minutes?: number;
           user_id: number;
         };
         Update: {
           created_at?: string;
           end_time?: string | null;
-          id?: never;
+          id?: number;
           is_delete?: boolean | null;
           remarks?: string | null;
           seat_id?: number;
           start_time?: string;
           updated_at?: string | null;
+          usage_duration_minutes?: number;
           user_id?: number;
         };
         Relationships: [
@@ -458,6 +461,7 @@ export type Database = {
           name: string;
           order: number;
           out_of_service: boolean;
+          usage_duration_minutes: number;
         };
         Insert: {
           attention_message?: string;
@@ -467,6 +471,7 @@ export type Database = {
           name: string;
           order?: number;
           out_of_service?: boolean;
+          usage_duration_minutes?: number;
         };
         Update: {
           attention_message?: string;
@@ -476,6 +481,7 @@ export type Database = {
           name?: string;
           order?: number;
           out_of_service?: boolean;
+          usage_duration_minutes?: number;
         };
         Relationships: [
           {
