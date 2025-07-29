@@ -95,7 +95,9 @@ export const EmptySeatModalBox: React.FC<EmptySeatModalBoxProps> = ({
         </div>
       ) : (
         <div className="flex flex-col gap-[1rem] p-[2rem]">
-          <div>{seat.attentionMessage}</div>
+          <p className="text-error text-center text-sm whitespace-pre-wrap">
+            {seat.attentionMessage}
+          </p>
           <div className="flex flex-col gap-[1rem]">
             <ul className="list bg-base-100 rounded-box px-[0] shadow-md">
               <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">
