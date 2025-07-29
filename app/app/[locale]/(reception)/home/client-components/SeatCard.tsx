@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { MdAccessAlarm } from "react-icons/md";
+import { MdAccessAlarm, MdComment } from "react-icons/md";
 import { MdAccessTime } from "react-icons/md";
 import SeatIcon from "@/components/icons/SeatIcon";
 import UserIcon from "@/components/icons/UserIcon";
@@ -32,8 +32,13 @@ const SeatCard: React.FC<SeatProps> = ({
     >
       <div className="card-body">
         {seat.outOfService && (
-          <div className="text-error text-center text-xs">
+          <div className="text-error text-center text-xs font-bold">
             <span className="text-error">使用不可</span>
+          </div>
+        )}
+        {seat.attentionMessage && (
+          <div className="text-error absolute top-1 right-0 text-center text-xs">
+            <MdComment className="mr-1" size={16} />
           </div>
         )}
         <div className="flex flex-row items-center gap-[0.125rem]">
