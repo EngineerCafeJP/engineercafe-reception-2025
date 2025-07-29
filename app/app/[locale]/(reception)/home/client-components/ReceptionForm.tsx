@@ -239,11 +239,19 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
             <label className="input" htmlFor="code">
               <input
                 autoComplete="off"
+                inputMode="numeric"
                 name="code"
                 placeholder="会員番号"
                 type="text"
                 value={searchFormValue}
                 onChange={(e) => handleChangeSearchWord(e.target.value)}
+                onInput={(e) => {
+                  // 全角数字を半角数字に変換
+                  const input = e.target as HTMLInputElement;
+                  input.value = input.value.replace(/[０-９]/g, (s) =>
+                    String.fromCharCode(s.charCodeAt(0) - 0xfee0),
+                  );
+                }}
               />
               {searchFormValue && (
                 <button className="cursor-pointer" onClick={handleClearSearch}>
