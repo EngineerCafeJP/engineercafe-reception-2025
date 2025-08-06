@@ -20,9 +20,22 @@ test.describe("ログイン機能のE2Eテスト", () => {
   });
 
   test("正常な認証情報でログインが成功する", async ({ page }) => {
+    // 環境変数から認証情報を取得
+    const testEmail = process.env.TEST_EMAIL;
+    const testPassword = process.env.TEST_PASSWORD;
+
+    // 環境変数が設定されていない場合はテストをスキップ
+    if (!testEmail || !testPassword) {
+      test.skip(
+        true,
+        "TEST_EMAIL または TEST_PASSWORD 環境変数が設定されていません",
+      );
+      return;
+    }
+
     // 有効な認証情報を入力
-    await page.getByTestId("email-input").fill("test@example.com");
-    await page.getByTestId("password-input").fill("passw0rd");
+    await page.getByTestId("email-input").fill(testEmail);
+    await page.getByTestId("password-input").fill(testPassword);
 
     // ログインボタンをクリック
     await page.getByTestId("login-button").click();
@@ -134,26 +147,52 @@ test.describe("ログイン機能のE2Eテスト", () => {
   });
 
   test("フォーム送信後に入力値が保持される", async ({ page }) => {
+    // 環境変数から認証情報を取得
+    const testEmail = process.env.TEST_EMAIL;
+    const testPassword = process.env.TEST_PASSWORD;
+
+    // 環境変数が設定されていない場合はテストをスキップ
+    if (!testEmail || !testPassword) {
+      test.skip(
+        true,
+        "TEST_EMAIL または TEST_PASSWORD 環境変数が設定されていません",
+      );
+      return;
+    }
+
     // 認証情報を入力
-    await page.getByTestId("email-input").fill("test@example.com");
-    await page.getByTestId("password-input").fill("passw0rd");
+    await page.getByTestId("email-input").fill(testEmail);
+    await page.getByTestId("password-input").fill(testPassword);
 
     // ログインボタンをクリック
     await page.getByTestId("login-button").click();
 
     // ログインページに留まる場合（エラー時）、入力値が保持されることを確認
     if (await page.getByText("管理者ログイン").isVisible()) {
-      await expect(page.getByTestId("email-input")).toHaveValue(
-        "test@example.com",
+      await expect(page.getByTestId("email-input")).toHaveValue(testEmail);
+      await expect(page.getByTestId("password-input")).toHaveValue(
+        testPassword,
       );
-      await expect(page.getByTestId("password-input")).toHaveValue("passw0rd");
     }
   });
 
   test("Enterキーでフォームを送信できる", async ({ page }) => {
+    // 環境変数から認証情報を取得
+    const testEmail = process.env.TEST_EMAIL;
+    const testPassword = process.env.TEST_PASSWORD;
+
+    // 環境変数が設定されていない場合はテストをスキップ
+    if (!testEmail || !testPassword) {
+      test.skip(
+        true,
+        "TEST_EMAIL または TEST_PASSWORD 環境変数が設定されていません",
+      );
+      return;
+    }
+
     // 認証情報を入力
-    await page.getByTestId("email-input").fill("test@example.com");
-    await page.getByTestId("password-input").fill("passw0rd");
+    await page.getByTestId("email-input").fill(testEmail);
+    await page.getByTestId("password-input").fill(testPassword);
 
     // Enterキーを押してフォームを送信
     await page.getByTestId("password-input").press("Enter");
