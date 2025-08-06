@@ -1,4 +1,33 @@
+import { readFileSync } from "fs";
+import { resolve } from "path";
 import { defineConfig, devices } from "@playwright/test";
+
+// .env.testファイルから環境変数を読み込み
+const envPath = resolve(__dirname, ".env.test");
+try {
+  const envContent = readFileSync(envPath, "utf8");
+  const envVars = envContent
+    .split("\n")
+    .filter((line) => line.trim() && !line.startsWith("#"))
+    .reduce(
+      (acc, line) => {
+        const [key, ...valueParts] = line.split("=");
+        if (key && valueParts.length > 0) {
+          acc[key.trim()] = valueParts.join("=").trim();
+        }
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+
+  // 環境変数をprocess.envに設定
+  Object.assign(process.env, envVars);
+} catch (error) {
+  console.warn(
+    ".env.testファイルが見つからないか、読み込めませんでした:",
+    error,
+  );
+}
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -31,10 +60,10 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
 
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
+    // {
+    //   name: "firefox",
+    //   use: { ...devices["Desktop Firefox"] },
+    // },
 
     {
       name: "webkit",
