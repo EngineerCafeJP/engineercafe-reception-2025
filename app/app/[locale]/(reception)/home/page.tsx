@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
+import BatchExtendSeatsModal from "@/[locale]/(reception)/components/BatchExtendSeatsModal";
 import UserEditModal, {
   UserFormData,
 } from "@/[locale]/(reception)/components/UserEditModal";
@@ -15,6 +16,7 @@ import { useUpdateUser } from "@/[locale]/(reception)/hooks/use-update-user";
 import { softDeleteUser } from "@/[locale]/(reception)/queries/users-queries";
 import { useRegistrationOptions } from "@/hooks/use-registration-options";
 import { Seat, SeatUsage, User } from "@/types";
+import { addMinutes } from "@/utils/format-time";
 import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
 
@@ -28,6 +30,8 @@ export default function HomePage() {
   const [searchUserKeyword, setSearchUserKeyword] = useState<string>("");
   const [editUser, setEditUser] = useState<User | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isBatchExtendSeatsModalOpen, setIsBatchExtendSeatsModalOpen] =
+    useState(false);
   const {
     seats,
     isLoading: seatsLoading,
@@ -212,6 +216,29 @@ export default function HomePage() {
     [updateSeat],
   );
 
+  const handleBatchExtendSeats = useCallback(
+    async (seatUsages: SeatUsage[]) => {
+      // バッチ処理を実行する
+      for (const seatUsage of seatUsages) {
+        const seat = seats.find((s) => s.id === seatUsage.seatId);
+        if (seat) {
+          const nextSeatUsage = {
+            ...seatUsage,
+            startTime: addMinutes(
+              seatUsage.startTime,
+              seatUsage.usageDurationMinutes,
+            ),
+            usageDurationMinutes: seat.usageDurationMinutes,
+            endTime: null,
+          };
+          await extendSeatUsage(nextSeatUsage);
+        }
+      }
+      await fetchInUseSeatUsage();
+    },
+    [extendSeatUsage, fetchInUseSeatUsage, seats],
+  );
+
   const isLoading =
     seatsLoading ||
     seatUsagesLoading ||
@@ -239,6 +266,17 @@ export default function HomePage() {
   return (
     <>
       <div className="mx-auto max-w-full">
+        <div className="absolute flex w-full justify-between">
+          <button
+            className="btn btn-sm btn-outline btn-accent m-2"
+            type="button"
+            onClick={() =>
+              setIsBatchExtendSeatsModalOpen(!isBatchExtendSeatsModalOpen)
+            }
+          >
+            座席一括延長
+          </button>
+        </div>
         <ReceptionForm
           assignSeat={handleAssignSeat}
           emptySeats={seats.filter(
@@ -281,6 +319,15 @@ export default function HomePage() {
           onClose={handleFormClose}
           onDelete={handleDeleteUser}
           onSave={handleUpdateUser}
+        />
+      )}
+      {seatUsages.length > 0 && (
+        <BatchExtendSeatsModal
+          isOpen={isBatchExtendSeatsModalOpen}
+          seatUsages={seatUsages}
+          seats={seats}
+          onClose={() => setIsBatchExtendSeatsModalOpen(false)}
+          onExecute={handleBatchExtendSeats}
         />
       )}
       {isLoading && (
