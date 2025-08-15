@@ -100,3 +100,18 @@ export const updateSeatUsageIsDeleted = async (
     .update({ is_delete: is_delete })
     .eq("id", id);
 };
+
+/**
+ * ユーザーの最新の利用履歴を取得
+ * @param userId 対象のユーザーID
+ * @returns 検索結果
+ */
+export const fetchLatestSeatUsageByUserId = async (userId: number) => {
+  return client
+    .from("seat_usage_logs")
+    .select("*")
+    .eq("user_id", userId)
+    .order("start_time", { ascending: false })
+    .limit(1)
+    .single();
+};

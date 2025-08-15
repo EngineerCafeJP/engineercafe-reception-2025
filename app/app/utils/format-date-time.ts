@@ -4,3 +4,8 @@ export const formatDateTime = (dateTimeString: string) => {
   const date = new Date(dateTimeString);
   return format(date, "yyyy/MM/dd HH:mm:ss");
 };
+
+export const formatDate = (dateTimeString: string) => {
+  const date = new Date(dateTimeString);
+  return format(date, "yyyy/MM/dd");
+};

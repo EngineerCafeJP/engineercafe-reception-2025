@@ -119,7 +119,7 @@ export default function HomePage() {
         setSearchUserKeyword("");
       } else {
         setSearchUserKeyword(searchWord);
-        await fetchUsers(searchWord);
+        await fetchUsers(searchWord, true);
       }
     },
     [clearSearchUsers, fetchUsers],
