@@ -31,6 +31,8 @@ export const BatchExtendSeatsModal: React.FC<BatchExtendSeatsModalProps> = ({
   >([]);
 
   useEffect(() => {
+    if (!isOpen) return;
+
     setSeatUsagesWithSelected(
       seatUsages.map((seatUsage) => {
         const endTime = seatUsage?.startTime
@@ -47,7 +49,7 @@ export const BatchExtendSeatsModal: React.FC<BatchExtendSeatsModalProps> = ({
         };
       }),
     );
-  }, [seatUsages, seats]);
+  }, [seatUsages, seats, isOpen]);
 
   const handleChangeSelected = (
     seatUsageWithSelected: SeatUsageWithSelected,
