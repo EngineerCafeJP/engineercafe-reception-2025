@@ -12,8 +12,10 @@ import { useKey } from "react-use";
 import { useDebounce } from "use-debounce";
 import CardReaderControlButton from "@/[locale]/(reception)/components/CardReaderControlButton";
 import AssignSeatConfirmModal from "@/[locale]/(reception)/home/client-components/AssignSeatConfirmModal";
+import UsageIntervalLabel from "@/[locale]/(reception)/home/client-components/UsageIntervalLabel";
 import UserIcon from "@/components/icons/UserIcon";
 import { Seat, User } from "@/types";
+import { formatDate } from "@/utils/format-date-time";
 
 interface ReceptionFormProps {
   searchWord: string;
@@ -294,6 +296,17 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                     <div className="text-sm">{user.name}</div>
                     <div className="ml-2 text-sm">({user.pronunciation})</div>
                   </div>
+                  {user.latestSeatUsage && (
+                    <div className="flex flex-row gap-1 text-sm">
+                      <div>
+                        前回:
+                        {formatDate(user.latestSeatUsage.startTime)}
+                      </div>
+                      <div>
+                        <UsageIntervalLabel seatUsage={user.latestSeatUsage} />
+                      </div>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>

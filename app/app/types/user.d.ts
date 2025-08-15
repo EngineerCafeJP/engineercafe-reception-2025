@@ -21,4 +21,5 @@ export type User = {
   warnings: string;
   createdAt: string;
   updatedAt: string;
+  latestSeatUsage?: SeatUsage;
 };
