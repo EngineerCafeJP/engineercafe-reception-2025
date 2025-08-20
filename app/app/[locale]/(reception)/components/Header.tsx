@@ -16,10 +16,6 @@ const navLinks = [
     href: "/usage-logs",
   },
   {
-    label: "レポート",
-    href: "/reports",
-  },
-  {
     label: "カード (NFC) 登録",
     href: "/nfc-registration",
   },
