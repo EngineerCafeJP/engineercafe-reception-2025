@@ -273,6 +273,8 @@ export default function HomePage() {
             onClick={() =>
               setIsBatchExtendSeatsModalOpen(!isBatchExtendSeatsModalOpen)
             }
+            onKeyDown={(e) => e.preventDefault()}
+            onKeyUp={(e) => e.preventDefault()}
           >
             座席一括延長
           </button>
