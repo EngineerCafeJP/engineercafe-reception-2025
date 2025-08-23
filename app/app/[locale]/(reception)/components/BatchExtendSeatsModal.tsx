@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useKey } from "react-use";
 import { Seat, SeatUsage } from "@/types";
 import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
 
@@ -74,6 +75,24 @@ export const BatchExtendSeatsModal: React.FC<BatchExtendSeatsModalProps> = ({
     onExecute(seatUsages);
     onClose();
   };
+
+  const handleKeyboardExecute = useCallback(() => {
+    if (!isOpen) return;
+    const seatUsages = seatUsagesWithSelected
+      .filter((s) => s.selected)
+      .map((s) => s.seatUsage);
+    onExecute(seatUsages);
+    onClose();
+  }, [isOpen, seatUsagesWithSelected, onExecute, onClose]);
+
+  const handleKeyboardClose = useCallback(() => {
+    if (!isOpen) return;
+    onClose();
+  }, [isOpen, onClose]);
+
+  // useKeyでキーボードイベントをハンドリング
+  useKey("Enter", handleKeyboardExecute, undefined, [isOpen]);
+  useKey("Escape", handleKeyboardClose, undefined, [isOpen]);
 
   return (
     <dialog
