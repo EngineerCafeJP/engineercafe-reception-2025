@@ -91,8 +91,14 @@ export const BatchExtendSeatsModal: React.FC<BatchExtendSeatsModalProps> = ({
   }, [isOpen, onClose]);
 
   // useKeyでキーボードイベントをハンドリング
-  useKey("Enter", handleKeyboardExecute, undefined, [isOpen]);
-  useKey("Escape", handleKeyboardClose, undefined, [isOpen]);
+  useKey("Enter", handleKeyboardExecute, undefined, [
+    isOpen,
+    handleKeyboardExecute,
+  ]);
+  useKey("Escape", handleKeyboardClose, undefined, [
+    isOpen,
+    handleKeyboardClose,
+  ]);
 
   return (
     <dialog
