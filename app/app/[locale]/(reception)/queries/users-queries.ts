@@ -30,6 +30,9 @@ export const fetchUsersBySearchParams = (params?: SearchUserParams) => {
     if (params.phone) {
       conditions.push(`phone.like.%${params.phone}%`);
     }
+    if (params.pronunciation) {
+      conditions.push(`pronunciation.like.%${params.pronunciation}%`);
+    }
     return query.or(conditions.join(","));
   }
 };

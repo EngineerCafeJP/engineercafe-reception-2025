@@ -9,14 +9,25 @@ export const useSearchUsers = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetch = async (keyword?: string, withLatestSeatUsage?: boolean) => {
+  const fetch = async (
+    keyword?: string,
+    withLatestSeatUsage?: boolean,
+    searchType?: string,
+  ) => {
     setIsLoading(true);
-    // 数値のみの場合はidとして扱う
+
+    const type = searchType || "user_id";
     const id = keyword?.match(/^\d+$/) ? Number(keyword) : undefined;
 
-    const params = id
-      ? { id }
-      : { name: keyword, email: keyword, phone: keyword };
+    const params =
+      type === "user_id"
+        ? { id: id }
+        : {
+            name: keyword,
+            email: keyword,
+            pronunciation: keyword,
+            phone: keyword,
+          };
 
     const { data, error } = await fetchUsersBySearchParams(params);
 

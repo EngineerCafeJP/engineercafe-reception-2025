@@ -24,7 +24,7 @@ interface ReceptionFormProps {
   emptySeats: Seat[];
   selectedUser: User | null;
   onSelectUser: (user: User | null) => void;
-  onChangeSearchWord: (input: string) => void;
+  onChangeSearchWord: (input: string, searchType: string) => void;
   onClose: () => void;
   onConnectUsbDevice: () => void;
   onDetectCard: (cardId: string) => void;
@@ -60,10 +60,11 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const [searchFormValue, setSearchFormValue] = useState<string>(searchWord);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const [debouncedChangeSearchWord] = useDebounce(searchFormValue, 250);
+  const [searchType, setSearchType] = useState<string>("user_id");
 
   // インクリメンタルサーチ
   useEffect(() => {
-    onChangeSearchWord(debouncedChangeSearchWord);
+    onChangeSearchWord(debouncedChangeSearchWord, searchType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedChangeSearchWord]);
 
@@ -97,8 +98,8 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
 
   const handleSearch = useCallback(() => {
     onSelectUser(null);
-    onChangeSearchWord(searchFormValue);
-  }, [onSelectUser, onChangeSearchWord, searchFormValue]);
+    onChangeSearchWord(searchFormValue, searchType);
+  }, [onSelectUser, onChangeSearchWord, searchFormValue, searchType]);
 
   const handleSelectArea = (area: string) => {
     setSelectedArea(area);
@@ -238,12 +239,44 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
               onDetectCard={handleDetectCard}
               onDisconnectUsbDevice={handleDisconnectUsbDevice}
             />
-            <label className="input" htmlFor="code">
+
+            <label className="input ps-0" htmlFor="code">
+              <div className="dropdown">
+                <div
+                  className="btn mx-0 w-1 text-sm"
+                  role="button"
+                  tabIndex={0}
+                >
+                  {searchType === "user_id" ? "#" : "ℹ️"}
+                </div>
+                <ul
+                  className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+                  tabIndex={0}
+                >
+                  <li
+                    className="hover:bg-base-200 cursor-pointer"
+                    onClick={() => setSearchType("user_id")}
+                  >
+                    会員番号
+                  </li>
+                  <li
+                    className="hover:bg-base-200 cursor-pointer"
+                    onClick={() => setSearchType("information")}
+                  >
+                    会員情報
+                  </li>
+                </ul>
+              </div>
+
               <input
                 autoComplete="off"
                 inputMode="numeric"
                 name="code"
-                placeholder="会員番号"
+                placeholder={
+                  searchType === "user_id"
+                    ? "会員番号"
+                    : "会員情報(名前、メールアドレス、電話番号)"
+                }
                 type="text"
                 value={searchFormValue}
                 onChange={(e) => handleChangeSearchWord(e.target.value)}

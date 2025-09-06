@@ -113,13 +113,13 @@ export default function HomePage() {
   };
 
   const handleChangeSearchWord = useCallback(
-    async (searchWord: string) => {
+    async (searchWord: string, searchType: string) => {
       if (searchWord === "") {
         clearSearchUsers();
         setSearchUserKeyword("");
       } else {
         setSearchUserKeyword(searchWord);
-        await fetchUsers(searchWord, true);
+        await fetchUsers(searchWord, true, searchType);
       }
     },
     [clearSearchUsers, fetchUsers],
