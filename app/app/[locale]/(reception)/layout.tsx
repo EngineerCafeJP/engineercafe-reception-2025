@@ -15,7 +15,7 @@ export default function ReceptionLayout({
   }
   return (
     <>
-      <Header />
+      <Header isCm={session?.user.app_metadata?.is_cm} />
       {children}
     </>
   );

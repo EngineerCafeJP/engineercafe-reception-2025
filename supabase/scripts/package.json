@@ -1,0 +1,20 @@
+{
+  "name": "supabase-scripts",
+  "version": "1.0.0",
+  "description": "Supabase管理用スクリプト",
+  "main": "index.js",
+  "scripts": {
+    "update-app-metadata": "node update-user-app-metadata.js",
+    "help": "node update-user-app-metadata.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "keywords": [
+    "supabase",
+    "admin",
+    "metadata"
+  ],
+  "author": "",
+  "license": "MIT"
+}
