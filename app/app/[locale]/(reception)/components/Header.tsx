@@ -8,6 +8,10 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
   {
+    label: "ホーム",
+    href: "/home",
+  },
+  {
     label: "ユーザー検索",
     href: "/user-search",
   },
@@ -49,6 +53,16 @@ function AccountMenu() {
         className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
         tabIndex={0}
       >
+        <li>
+          <Link className="btn btn-ghost" href="/home">
+            ホーム
+          </Link>
+        </li>
+        <li>
+          <Link className="btn btn-ghost" href="/reports">
+            レポート
+          </Link>
+        </li>
         <li>
           <button className="btn btn-ghost" onClick={signOut}>
             ログアウト
