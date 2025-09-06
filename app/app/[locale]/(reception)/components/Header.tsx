@@ -25,7 +25,7 @@ const navLinks = [
   },
 ];
 
-function AccountMenu() {
+function AccountMenu({ isCm }: { isCm: boolean | undefined }) {
   const { session, signOut } = useAuth();
 
   if (!session) {
@@ -58,11 +58,13 @@ function AccountMenu() {
             ホーム
           </Link>
         </li>
-        <li>
-          <Link className="btn btn-ghost" href="/reports">
-            レポート
-          </Link>
-        </li>
+        {isCm && (
+          <li>
+            <Link className="btn btn-ghost" href="/reports">
+              レポート
+            </Link>
+          </li>
+        )}
         <li>
           <button className="btn btn-ghost" onClick={signOut}>
             ログアウト
@@ -90,7 +92,7 @@ function NavLinks() {
   ));
 }
 
-function CollapsibleNavigation() {
+function CollapsibleNavigation({ isCm }: { isCm: boolean | undefined }) {
   return (
     <div className="dropdown">
       <div className="btn btn-ghost xl:hidden" role="button" tabIndex={0}>
@@ -102,14 +104,14 @@ function CollapsibleNavigation() {
       >
         <NavLinks />
         <li className="mt-1">
-          <AccountMenu />
+          <AccountMenu isCm={isCm} />
         </li>
       </ul>
     </div>
   );
 }
 
-function InlineNavigation() {
+function InlineNavigation({ isCm }: { isCm: boolean | undefined }) {
   return (
     <ul className="menu menu-horizontal hidden items-center xl:flex">
       {navLinks.map((link) => (
@@ -121,17 +123,21 @@ function InlineNavigation() {
         </Fragment>
       ))}
       <li>
-        <AccountMenu />
+        <AccountMenu isCm={isCm} />
       </li>
     </ul>
   );
 }
 
-export default function Header() {
+export default function Header({
+  isCm = false,
+}: {
+  isCm: boolean | undefined;
+}) {
   return (
     <header className="navbar bg-base-100 border-b-2 shadow-md">
       <div className="navbar-start">
-        <CollapsibleNavigation />
+        <CollapsibleNavigation isCm={isCm} />
         <Link className="btn btn-ghost btn-lg font-bold" href="/home">
           <Image
             alt="Logo"
@@ -143,7 +149,7 @@ export default function Header() {
         </Link>
       </div>
       <div className="navbar-end">
-        <InlineNavigation />
+        <InlineNavigation isCm={isCm} />
       </div>
     </header>
   );
