@@ -3,4 +3,5 @@ export type SearchUserParams = {
   name?: string;
   email?: string;
   phone?: string;
+  pronunciation?: string;
 };
