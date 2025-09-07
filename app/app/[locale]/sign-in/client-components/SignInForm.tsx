@@ -1,10 +1,14 @@
 "use client";
 
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+
 export type SignInFormProps = {
   signIn: (email: string, password: string) => Promise<void>;
 };
 
 const SignInForm: React.FC<SignInFormProps> = ({ signIn }) => {
+  const t = useTranslations("SignIn");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -40,7 +44,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ signIn }) => {
             type="password"
           />
         </div>
-        <div className="text-right">
+        <div className="mb-4 text-right">
           <button
             className="btn btn-primary mx-auto"
             data-testid="login-button"
@@ -48,6 +52,15 @@ const SignInForm: React.FC<SignInFormProps> = ({ signIn }) => {
           >
             ログイン
           </button>
+        </div>
+        <div className="text-center">
+          <Link
+            className="text-sm text-blue-600 underline hover:text-blue-800"
+            data-testid="forgot-password-link"
+            href="/forgot-password"
+          >
+            {t("forgotPasswordLink")}
+          </Link>
         </div>
       </div>
     </form>

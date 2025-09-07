@@ -1,7 +1,6 @@
 "use client";
 
 import { Session } from "@supabase/supabase-js";
-import { redirect } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import supabase from "@/utils/supabase/client";
 
@@ -9,6 +8,8 @@ interface AuthContextType {
   session: Session | null;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  updatePassword: (password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,7 +35,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setSession(session);
         } else if (event === "SIGNED_OUT") {
           setSession(null);
-          redirect("/sign-in");
         }
       },
     );
@@ -52,8 +52,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await supabase.auth.signOut();
   };
 
+  const resetPassword = async (email: string) => {
+    debugger;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) {
+      throw error;
+    }
+  };
+
+  const updatePassword = async (password: string) => {
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) {
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ session, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ session, signIn, signOut, resetPassword, updatePassword }}
+    >
       {children}
     </AuthContext.Provider>
   );
