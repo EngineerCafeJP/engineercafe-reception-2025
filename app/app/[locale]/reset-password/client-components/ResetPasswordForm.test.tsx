@@ -35,12 +35,25 @@ describe("ResetPasswordForm", () => {
       replace: jest.fn(),
       prefetch: jest.fn(),
     });
-    mockUseTranslations.mockReturnValue({
-      title: "新しいパスワードを設定",
-      passwordLabel: "新しいパスワード",
-      confirmPasswordLabel: "確認パスワード",
-      submitButton: "パスワードを更新",
-    } as any);
+    (mockUseTranslations as any).mockReturnValue((key: string) => {
+      const translations: Record<string, string> = {
+        title: "新しいパスワードを設定",
+        passwordLabel: "新しいパスワード",
+        confirmPasswordLabel: "確認パスワード",
+        submitButton: "パスワードを更新",
+        passwordMinLength: "パスワードは8文字以上で入力してください",
+        passwordComplexity:
+          "パスワードは大文字、小文字、数字、記号を含む必要があります",
+        confirmPasswordRequired: "確認パスワードを入力してください",
+        passwordMismatch: "パスワードが一致しません",
+        updating: "更新中...",
+        successTitle: "パスワードを更新しました",
+        successMessage: "パスワードが正常に更新されました",
+        backToSignIn: "ログインページに戻る",
+        errorMessage: "パスワードの更新に失敗しました",
+      };
+      return translations[key] || key;
+    });
   });
 
   it("フォームが正しくレンダリングされること", () => {

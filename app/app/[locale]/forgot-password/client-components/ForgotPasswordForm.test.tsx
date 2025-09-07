@@ -22,11 +22,22 @@ describe("ForgotPasswordForm", () => {
       updatePassword: jest.fn(),
       isInitialized: true,
     });
-    mockUseTranslations.mockReturnValue({
-      title: "パスワードを忘れた方",
-      emailLabel: "メールアドレス",
-      submitButton: "リセットメールを送信",
-    } as any);
+    (mockUseTranslations as any).mockReturnValue((key: string) => {
+      const translations: Record<string, string> = {
+        title: "パスワードを忘れた方",
+        emailLabel: "メールアドレス",
+        submitButton: "リセットメールを送信",
+        emailRequired: "メールアドレスを入力してください",
+        emailInvalid: "有効なメールアドレスを入力してください",
+        submitting: "送信中...",
+        successTitle: "メールを送信しました",
+        successMessage: "パスワードリセット用のメールを送信しました",
+        successInstruction: "メール内のリンクをクリックしてください",
+        checkSpamFolder: "迷惑メールフォルダもご確認ください",
+        errorMessage: "パスワードリセットメールの送信に失敗しました",
+      };
+      return translations[key] || key;
+    });
   });
 
   it("フォームが正しくレンダリングされること", () => {
