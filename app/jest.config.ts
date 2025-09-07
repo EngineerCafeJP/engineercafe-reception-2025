@@ -93,6 +93,7 @@ const config: import("jest").Config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/app/$1",
     "^~/(.*)$": "<rootDir>/$1",
+    "^next-intl$": "<rootDir>/__mocks__/next-intl.js",
   },
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],

@@ -15,12 +15,15 @@ import { useUpdateSeat } from "@/[locale]/(reception)/hooks/use-update-seat";
 import { useUpdateUser } from "@/[locale]/(reception)/hooks/use-update-user";
 import { softDeleteUser } from "@/[locale]/(reception)/queries/users-queries";
 import { useRegistrationOptions } from "@/hooks/use-registration-options";
+import { useSession } from "@/hooks/use-session";
 import { Seat, SeatUsage, User } from "@/types";
 import { addMinutes } from "@/utils/format-time";
 import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
 
 export default function HomePage() {
+  useSession(true);
+
   const searchParams = useSearchParams();
   const searchParamUserId = searchParams.get("userId");
   const userId =

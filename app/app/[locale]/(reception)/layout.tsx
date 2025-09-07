@@ -2,7 +2,6 @@
 
 import Header from "@/[locale]/(reception)/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
-import { redirect } from "~/i18n/navigation";
 
 export default function ReceptionLayout({
   children,
@@ -10,9 +9,7 @@ export default function ReceptionLayout({
   children: React.ReactNode;
 }>) {
   const { session } = useAuth();
-  if (!session) {
-    redirect({ href: "/sign-in", locale: "ja" });
-  }
+
   return (
     <>
       <Header isCm={session?.user.app_metadata?.is_cm} />
