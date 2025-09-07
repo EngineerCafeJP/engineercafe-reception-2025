@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { redirect } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -10,27 +8,31 @@ import ResetPasswordForm from "./client-components/ResetPasswordForm";
 
 export default function ResetPasswordPage() {
   const t = useTranslations("ResetPassword");
-  const { session } = useAuth();
-  const searchParams = useSearchParams();
+  const { session, isInitialized } = useAuth();
   const [isValidToken, setIsValidToken] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // URLパラメータからトークンを取得
-    const accessToken = searchParams.get("access_token");
-    const refreshToken = searchParams.get("refresh_token");
-    const type = searchParams.get("type");
+    debugger;
+    if (!isInitialized) return;
+
+    // ハッシュフラグメントからパラメータを取得
+    const hash = window.location.hash.substring(1); // #を除去
+    const params = new URLSearchParams(hash);
+
+    const accessToken = params.get("access_token");
+    const refreshToken = params.get("refresh_token");
+    const type = params.get("type");
 
     // パスワードリセット用のトークンかチェック
     if (type === "recovery" && accessToken && refreshToken) {
       setIsValidToken(true);
+    } else if (session) {
+      // セッションが存在する場合（Supabaseの認証状態変更で処理された場合）
+      setIsValidToken(true);
     } else {
       setIsValidToken(false);
     }
-  }, [searchParams]);
-
-  if (session) {
-    redirect("/");
-  }
+  }, [isInitialized, session]);
 
   if (isValidToken === null) {
     return (

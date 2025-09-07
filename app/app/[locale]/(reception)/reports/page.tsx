@@ -8,6 +8,7 @@ import {
 } from "@/[locale]/(reception)/hooks/use-seat-usage-reports-view";
 import DateSelectForm from "@/[locale]/(reception)/reports/client-components/DateSelectForm";
 import SeatUsageReportTable from "@/[locale]/(reception)/reports/client-components/SeatUsageReportsTable";
+import { useSession } from "@/hooks/use-session";
 import {
   formatEndDateOfMonth,
   formatStartDateOfMonth,
@@ -16,6 +17,8 @@ import {
 } from "@/utils/format-date";
 
 export default function ReportsPage() {
+  useSession(true);
+
   const [date, setDate] = useState<string>(
     new Date().toISOString().split("T")[0],
   );

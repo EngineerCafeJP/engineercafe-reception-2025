@@ -99,6 +99,12 @@ supabase db query --file supabase/scripts/mock.sql
 
 http://127.0.0.1:54323
 
+## メールテスト
+
+ローカルで送信されたメールはSupabase Inbucketで確認できる
+
+http://127.0.0.1:54324
+
 ### テーブル定義を変更した場合
 
 `app`ディレクトリで以下のコマンドを実行し、型定義ファイルを更新します。

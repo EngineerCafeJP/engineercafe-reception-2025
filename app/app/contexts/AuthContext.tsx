@@ -10,12 +10,14 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updatePassword: (password: string) => Promise<void>;
+  isInitialized: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     // 初回取得
@@ -31,13 +33,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // セッションの変更を監視
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        if (event === "SIGNED_IN") {
+        console.log("Auth state change:", event, session);
+        if (event === "SIGNED_IN" || event === "PASSWORD_RECOVERY") {
           setSession(session);
         } else if (event === "SIGNED_OUT") {
           setSession(null);
         }
       },
     );
+
+    setIsInitialized(true);
 
     return () => {
       authListener?.subscription.unsubscribe();
@@ -53,7 +58,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const resetPassword = async (email: string) => {
-    debugger;
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
@@ -71,7 +75,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ session, signIn, signOut, resetPassword, updatePassword }}
+      value={{
+        session,
+        signIn,
+        signOut,
+        resetPassword,
+        updatePassword,
+        isInitialized,
+      }}
     >
       {children}
     </AuthContext.Provider>

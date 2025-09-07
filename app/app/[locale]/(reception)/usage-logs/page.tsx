@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { useMemo, useState } from "react";
 import { useSeatUsageLogsByDate } from "@/[locale]/(reception)/hooks/use-in-usage-logs";
 import DeleteHistoryItemConfirmModal from "@/[locale]/(reception)/usage-logs/client-components/DeleteHistoryItemConfirmModal";
+import { useSession } from "@/hooks/use-session";
 import { SeatUsage } from "@/types";
 import { formatDate } from "@/utils/format-date";
 import DateSelectorForm from "./client-components/DateSelectorForm";
@@ -11,6 +12,8 @@ import HistoryListViewForm from "./client-components/HistoryListViewForm";
 import ScoreDisplayForm from "./client-components/ScoreDisplayForm";
 
 export default function UsageHistory() {
+  useSession(true);
+
   // 履歴の標示対象日付
   const [targetDate, setTargetDate] = useState(new Date());
   // 削除対象アイテム番号
