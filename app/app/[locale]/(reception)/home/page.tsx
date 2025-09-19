@@ -17,6 +17,7 @@ import { softDeleteUser } from "@/[locale]/(reception)/queries/users-queries";
 import { useRegistrationOptions } from "@/hooks/use-registration-options";
 import { useSession } from "@/hooks/use-session";
 import { Seat, SeatUsage, User } from "@/types";
+import { ReceptionSearchType } from "@/types/receptionSearchType";
 import { addMinutes } from "@/utils/format-time";
 import ReceptionForm from "./client-components/ReceptionForm";
 import { SeatAreaMap } from "./client-components/SeatAreaMap";
@@ -31,6 +32,7 @@ export default function HomePage() {
       ? searchParamUserId
       : undefined;
   const [searchUserKeyword, setSearchUserKeyword] = useState<string>("");
+  const [searchType, setSearchType] = useState<ReceptionSearchType>("user_id");
   const [editUser, setEditUser] = useState<User | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isBatchExtendSeatsModalOpen, setIsBatchExtendSeatsModalOpen] =
@@ -111,7 +113,7 @@ export default function HomePage() {
     if (userId === null) {
       return;
     }
-
+    setSearchType("user_id");
     setSearchUserKeyword(userId.toString());
   };
 
@@ -171,6 +173,7 @@ export default function HomePage() {
         usageDurationMinutes || seat.usageDurationMinutes,
       );
       await fetchInUseSeatUsage();
+      setSearchType("user_id");
       setSearchUserKeyword("");
       handleFormClose();
     },
@@ -290,9 +293,11 @@ export default function HomePage() {
               !seatUsages.some((usage) => usage.seatId === seat.id),
           )}
           searchNfcError={searchUserKeyword ? null : searchNfcError}
+          searchType={searchType}
           searchUserList={isLoading ? null : users}
           searchWord={searchUserKeyword}
           selectedUser={selectedUser}
+          onChangeSearchType={setSearchType}
           onChangeSearchWord={handleChangeSearchWord}
           onClose={handleFormClose}
           onConnectUsbDevice={handleConnectUsbDevice}

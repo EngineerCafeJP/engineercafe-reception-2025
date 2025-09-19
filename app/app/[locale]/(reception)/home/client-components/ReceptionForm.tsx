@@ -15,6 +15,7 @@ import AssignSeatConfirmModal from "@/[locale]/(reception)/home/client-component
 import UsageIntervalLabel from "@/[locale]/(reception)/home/client-components/UsageIntervalLabel";
 import UserIcon from "@/components/icons/UserIcon";
 import { Seat, User } from "@/types";
+import { ReceptionSearchType } from "@/types/receptionSearchType";
 import { formatDate } from "@/utils/format-date-time";
 
 interface ReceptionFormProps {
@@ -23,6 +24,7 @@ interface ReceptionFormProps {
   searchNfcError: string | null;
   emptySeats: Seat[];
   selectedUser: User | null;
+  searchType: ReceptionSearchType;
   onSelectUser: (user: User | null) => void;
   onChangeSearchWord: (input: string, searchType: string) => void;
   onClose: () => void;
@@ -36,6 +38,7 @@ interface ReceptionFormProps {
     usageDurationMinutes?: number,
   ) => void;
   onEditUser: (user: User) => void;
+  onChangeSearchType: (searchType: ReceptionSearchType) => void;
 }
 
 const ReceptionForm: React.FC<ReceptionFormProps> = ({
@@ -44,6 +47,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   searchNfcError,
   emptySeats,
   selectedUser,
+  searchType,
   onSelectUser,
   onChangeSearchWord,
   onClose,
@@ -52,6 +56,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   onDisconnectUsbDevice,
   assignSeat,
   onEditUser,
+  onChangeSearchType,
 }) => {
   const [selectedUserIndex, setSelectedUserIndex] = useState<number>(0);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
@@ -60,7 +65,6 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const [searchFormValue, setSearchFormValue] = useState<string>(searchWord);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const [debouncedChangeSearchWord] = useDebounce(searchFormValue, 250);
-  const [searchType, setSearchType] = useState<string>("user_id");
 
   // インクリメンタルサーチ
   useEffect(() => {
@@ -255,13 +259,13 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                 >
                   <li
                     className="hover:bg-base-200 cursor-pointer"
-                    onClick={() => setSearchType("user_id")}
+                    onClick={() => onChangeSearchType("user_id")}
                   >
                     会員番号
                   </li>
                   <li
                     className="hover:bg-base-200 cursor-pointer"
-                    onClick={() => setSearchType("information")}
+                    onClick={() => onChangeSearchType("information")}
                   >
                     会員情報
                   </li>
