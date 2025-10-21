@@ -319,7 +319,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
               {searchUserList.map((user, index) => (
                 <li
                   key={user.id}
-                  className="list-row border-base-300 hover:border-base-300/30 cursor-pointer rounded-none border-b p-[0.5rem]"
+                  className="list-row border-base-300 hover:border-base-300/30 flex cursor-pointer justify-between rounded-none border-b p-[0.5rem]"
                   style={{
                     backgroundColor:
                       selectedUserIndex === index
@@ -328,22 +328,48 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                   }}
                   onClick={() => handleSelectUser(user)}
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="w-16 text-sm font-bold">{user.id}</div>
-                    <div className="text-sm">{user.name}</div>
-                    <div className="ml-2 text-sm">({user.pronunciation})</div>
-                  </div>
-                  {user.latestSeatUsage && (
-                    <div className="flex flex-row gap-1 text-sm">
-                      <div>
-                        前回:
-                        {formatDate(user.latestSeatUsage.startTime)}
-                      </div>
-                      <div>
-                        <UsageIntervalLabel seatUsage={user.latestSeatUsage} />
-                      </div>
+                  <div className="flex flex-row justify-between gap-1">
+                    <div className="flex items-center gap-2">
+                      <div className="w-16 text-sm font-bold">{user.id}</div>
+                      <div className="text-sm">{user.name}</div>
+                      <div className="ml-2 text-sm">({user.pronunciation})</div>
                     </div>
-                  )}
+                    {user.latestSeatUsage && (
+                      <div className="flex flex-row gap-1 text-sm">
+                        <div>
+                          前回:
+                          {formatDate(user.latestSeatUsage.startTime)}
+                        </div>
+                        <div>
+                          <UsageIntervalLabel
+                            seatUsage={user.latestSeatUsage}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-row gap-1 text-sm">
+                    {user.comments && (
+                      <div className="flex items-center">
+                        <div
+                          className="tooltip tooltip-left"
+                          data-tip={user.comments}
+                        >
+                          <MdComment className="mr-1 cursor-help" size={20} />
+                        </div>
+                      </div>
+                    )}
+                    {user.warnings && (
+                      <div className="flex items-center">
+                        <div
+                          className="tooltip tooltip-left"
+                          data-tip={user.warnings}
+                        >
+                          <MdWarning className="mr-1 cursor-help" size={20} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -366,12 +392,22 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                   </div>
                   {selectedUser?.comments && (
                     <div className="text-warning m-1 flex items-center">
-                      <MdComment className="mr-1" size={20} />
+                      <div
+                        className="tooltip tooltip-top"
+                        data-tip={selectedUser.comments}
+                      >
+                        <MdComment className="mr-1 cursor-help" size={20} />
+                      </div>
                     </div>
                   )}
                   {selectedUser?.warnings && (
                     <div className="text-error m-1 flex items-center">
-                      <MdWarning className="mr-1" size={20} />
+                      <div
+                        className="tooltip tooltip-top"
+                        data-tip={selectedUser.warnings}
+                      >
+                        <MdWarning className="mr-1 cursor-help" size={20} />
+                      </div>
                     </div>
                   )}
                   <div className="flex justify-end pe-2">
