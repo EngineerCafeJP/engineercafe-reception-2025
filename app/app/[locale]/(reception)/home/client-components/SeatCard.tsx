@@ -38,7 +38,12 @@ const SeatCard: React.FC<SeatProps> = ({
         )}
         {seat.attentionMessage && (
           <div className="text-error absolute top-1 right-0 text-center text-xs">
-            <MdComment className="mr-1" size={16} />
+            <div
+              className="tooltip tooltip-top"
+              data-tip={seat.attentionMessage}
+            >
+              <MdComment className="mr-1 cursor-help" size={16} />
+            </div>
           </div>
         )}
         <div className="flex flex-row items-center gap-[0.125rem]">
