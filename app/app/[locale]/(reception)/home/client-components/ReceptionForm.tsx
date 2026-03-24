@@ -13,8 +13,9 @@ import { useDebounce } from "use-debounce";
 import CardReaderControlButton from "@/[locale]/(reception)/components/CardReaderControlButton";
 import AssignSeatConfirmModal from "@/[locale]/(reception)/home/client-components/AssignSeatConfirmModal";
 import UsageIntervalLabel from "@/[locale]/(reception)/home/client-components/UsageIntervalLabel";
+import { getUserLocationLabel } from "@/[locale]/(reception)/utils/user-location-label";
 import UserIcon from "@/components/icons/UserIcon";
-import { Seat, User } from "@/types";
+import { Prefecture, Seat, User } from "@/types";
 import { ReceptionSearchType } from "@/types/receptionSearchType";
 import { formatDate } from "@/utils/format-date-time";
 
@@ -25,6 +26,7 @@ interface ReceptionFormProps {
   emptySeats: Seat[];
   selectedUser: User | null;
   searchType: ReceptionSearchType;
+  prefectures: Prefecture[] | null;
   onSelectUser: (user: User | null) => void;
   onChangeSearchWord: (input: string, searchType: string) => void;
   onClose: () => void;
@@ -48,6 +50,7 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   emptySeats,
   selectedUser,
   searchType,
+  prefectures,
   onSelectUser,
   onChangeSearchWord,
   onClose,
@@ -80,6 +83,9 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const handleSelectUser = (user: User) => {
     onSelectUser(user);
   };
+
+  const getLocationLabel = (user: User) =>
+    getUserLocationLabel(user, prefectures);
 
   const areaList = React.useMemo(() => {
     const categories = emptySeats.map((seat: Seat) => seat.seatCategory);
@@ -333,6 +339,9 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                       <div className="w-16 text-sm font-bold">{user.id}</div>
                       <div className="text-sm">{user.name}</div>
                       <div className="ml-2 text-sm">({user.pronunciation})</div>
+                      <div className="badge badge-outline badge-sm">
+                        {getLocationLabel(user)}
+                      </div>
                     </div>
                     {user.latestSeatUsage && (
                       <div className="flex flex-row gap-1 text-sm">
@@ -388,6 +397,9 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                       <small className="ml-2">
                         ({`${selectedUser?.pronunciation}`})
                       </small>
+                    </div>
+                    <div className="text-sm">
+                      所在地: {getLocationLabel(selectedUser)}
                     </div>
                   </div>
                   {selectedUser?.comments && (

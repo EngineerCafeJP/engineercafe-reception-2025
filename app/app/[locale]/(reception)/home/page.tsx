@@ -292,6 +292,7 @@ export default function HomePage() {
               !seat.outOfService &&
               !seatUsages.some((usage) => usage.seatId === seat.id),
           )}
+          prefectures={prefectures}
           searchNfcError={searchUserKeyword ? null : searchNfcError}
           searchType={searchType}
           searchUserList={isLoading ? null : users}
