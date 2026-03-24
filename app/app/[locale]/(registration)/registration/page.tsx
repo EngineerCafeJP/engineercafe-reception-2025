@@ -1,7 +1,7 @@
 "use client";
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { Locale, useTranslations } from "next-intl";
+import { hasLocale, useTranslations } from "next-intl";
 import { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdErrorOutline } from "react-icons/md";
@@ -21,13 +21,19 @@ import { useSubmitRegistration } from "@/[locale]/(registration)/registration/ho
 import { registrationSchema } from "@/[locale]/(registration)/registration/schemas/registration-schema";
 import { RegistrationSchema } from "@/[locale]/(registration)/registration/types";
 import { useRegistrationOptions } from "@/hooks/use-registration-options";
+import { routing } from "~/i18n/routing";
 
 export default function Registration({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = use(params);
+
+  if (!hasLocale(routing.locales, locale)) {
+    throw new Error(`Invalid locale: ${locale}`);
+  }
+
   const t = useTranslations("Registration");
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [createdUserId, setCreatedUserId] = useState<number>();
