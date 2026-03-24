@@ -339,9 +339,6 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                       <div className="w-16 text-sm font-bold">{user.id}</div>
                       <div className="text-sm">{user.name}</div>
                       <div className="ml-2 text-sm">({user.pronunciation})</div>
-                      <div className="badge badge-outline badge-sm">
-                        {getLocationLabel(user)}
-                      </div>
                     </div>
                     {user.latestSeatUsage && (
                       <div className="flex flex-row gap-1 text-sm">
@@ -354,6 +351,14 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                             seatUsage={user.latestSeatUsage}
                           />
                         </div>
+                        <div className="badge badge-outline badge-sm self-center">
+                          {getLocationLabel(user)}
+                        </div>
+                      </div>
+                    )}
+                    {!user.latestSeatUsage && (
+                      <div className="badge badge-outline badge-sm self-center">
+                        {getLocationLabel(user)}
                       </div>
                     )}
                   </div>

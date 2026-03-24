@@ -96,11 +96,26 @@ describe("ReceptionForm", () => {
     render(
       <ReceptionForm
         {...defaultProps}
-        searchUserList={[buildUser({ city: "福岡市博多区" })]}
+        searchUserList={[
+          buildUser({
+            city: "福岡市博多区",
+            latestSeatUsage: {
+              id: 1,
+              seatId: 1,
+              userId: 1001,
+              startTime: "2026-03-24T10:00:00.000Z",
+              usageDurationMinutes: 120,
+              endTime: null,
+              createdAt: "",
+              updatedAt: "",
+            },
+          }),
+        ]}
       />,
     );
 
     expect(screen.getByText("山田太郎")).toBeInTheDocument();
+    expect(screen.getByText(/前回:2026\/03\/24/)).toBeInTheDocument();
     expect(screen.getByText("市内")).toBeInTheDocument();
   });
 
