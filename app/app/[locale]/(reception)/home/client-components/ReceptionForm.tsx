@@ -87,6 +87,17 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const getLocationLabel = (user: User) =>
     getUserLocationLabel(user, prefectures);
 
+  const renderUserBadges = (user: User) => (
+    <>
+      <div className="badge badge-outline badge-sm self-center">
+        {getLocationLabel(user)}
+      </div>
+      {user.nonJapanese && (
+        <div className="badge badge-secondary badge-sm self-center">外国人</div>
+      )}
+    </>
+  );
+
   const areaList = React.useMemo(() => {
     const categories = emptySeats.map((seat: Seat) => seat.seatCategory);
 
@@ -351,14 +362,12 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                             seatUsage={user.latestSeatUsage}
                           />
                         </div>
-                        <div className="badge badge-outline badge-sm self-center">
-                          {getLocationLabel(user)}
-                        </div>
+                        {renderUserBadges(user)}
                       </div>
                     )}
                     {!user.latestSeatUsage && (
-                      <div className="badge badge-outline badge-sm self-center">
-                        {getLocationLabel(user)}
+                      <div className="flex flex-row gap-1 text-sm">
+                        {renderUserBadges(user)}
                       </div>
                     )}
                   </div>
