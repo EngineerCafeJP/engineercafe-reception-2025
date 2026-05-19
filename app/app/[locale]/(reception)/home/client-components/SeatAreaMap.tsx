@@ -163,7 +163,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
         />
         <AreaBox
           areaName="Underスペース"
-          maxCol={3}
+          maxCol={4}
           seatUsages={seatUsages}
           seats={seats.filter(
             (seat) => seat.seatCategory.name === "Underスペース",
