@@ -103,20 +103,24 @@ export function drawMemberNumberChip({
 }
 
 export function canShareMemberNumberImage() {
-  if (
-    typeof navigator === "undefined" ||
-    typeof navigator.share !== "function" ||
-    typeof navigator.canShare !== "function" ||
-    typeof File === "undefined"
-  ) {
+  try {
+    if (
+      typeof navigator === "undefined" ||
+      typeof navigator.share !== "function" ||
+      typeof navigator.canShare !== "function" ||
+      typeof File === "undefined"
+    ) {
+      return false;
+    }
+
+    return navigator.canShare({
+      files: [
+        createMemberNumberImageFile(new Blob([], { type: IMAGE_MIME_TYPE }), 0),
+      ],
+    });
+  } catch {
     return false;
   }
-
-  return navigator.canShare({
-    files: [
-      createMemberNumberImageFile(new Blob([], { type: IMAGE_MIME_TYPE }), 0),
-    ],
-  });
 }
 
 export async function shareMemberNumberImage({

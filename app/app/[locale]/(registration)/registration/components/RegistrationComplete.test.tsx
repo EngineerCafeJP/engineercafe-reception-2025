@@ -187,6 +187,28 @@ describe("RegistrationComplete", () => {
     expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
   });
 
+  it("共有可否の判定に失敗した場合は保存ボタンのみ表示する", () => {
+    Object.defineProperty(navigator, "canShare", {
+      configurable: true,
+      value: jest.fn(() => {
+        throw new Error("canShare is not available");
+      }),
+    });
+    Object.defineProperty(navigator, "share", {
+      configurable: true,
+      value: jest.fn().mockResolvedValue(undefined),
+    });
+
+    render(<RegistrationComplete createdUserId={12345} />);
+
+    expect(
+      screen.queryByRole("button", { name: "画像を共有" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "画像を保存" }),
+    ).toBeInTheDocument();
+  });
+
   it("画像生成に失敗した場合はスクリーンショット保存を案内する", async () => {
     mockNavigatorShare(true);
     mockCanvas(null);
