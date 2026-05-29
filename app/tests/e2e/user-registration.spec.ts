@@ -111,7 +111,7 @@ test.describe("ユーザー登録ページのE2Eテスト", () => {
       page.getByRole("button", { name: "画像を保存" }),
     ).toBeVisible();
 
-    // ユーザーIDが表示されていることを確認
+    // 会員番号が表示されていることを確認
     const userIdElement = page.locator("text=/^[0-9]+$/").first();
     await expect(userIdElement).toBeVisible();
     const userId = await userIdElement.textContent();
