@@ -1,15 +1,22 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
-import { MdOutlineFileDownload, MdOutlineInfo } from "react-icons/md";
 import {
+  MdOutlineFileDownload,
+  MdOutlineInfo,
+  MdOutlineIosShare,
+} from "react-icons/md";
+import {
+  canShareMemberNumberImage,
   createMemberNumberImageBlob,
   drawMemberNumberChip,
+  downloadMemberNumberImage,
   formatMemberNumber,
-  saveMemberNumberImage,
+  shareMemberNumberImage,
 } from "@/[locale]/(registration)/registration/utils/member-number-image";
 
 const MEMBER_NUMBER_CHIP_CANVAS_SIZE = 512;
 const MEMBER_NUMBER_CHIP_TITLE = "Engineer Cafe";
+type MemberNumberImageAction = "download" | "share";
 
 type RegistrationCompleteProps = {
   createdUserId: number;
@@ -20,11 +27,17 @@ export default function RegistrationComplete({
 }: RegistrationCompleteProps) {
   const t = useTranslations("RegistrationComplete");
   const memberNumber = formatMemberNumber(createdUserId);
-  const [isSavingImage, setIsSavingImage] = useState(false);
+  const [activeImageAction, setActiveImageAction] =
+    useState<MemberNumberImageAction>();
+  const [canShareImage, setCanShareImage] = useState(false);
   const [saveImageError, setSaveImageError] = useState(false);
 
-  const handleSaveImage = async () => {
-    setIsSavingImage(true);
+  useEffect(() => {
+    setCanShareImage(canShareMemberNumberImage());
+  }, []);
+
+  const handleImageAction = async (action: MemberNumberImageAction) => {
+    setActiveImageAction(action);
     setSaveImageError(false);
 
     try {
@@ -33,16 +46,21 @@ export default function RegistrationComplete({
         userId: createdUserId,
       });
 
-      await saveMemberNumberImage({
-        blob,
-        shareText: t("shareText"),
-        shareTitle: t("shareTitle"),
-        userId: createdUserId,
-      });
+      if (action === "share") {
+        await shareMemberNumberImage({
+          blob,
+          shareText: t("shareText"),
+          shareTitle: t("shareTitle"),
+          userId: createdUserId,
+        });
+        return;
+      }
+
+      downloadMemberNumberImage(blob, createdUserId);
     } catch {
       setSaveImageError(true);
     } finally {
-      setIsSavingImage(false);
+      setActiveImageAction(undefined);
     }
   };
 
@@ -73,24 +91,46 @@ export default function RegistrationComplete({
             <div className="text-xs">{t("alertMessage")}</div>
           </div>
         </div>
-        <button
-          className="btn btn-primary mt-6 w-full sm:w-fit"
-          disabled={isSavingImage}
-          type="button"
-          onClick={handleSaveImage}
-        >
-          {isSavingImage ? (
-            <>
-              <span className="loading loading-spinner" />
-              {t("savingImage")}
-            </>
-          ) : (
-            <>
-              <MdOutlineFileDownload size="1.25rem" />
-              {t("saveImage")}
-            </>
+        <div className="mt-6 flex w-full gap-3 sm:w-fit">
+          {canShareImage && (
+            <button
+              className="btn btn-secondary min-w-0 flex-1 whitespace-nowrap sm:flex-none"
+              disabled={activeImageAction !== undefined}
+              type="button"
+              onClick={() => handleImageAction("share")}
+            >
+              {activeImageAction === "share" ? (
+                <>
+                  <span className="loading loading-spinner" />
+                  {t("sharingImage")}
+                </>
+              ) : (
+                <>
+                  <MdOutlineIosShare size="1.25rem" />
+                  {t("shareImage")}
+                </>
+              )}
+            </button>
           )}
-        </button>
+          <button
+            className="btn btn-primary min-w-0 flex-1 whitespace-nowrap sm:flex-none"
+            disabled={activeImageAction !== undefined}
+            type="button"
+            onClick={() => handleImageAction("download")}
+          >
+            {activeImageAction === "download" ? (
+              <>
+                <span className="loading loading-spinner" />
+                {t("savingImage")}
+              </>
+            ) : (
+              <>
+                <MdOutlineFileDownload size="1.25rem" />
+                {t("saveImage")}
+              </>
+            )}
+          </button>
+        </div>
         {saveImageError && (
           <div className="text-error mt-3 text-sm" role="alert">
             {t("saveError")}

@@ -149,6 +149,8 @@
     "userId": "Member Number",
     "alertTitle": "Please save your member number",
     "alertMessage": "This number is required for NFC card registration and reception. Please take a screenshot or save it as an image using the button below.",
+    "shareImage": "Share Image",
+    "sharingImage": "Sharing",
     "saveImage": "Save Image",
     "savingImage": "Creating Image",
     "saveError": "Could not save the image. Please take a screenshot of this screen.",

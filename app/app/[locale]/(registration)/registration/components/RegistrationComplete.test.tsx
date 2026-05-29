@@ -12,6 +12,8 @@ const translations: Record<string, string> = {
   alertTitle: "会員番号を保存してください",
   alertMessage:
     "この番号はNFCカード登録や受付時に必要です。スクリーンショットを撮るか、下のボタンから画像として保存してください。",
+  shareImage: "画像を共有",
+  sharingImage: "共有中",
   saveImage: "画像を保存",
   savingImage: "画像を作成中",
   saveError:
@@ -66,12 +68,24 @@ function mockNavigatorShare(canShare: boolean) {
   });
 }
 
+function resetNavigatorShare() {
+  Object.defineProperty(navigator, "canShare", {
+    configurable: true,
+    value: undefined,
+  });
+  Object.defineProperty(navigator, "share", {
+    configurable: true,
+    value: undefined,
+  });
+}
+
 describe("RegistrationComplete", () => {
   const createObjectURL = jest.fn(() => "blob:member-number");
   const revokeObjectURL = jest.fn();
   const anchorClick = jest.fn();
 
   beforeEach(() => {
+    resetNavigatorShare();
     mockUseTranslations.mockReturnValue(
       ((key: string) => translations[key] || key) as ReturnType<
         typeof useTranslations
@@ -113,6 +127,9 @@ describe("RegistrationComplete", () => {
     expect(
       screen.getByRole("button", { name: "画像を保存" }),
     ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "画像を共有" }),
+    ).not.toBeInTheDocument();
     expect(mockCanvasContext.fillText).toHaveBeenCalledWith(
       "Engineer Cafe",
       expect.any(Number),
@@ -129,7 +146,15 @@ describe("RegistrationComplete", () => {
     mockNavigatorShare(true);
     render(<RegistrationComplete createdUserId={12345} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "画像を保存" }));
+    const shareButton = await screen.findByRole("button", {
+      name: "画像を共有",
+    });
+
+    expect(
+      screen.getByRole("button", { name: "画像を保存" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(shareButton);
 
     await waitFor(() => {
       expect(navigator.share).toHaveBeenCalledWith(
@@ -149,11 +174,16 @@ describe("RegistrationComplete", () => {
     mockNavigatorShare(false);
     render(<RegistrationComplete createdUserId={12345} />);
 
+    expect(
+      screen.queryByRole("button", { name: "画像を共有" }),
+    ).not.toBeInTheDocument();
+
     fireEvent.click(screen.getByRole("button", { name: "画像を保存" }));
 
     await waitFor(() => {
       expect(anchorClick).toHaveBeenCalledTimes(1);
     });
+    expect(navigator.share).not.toHaveBeenCalled();
     expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
   });
 
