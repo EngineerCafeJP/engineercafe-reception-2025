@@ -49,9 +49,14 @@ export default function RegistrationComplete({
     <div className="mt-5">
       <div className="text-xl font-bold">{t("title")}</div>
       <div className="mt-10 flex flex-col">
-        <span className="font-bold tracking-wide opacity-50">
-          {t("userId")}
-        </span>
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <span className="font-bold tracking-wide opacity-50">
+            {t("userId")}
+          </span>
+          <span className="text-3xl leading-none font-black">
+            {memberNumber}
+          </span>
+        </div>
         <MemberNumberChip
           chipTitle={MEMBER_NUMBER_CHIP_TITLE}
           label={t("userId")}

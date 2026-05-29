@@ -100,6 +100,7 @@ describe("RegistrationComplete", () => {
 
     expect(screen.getByText("ユーザー登録完了")).toBeInTheDocument();
     expect(screen.getByText("会員番号")).toBeInTheDocument();
+    expect(screen.getByText("12345")).toBeInTheDocument();
     expect(
       screen.getByRole("img", { name: "会員番号: 12345" }),
     ).toBeInTheDocument();
