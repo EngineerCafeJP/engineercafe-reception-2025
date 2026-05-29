@@ -1,22 +1,13 @@
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { MdOutlineFileDownload, MdOutlineInfo } from "react-icons/md";
 import {
-  MdOutlineFileDownload,
-  MdOutlineInfo,
-  MdOutlineIosShare,
-} from "react-icons/md";
-import {
-  canShareMemberNumberImage,
   createMemberNumberImageBlob,
-  drawMemberNumberChip,
   downloadMemberNumberImage,
   formatMemberNumber,
-  shareMemberNumberImage,
 } from "@/[locale]/(registration)/registration/utils/member-number-image";
 
-const MEMBER_NUMBER_CHIP_CANVAS_SIZE = 512;
 const MEMBER_NUMBER_CHIP_TITLE = "Engineer Cafe";
-type MemberNumberImageAction = "download" | "share";
 
 type RegistrationCompleteProps = {
   createdUserId: number;
@@ -27,40 +18,64 @@ export default function RegistrationComplete({
 }: RegistrationCompleteProps) {
   const t = useTranslations("RegistrationComplete");
   const memberNumber = formatMemberNumber(createdUserId);
-  const [activeImageAction, setActiveImageAction] =
-    useState<MemberNumberImageAction>();
-  const [canShareImage, setCanShareImage] = useState(false);
+  const [isSavingImage, setIsSavingImage] = useState(false);
+  const [memberNumberImageBlob, setMemberNumberImageBlob] = useState<Blob>();
+  const [memberNumberImageUrl, setMemberNumberImageUrl] = useState<string>();
   const [saveImageError, setSaveImageError] = useState(false);
 
   useEffect(() => {
-    setCanShareImage(canShareMemberNumberImage());
-  }, []);
+    let isMounted = true;
+    let imageUrl: string | undefined;
 
-  const handleImageAction = async (action: MemberNumberImageAction) => {
-    setActiveImageAction(action);
+    setMemberNumberImageBlob(undefined);
+    setMemberNumberImageUrl(undefined);
+    setSaveImageError(false);
+
+    createMemberNumberImageBlob({
+      label: MEMBER_NUMBER_CHIP_TITLE,
+      userId: createdUserId,
+    })
+      .then((blob) => {
+        if (!isMounted) {
+          return;
+        }
+
+        imageUrl = URL.createObjectURL(blob);
+        setMemberNumberImageBlob(blob);
+        setMemberNumberImageUrl(imageUrl);
+      })
+      .catch(() => {
+        if (!isMounted) {
+          return;
+        }
+
+        setSaveImageError(true);
+      });
+
+    return () => {
+      isMounted = false;
+
+      if (imageUrl) {
+        URL.revokeObjectURL(imageUrl);
+      }
+    };
+  }, [createdUserId]);
+
+  const handleSaveImage = () => {
+    if (!memberNumberImageBlob) {
+      setSaveImageError(true);
+      return;
+    }
+
+    setIsSavingImage(true);
     setSaveImageError(false);
 
     try {
-      const blob = await createMemberNumberImageBlob({
-        label: MEMBER_NUMBER_CHIP_TITLE,
-        userId: createdUserId,
-      });
-
-      if (action === "share") {
-        await shareMemberNumberImage({
-          blob,
-          shareText: t("shareText"),
-          shareTitle: t("shareTitle"),
-          userId: createdUserId,
-        });
-        return;
-      }
-
-      downloadMemberNumberImage(blob, createdUserId);
+      downloadMemberNumberImage(memberNumberImageBlob, createdUserId);
     } catch {
       setSaveImageError(true);
     } finally {
-      setActiveImageAction(undefined);
+      setIsSavingImage(false);
     }
   };
 
@@ -77,7 +92,7 @@ export default function RegistrationComplete({
           </span>
         </div>
         <MemberNumberChip
-          chipTitle={MEMBER_NUMBER_CHIP_TITLE}
+          imageUrl={memberNumberImageUrl}
           label={t("userId")}
           memberNumber={memberNumber}
         />
@@ -91,46 +106,24 @@ export default function RegistrationComplete({
             <div className="text-xs">{t("alertMessage")}</div>
           </div>
         </div>
-        <div className="mt-6 flex w-full gap-3 sm:w-fit">
-          {canShareImage && (
-            <button
-              className="btn btn-secondary min-w-0 flex-1 whitespace-nowrap sm:flex-none"
-              disabled={activeImageAction !== undefined}
-              type="button"
-              onClick={() => handleImageAction("share")}
-            >
-              {activeImageAction === "share" ? (
-                <>
-                  <span className="loading loading-spinner" />
-                  {t("sharingImage")}
-                </>
-              ) : (
-                <>
-                  <MdOutlineIosShare size="1.25rem" />
-                  {t("shareImage")}
-                </>
-              )}
-            </button>
+        <button
+          className="btn btn-primary mt-6 w-full sm:w-fit"
+          disabled={isSavingImage || !memberNumberImageBlob}
+          type="button"
+          onClick={handleSaveImage}
+        >
+          {isSavingImage ? (
+            <>
+              <span className="loading loading-spinner" />
+              {t("savingImage")}
+            </>
+          ) : (
+            <>
+              <MdOutlineFileDownload size="1.25rem" />
+              {t("saveImage")}
+            </>
           )}
-          <button
-            className="btn btn-primary min-w-0 flex-1 whitespace-nowrap sm:flex-none"
-            disabled={activeImageAction !== undefined}
-            type="button"
-            onClick={() => handleImageAction("download")}
-          >
-            {activeImageAction === "download" ? (
-              <>
-                <span className="loading loading-spinner" />
-                {t("savingImage")}
-              </>
-            ) : (
-              <>
-                <MdOutlineFileDownload size="1.25rem" />
-                {t("saveImage")}
-              </>
-            )}
-          </button>
-        </div>
+        </button>
         {saveImageError && (
           <div className="text-error mt-3 text-sm" role="alert">
             {t("saveError")}
@@ -142,42 +135,33 @@ export default function RegistrationComplete({
 }
 
 function MemberNumberChip({
-  chipTitle,
+  imageUrl,
   label,
   memberNumber,
 }: {
-  chipTitle: string;
+  imageUrl?: string;
   label: string;
   memberNumber: string;
 }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-
-    if (!canvas || !context) {
-      return;
-    }
-
-    drawMemberNumberChip({
-      context,
-      label: chipTitle,
-      memberNumber,
-      size: MEMBER_NUMBER_CHIP_CANVAS_SIZE,
-    });
-  }, [chipTitle, memberNumber]);
-
   return (
     <div className="mt-8 flex justify-center">
-      <canvas
-        ref={canvasRef}
-        aria-label={`${label}: ${memberNumber}`}
-        className="aspect-square w-52 max-w-[76vw]"
-        height={MEMBER_NUMBER_CHIP_CANVAS_SIZE}
-        role="img"
-        width={MEMBER_NUMBER_CHIP_CANVAS_SIZE}
-      />
+      {imageUrl ? (
+        // A native img keeps the generated blob available to the browser image menu.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          alt={`${label}: ${memberNumber}`}
+          className="aspect-square w-52 max-w-[76vw]"
+          src={imageUrl}
+        />
+      ) : (
+        <div
+          aria-label={`${label}: ${memberNumber}`}
+          className="flex aspect-square w-52 max-w-[76vw] items-center justify-center"
+          role="status"
+        >
+          <span className="loading loading-spinner loading-lg" />
+        </div>
+      )}
     </div>
   );
 }

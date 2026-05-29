@@ -10,13 +10,6 @@ type DrawMemberNumberChipParams = {
   size: number;
 };
 
-type ShareMemberNumberImageParams = {
-  blob: Blob;
-  shareText: string;
-  shareTitle: string;
-  userId: number;
-};
-
 const IMAGE_SIZE = 1080;
 const IMAGE_MIME_TYPE = "image/png";
 const MEMBER_NUMBER_LENGTH = 6;
@@ -102,54 +95,6 @@ export function drawMemberNumberChip({
   context.restore();
 }
 
-export function canShareMemberNumberImage() {
-  try {
-    if (
-      typeof navigator === "undefined" ||
-      typeof navigator.share !== "function" ||
-      typeof navigator.canShare !== "function" ||
-      typeof File === "undefined"
-    ) {
-      return false;
-    }
-
-    return navigator.canShare({
-      files: [
-        createMemberNumberImageFile(new Blob([], { type: IMAGE_MIME_TYPE }), 0),
-      ],
-    });
-  } catch {
-    return false;
-  }
-}
-
-export async function shareMemberNumberImage({
-  blob,
-  shareText,
-  shareTitle,
-  userId,
-}: ShareMemberNumberImageParams) {
-  const file = createMemberNumberImageFile(blob, userId);
-
-  if (!navigator.share || !navigator.canShare?.({ files: [file] })) {
-    throw new Error("Web Share is not available");
-  }
-
-  try {
-    await navigator.share({
-      files: [file],
-      text: shareText,
-      title: shareTitle,
-    });
-  } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      return;
-    }
-
-    throw error;
-  }
-}
-
 export function downloadMemberNumberImage(blob: Blob, userId: number) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -167,12 +112,6 @@ export function downloadMemberNumberImage(blob: Blob, userId: number) {
 
 function createMemberNumberImageFileName(userId: number) {
   return `engineercafe-member-${formatMemberNumber(userId)}.png`;
-}
-
-function createMemberNumberImageFile(blob: Blob, userId: number) {
-  return new File([blob], createMemberNumberImageFileName(userId), {
-    type: IMAGE_MIME_TYPE,
-  });
 }
 
 function createOctagonPoints(size: number, padding: number) {
