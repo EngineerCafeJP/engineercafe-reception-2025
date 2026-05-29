@@ -23,8 +23,23 @@ const translations: Record<string, string> = {
 };
 
 const mockCanvasContext = {
+  arc: jest.fn(),
+  beginPath: jest.fn(),
+  clearRect: jest.fn(),
+  clip: jest.fn(),
+  closePath: jest.fn(),
+  createLinearGradient: jest.fn(() => ({
+    addColorStop: jest.fn(),
+  })),
+  fill: jest.fn(),
   fillRect: jest.fn(),
   fillText: jest.fn(),
+  lineTo: jest.fn(),
+  measureText: jest.fn((text: string) => ({ width: text.length * 24 })),
+  moveTo: jest.fn(),
+  restore: jest.fn(),
+  save: jest.fn(),
+  stroke: jest.fn(),
 };
 
 function mockCanvas(
@@ -85,7 +100,9 @@ describe("RegistrationComplete", () => {
 
     expect(screen.getByText("ユーザー登録完了")).toBeInTheDocument();
     expect(screen.getByText("会員番号")).toBeInTheDocument();
-    expect(screen.getByText("12345")).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: "会員番号: 12345" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("会員番号を保存してください")).toBeInTheDocument();
     expect(
       screen.getByText(
@@ -95,6 +112,16 @@ describe("RegistrationComplete", () => {
     expect(
       screen.getByRole("button", { name: "画像を保存" }),
     ).toBeInTheDocument();
+    expect(mockCanvasContext.fillText).toHaveBeenCalledWith(
+      "Engineer Cafe",
+      expect.any(Number),
+      expect.any(Number),
+    );
+    expect(mockCanvasContext.fillText).toHaveBeenCalledWith(
+      "12345",
+      expect.any(Number),
+      expect.any(Number),
+    );
   });
 
   it("共有可能な端末では会員番号画像を共有する", async () => {

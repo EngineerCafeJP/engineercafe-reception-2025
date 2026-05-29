@@ -153,8 +153,6 @@
     "savingImage": "Creating Image",
     "saveError": "Could not save the image. Please take a screenshot of this screen.",
     "shareTitle": "Engineer Cafe Member Number",
-    "shareText": "This is my Engineer Cafe member number.",
-    "imageTitle": "Engineer Cafe",
-    "imageNote": "Required for NFC card registration and reception"
+    "shareText": "This is my Engineer Cafe member number."
   }
 }
