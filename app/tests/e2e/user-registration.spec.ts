@@ -98,13 +98,14 @@ test.describe("ユーザー登録ページのE2Eテスト", () => {
     // 登録完了画面の確認
     await expect(page.getByText("登録完了")).toBeVisible();
     await expect(page.getByText("ユーザー登録完了")).toBeVisible();
-    await expect(page.getByText("会員番号")).toBeVisible();
+    await expect(page.getByText("会員番号", { exact: true })).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "会員番号を保存してください" }),
+      page.getByText("会員番号を保存してください", { exact: true }),
     ).toBeVisible();
     await expect(
       page.getByText(
         "この番号はNFCカード登録や受付時に必要です。スクリーンショットを撮るか、下のボタンから画像として保存してください。",
+        { exact: true },
       ),
     ).toBeVisible();
     await expect(
