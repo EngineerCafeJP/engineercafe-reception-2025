@@ -4,6 +4,7 @@ import { MdOutlineFileDownload, MdOutlineInfo } from "react-icons/md";
 import {
   createMemberNumberImageBlob,
   drawMemberNumberChip,
+  formatMemberNumber,
   saveMemberNumberImage,
 } from "@/[locale]/(registration)/registration/utils/member-number-image";
 
@@ -18,7 +19,7 @@ export default function RegistrationComplete({
   createdUserId,
 }: RegistrationCompleteProps) {
   const t = useTranslations("RegistrationComplete");
-  const memberNumber = String(createdUserId);
+  const memberNumber = formatMemberNumber(createdUserId);
   const [isSavingImage, setIsSavingImage] = useState(false);
   const [saveImageError, setSaveImageError] = useState(false);
 

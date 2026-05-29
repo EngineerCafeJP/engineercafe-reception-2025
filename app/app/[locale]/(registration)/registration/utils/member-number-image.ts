@@ -19,6 +19,11 @@ type SaveMemberNumberImageParams = {
 
 const IMAGE_SIZE = 1080;
 const IMAGE_MIME_TYPE = "image/png";
+const MEMBER_NUMBER_LENGTH = 6;
+
+export function formatMemberNumber(userId: number) {
+  return String(userId).padStart(MEMBER_NUMBER_LENGTH, "0");
+}
 
 export function createMemberNumberImageBlob({
   label,
@@ -39,7 +44,7 @@ export function createMemberNumberImageBlob({
     drawMemberNumberChip({
       context,
       label,
-      memberNumber: String(userId),
+      memberNumber: formatMemberNumber(userId),
       size: IMAGE_SIZE,
     });
 
@@ -144,7 +149,7 @@ function downloadMemberNumberImage(blob: Blob, userId: number) {
 }
 
 function createMemberNumberImageFileName(userId: number) {
-  return `engineercafe-member-${userId}.png`;
+  return `engineercafe-member-${formatMemberNumber(userId)}.png`;
 }
 
 function createOctagonPoints(size: number, padding: number) {

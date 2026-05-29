@@ -113,13 +113,13 @@ test.describe("ユーザー登録ページのE2Eテスト", () => {
 
     // 会員番号がCanvas画像として表示されていることを確認
     const memberNumberChip = page.getByRole("img", {
-      name: /会員番号: [0-9]+/,
+      name: /会員番号: [0-9]{6}/,
     });
     await expect(memberNumberChip).toBeVisible();
     const memberNumberLabel = await memberNumberChip.getAttribute("aria-label");
     const userId = memberNumberLabel?.replace("会員番号: ", "") ?? "";
 
-    expect(userId).toMatch(/^[0-9]+$/);
+    expect(userId).toMatch(/^[0-9]{6}$/);
 
     // 会員番号画像を保存できることを確認
     const downloadPromise = page.waitForEvent("download");

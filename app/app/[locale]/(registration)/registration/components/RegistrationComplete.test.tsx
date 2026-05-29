@@ -100,9 +100,9 @@ describe("RegistrationComplete", () => {
 
     expect(screen.getByText("ユーザー登録完了")).toBeInTheDocument();
     expect(screen.getByText("会員番号")).toBeInTheDocument();
-    expect(screen.getByText("12345")).toBeInTheDocument();
+    expect(screen.getByText("012345")).toBeInTheDocument();
     expect(
-      screen.getByRole("img", { name: "会員番号: 12345" }),
+      screen.getByRole("img", { name: "会員番号: 012345" }),
     ).toBeInTheDocument();
     expect(screen.getByText("会員番号を保存してください")).toBeInTheDocument();
     expect(
@@ -119,7 +119,7 @@ describe("RegistrationComplete", () => {
       expect.any(Number),
     );
     expect(mockCanvasContext.fillText).toHaveBeenCalledWith(
-      "12345",
+      "012345",
       expect.any(Number),
       expect.any(Number),
     );
