@@ -146,8 +146,15 @@
   },
   "RegistrationComplete": {
     "title": "User Registration Complete",
-    "userId": "User ID",
-    "alertTitle": "Please make a note of your User ID",
-    "alertMessage": "The User ID is required for NFC registration."
+    "userId": "Member Number",
+    "alertTitle": "Please save your member number",
+    "alertMessage": "This number is required for NFC card registration and reception. Please take a screenshot or save it as an image using the button below.",
+    "saveImage": "Save Image",
+    "savingImage": "Creating Image",
+    "saveError": "Could not save the image. Please take a screenshot of this screen.",
+    "shareTitle": "Engineer Cafe Member Number",
+    "shareText": "This is my Engineer Cafe member number.",
+    "imageTitle": "Engineer Cafe",
+    "imageNote": "Required for NFC card registration and reception"
   }
 }
