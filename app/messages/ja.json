@@ -146,8 +146,11 @@
   },
   "RegistrationComplete": {
     "title": "ユーザー登録完了",
-    "userId": "ユーザーID",
-    "alertTitle": "ユーザーIDをメモして下さい",
-    "alertMessage": "ユーザーIDは、NFCの登録に必要です。"
+    "userId": "会員番号",
+    "alertTitle": "会員番号を保存してください",
+    "alertMessage": "この番号はNFCカード登録や受付時に必要です。画像を長押ししてブラウザのメニューから共有・保存するか、下のボタンから画像として保存してください。",
+    "saveImage": "画像を保存",
+    "savingImage": "画像を作成中",
+    "saveError": "画像を保存できませんでした。画面のスクリーンショットを撮って保存してください。"
   }
 }

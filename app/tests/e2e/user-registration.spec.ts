@@ -2,6 +2,17 @@ import { test, expect } from "@playwright/test";
 
 test.describe("ユーザー登録ページのE2Eテスト", () => {
   test("ユーザー登録の正常系", async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, "share", {
+        configurable: true,
+        value: undefined,
+      });
+      Object.defineProperty(navigator, "canShare", {
+        configurable: true,
+        value: undefined,
+      });
+    });
+
     await page.goto("/ja/registration");
 
     // 同意フォームのステップ
@@ -87,15 +98,37 @@ test.describe("ユーザー登録ページのE2Eテスト", () => {
     // 登録完了画面の確認
     await expect(page.getByText("登録完了")).toBeVisible();
     await expect(page.getByText("ユーザー登録完了")).toBeVisible();
+    await expect(page.getByText("会員番号", { exact: true })).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "ユーザーIDをメモして下さい" }),
+      page.getByText("会員番号を保存してください", { exact: true }),
     ).toBeVisible();
     await expect(
-      page.getByText("ユーザーIDは、NFCの登録に必要です。"),
+      page.getByText(
+        "この番号はNFCカード登録や受付時に必要です。スクリーンショットを撮るか、下のボタンから画像として保存してください。",
+        { exact: true },
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "画像を保存" }),
     ).toBeVisible();
 
-    // ユーザーIDが表示されていることを確認
-    const userIdElement = page.locator("text=/^[0-9]+$/").first();
-    await expect(userIdElement).toBeVisible();
+    // 会員番号がCanvas画像として表示されていることを確認
+    const memberNumberChip = page.getByRole("img", {
+      name: /会員番号: [0-9]{6}/,
+    });
+    await expect(memberNumberChip).toBeVisible();
+    const memberNumberLabel = await memberNumberChip.getAttribute("aria-label");
+    const userId = memberNumberLabel?.replace("会員番号: ", "") ?? "";
+
+    expect(userId).toMatch(/^[0-9]{6}$/);
+
+    // 会員番号画像を保存できることを確認
+    const downloadPromise = page.waitForEvent("download");
+    await page.getByRole("button", { name: "画像を保存" }).click();
+    const download = await downloadPromise;
+
+    expect(download.suggestedFilename()).toBe(
+      `engineercafe-member-${userId}.png`,
+    );
   });
 });
