@@ -1,5 +1,5 @@
 import humps from "humps";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { fetchLatestSeatUsageByUserId } from "@/[locale]/(reception)/queries/seat-usages-queries";
 import { fetchUsersBySearchParams } from "@/[locale]/(reception)/queries/users-queries";
 import { SeatUsage, User } from "@/types";
@@ -8,13 +8,20 @@ export const useSearchUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const latestRequestIdRef = useRef(0);
+
+  const isLatestRequest = (requestId: number) =>
+    requestId === latestRequestIdRef.current;
 
   const fetch = async (
     keyword?: string,
     withLatestSeatUsage?: boolean,
     searchType?: string,
   ) => {
+    const requestId = latestRequestIdRef.current + 1;
+    latestRequestIdRef.current = requestId;
     setIsLoading(true);
+    setError(null);
 
     const type = searchType || "user_id";
     const id = keyword?.match(/^\d+$/) ? Number(keyword) : undefined;
@@ -30,6 +37,10 @@ export const useSearchUsers = () => {
           };
 
     const { data, error } = await fetchUsersBySearchParams(params);
+
+    if (!isLatestRequest(requestId)) {
+      return;
+    }
 
     if (error) {
       setError(error);
@@ -62,11 +73,16 @@ export const useSearchUsers = () => {
       );
     }
 
+    if (!isLatestRequest(requestId)) {
+      return;
+    }
+
     setUsers(camelizedData);
     setIsLoading(false);
   };
 
   const clear = () => {
+    latestRequestIdRef.current += 1;
     setUsers([]);
     setError(null);
     setIsLoading(false);

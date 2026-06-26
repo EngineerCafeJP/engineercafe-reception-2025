@@ -1,4 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { useState } from "react";
+import { useKey } from "react-use";
 import { Prefecture, Seat, User } from "@/types";
 import ReceptionForm from "./ReceptionForm";
 
@@ -92,6 +94,16 @@ describe("ReceptionForm", () => {
     jest.clearAllMocks();
   });
 
+  const getInput = () => screen.getByPlaceholderText("会員番号");
+
+  const triggerEnterKey = () => {
+    const enterKeyCall = (useKey as jest.Mock).mock.calls.findLast(
+      ([key]) => key === "Enter",
+    );
+    expect(enterKeyCall).toBeDefined();
+    enterKeyCall?.[1](new KeyboardEvent("keydown", { key: "Enter" }));
+  };
+
   it("検索候補一覧で福岡市内ユーザーに市内ラベルを表示すること", () => {
     render(
       <ReceptionForm
@@ -177,5 +189,75 @@ describe("ReceptionForm", () => {
     );
 
     expect(screen.getByText("所在地: 大阪府")).toBeInTheDocument();
+  });
+
+  it("入力値と検索済みキーワードが一致しない場合は Enter で古い検索結果を選択せず現在値で検索すること", () => {
+    const onSelectUser = jest.fn();
+    const onChangeSearchWord = jest.fn();
+
+    render(
+      <ReceptionForm
+        {...defaultProps}
+        searchUserList={[buildUser({ id: 123, name: "古い検索結果" })]}
+        searchWord="123"
+        onChangeSearchWord={onChangeSearchWord}
+        onSelectUser={onSelectUser}
+      />,
+    );
+
+    fireEvent.change(getInput(), { target: { value: "1234" } });
+    onSelectUser.mockClear();
+    onChangeSearchWord.mockClear();
+
+    triggerEnterKey();
+
+    expect(onSelectUser).not.toHaveBeenCalledWith(
+      expect.objectContaining({ id: 123 }),
+    );
+    expect(onSelectUser).toHaveBeenCalledWith(null);
+    expect(onChangeSearchWord).toHaveBeenCalledWith("1234", "user_id");
+  });
+
+  it("入力値と検索済みキーワードが一致しない場合は古い検索結果を表示しないこと", () => {
+    render(
+      <ReceptionForm
+        {...defaultProps}
+        searchUserList={[buildUser({ id: 123, name: "古い検索結果" })]}
+        searchWord="123"
+      />,
+    );
+
+    expect(screen.getByText("古い検索結果")).toBeInTheDocument();
+
+    fireEvent.change(getInput(), { target: { value: "1234" } });
+
+    expect(screen.queryByText("古い検索結果")).not.toBeInTheDocument();
+  });
+
+  it("ユーザー選択済み状態で入力欄を変更すると選択済みユーザーを解除すること", () => {
+    const selectedUser = buildUser({ id: 123, name: "選択済みユーザー" });
+
+    const TestComponent = () => {
+      const [currentSelectedUser, setCurrentSelectedUser] =
+        useState<User | null>(selectedUser);
+
+      return (
+        <ReceptionForm
+          {...defaultProps}
+          selectedUser={currentSelectedUser}
+          onSelectUser={setCurrentSelectedUser}
+        />
+      );
+    };
+
+    render(<TestComponent />);
+
+    expect(screen.getByText("name: 選択済みユーザー")).toBeInTheDocument();
+
+    fireEvent.change(getInput(), { target: { value: "1234" } });
+
+    expect(
+      screen.queryByText("name: 選択済みユーザー"),
+    ).not.toBeInTheDocument();
   });
 });

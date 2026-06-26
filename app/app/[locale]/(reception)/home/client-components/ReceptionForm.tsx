@@ -19,6 +19,11 @@ import { Prefecture, Seat, User } from "@/types";
 import { ReceptionSearchType } from "@/types/receptionSearchType";
 import { formatDate } from "@/utils/format-date-time";
 
+const normalizeFullWidthNumbers = (value: string) =>
+  value.replace(/[０-９]/g, (s) =>
+    String.fromCharCode(s.charCodeAt(0) - 0xfee0),
+  );
+
 interface ReceptionFormProps {
   searchWord: string;
   searchUserList: User[] | null;
@@ -68,6 +73,8 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   const [searchFormValue, setSearchFormValue] = useState<string>(searchWord);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const [debouncedChangeSearchWord] = useDebounce(searchFormValue, 250);
+  const isSearchResultSynced = searchFormValue === searchWord;
+  const syncedSearchUserList = isSearchResultSynced ? searchUserList : null;
 
   // インクリメンタルサーチ
   useEffect(() => {
@@ -79,6 +86,10 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
   useEffect(() => {
     setSearchFormValue(searchWord);
   }, [searchWord]);
+
+  useEffect(() => {
+    setSelectedUserIndex(0);
+  }, [searchWord, searchType]);
 
   const handleSelectUser = (user: User) => {
     onSelectUser(user);
@@ -114,7 +125,14 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
     emptySeats.filter((seat: Seat) => seat.seatCategory.name === categoryName);
 
   const handleChangeSearchWord = (word: string) => {
-    setSearchFormValue(word);
+    const normalizedWord = normalizeFullWidthNumbers(word);
+    if (normalizedWord !== searchFormValue) {
+      onSelectUser(null);
+      setSelectedArea(null);
+      setSelectedSeat(null);
+      setIsConfirmModalOpen(false);
+    }
+    setSearchFormValue(normalizedWord);
   };
 
   const handleSearch = useCallback(() => {
@@ -179,7 +197,9 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
       if (
         searchFormValue &&
         selectedUser == null &&
-        (searchUserList == null || searchUserList.length === 0)
+        (!isSearchResultSynced ||
+          syncedSearchUserList == null ||
+          syncedSearchUserList.length === 0)
       ) {
         handleSearch();
       } else if (
@@ -188,17 +208,18 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
       ) {
         setIsConfirmModalOpen(true);
       } else if (
-        searchUserList &&
+        syncedSearchUserList &&
         selectedUser == null &&
-        searchUserList.length > 0
+        syncedSearchUserList.length > 0
       ) {
-        onSelectUser(searchUserList[selectedUserIndex]);
+        onSelectUser(syncedSearchUserList[selectedUserIndex]);
       }
     },
     [
       searchFormValue,
       selectedUser,
-      searchUserList,
+      syncedSearchUserList,
+      isSearchResultSynced,
       handleSearch,
       onSelectUser,
       selectedUserIndex,
@@ -207,30 +228,30 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
 
   const handleArrowDownKeyDown = useCallback(
     (_e: KeyboardEvent) => {
-      if (searchUserList && selectedUser === null) {
-        if (selectedUserIndex < searchUserList.length - 1) {
+      if (syncedSearchUserList && selectedUser === null) {
+        if (selectedUserIndex < syncedSearchUserList.length - 1) {
           setSelectedUserIndex(selectedUserIndex + 1);
         }
       }
     },
-    [selectedUserIndex, searchUserList, selectedUser],
+    [selectedUserIndex, syncedSearchUserList, selectedUser],
   );
 
   const handleArrowUpKeyDown = useCallback(
     (_e: KeyboardEvent) => {
-      if (searchUserList && selectedUser === null) {
+      if (syncedSearchUserList && selectedUser === null) {
         if (selectedUserIndex > 0) {
           setSelectedUserIndex(selectedUserIndex - 1);
         }
       }
     },
-    [selectedUserIndex, searchUserList, selectedUser],
+    [selectedUserIndex, syncedSearchUserList, selectedUser],
   );
 
   useKey("Enter", handleEnterKeyDown, undefined, [
     selectedUser,
     handleEnterKeyDown,
-    searchUserList,
+    syncedSearchUserList,
     selectedUserIndex,
   ]);
 
@@ -238,14 +259,14 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
 
   useKey("ArrowUp", handleArrowUpKeyDown, undefined, [
     selectedUserIndex,
-    searchUserList,
+    syncedSearchUserList,
     selectedUser,
     handleArrowUpKeyDown,
   ]);
 
   useKey("ArrowDown", handleArrowDownKeyDown, undefined, [
     selectedUserIndex,
-    searchUserList,
+    syncedSearchUserList,
     selectedUser,
     handleArrowDownKeyDown,
   ]);
@@ -301,13 +322,6 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
                 type="text"
                 value={searchFormValue}
                 onChange={(e) => handleChangeSearchWord(e.target.value)}
-                onInput={(e) => {
-                  // 全角数字を半角数字に変換
-                  const input = e.target as HTMLInputElement;
-                  input.value = input.value.replace(/[０-９]/g, (s) =>
-                    String.fromCharCode(s.charCodeAt(0) - 0xfee0),
-                  );
-                }}
               />
               {searchFormValue && (
                 <button className="cursor-pointer" onClick={handleClearSearch}>
@@ -324,16 +338,16 @@ const ReceptionForm: React.FC<ReceptionFormProps> = ({
           )}
           {searchFormValue !== "" &&
             searchWord !== "" &&
-            searchUserList &&
-            searchUserList.length === 0 &&
+            syncedSearchUserList &&
+            syncedSearchUserList.length === 0 &&
             selectedUser == null && (
               <span className="text-error text-xs">
                 会員番号が見つかりません
               </span>
             )}
-          {searchUserList && selectedUser === null && (
+          {syncedSearchUserList && selectedUser === null && (
             <ul className="list bg-base-100 my-1 rounded-none px-1">
-              {searchUserList.map((user, index) => (
+              {syncedSearchUserList.map((user, index) => (
                 <li
                   key={user.id}
                   className="list-row border-base-300 hover:border-base-300/30 flex cursor-pointer justify-between rounded-none border-b p-[0.5rem]"

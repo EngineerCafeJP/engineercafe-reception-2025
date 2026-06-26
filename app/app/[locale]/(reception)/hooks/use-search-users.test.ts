@@ -15,6 +15,14 @@ describe("useSearchUsers", () => {
     },
   ];
 
+  const createDeferred = <T>() => {
+    let resolve!: (value: T) => void;
+    const promise = new Promise<T>((promiseResolve) => {
+      resolve = promiseResolve;
+    });
+    return { promise, resolve };
+  };
+
   beforeEach(() => {
     (fetchUsersBySearchParams as jest.Mock).mockResolvedValue({
       data: mockUsers,
@@ -92,5 +100,118 @@ describe("useSearchUsers", () => {
         expect(result.current.error).toBeInstanceOf(Error);
       });
     });
+  });
+
+  it("should not overwrite latest users with stale search response", async () => {
+    const firstSearch = createDeferred<{
+      data: { id: string; name: string; email: string; phone: string }[];
+      error: null;
+    }>();
+    const secondSearch = createDeferred<{
+      data: { id: string; name: string; email: string; phone: string }[];
+      error: null;
+    }>();
+
+    (fetchUsersBySearchParams as jest.Mock)
+      .mockReturnValueOnce(firstSearch.promise)
+      .mockReturnValueOnce(secondSearch.promise);
+
+    const { result } = renderHook(() => useSearchUsers());
+
+    let firstFetch = Promise.resolve();
+    let secondFetch = Promise.resolve();
+
+    act(() => {
+      firstFetch = result.current.fetch("123");
+      secondFetch = result.current.fetch("1234");
+    });
+
+    await act(async () => {
+      secondSearch.resolve({
+        data: [
+          {
+            id: "1234",
+            name: "latest_user",
+            email: "latest_user@example.com",
+            phone: "09000001234",
+          },
+        ],
+        error: null,
+      });
+      await secondFetch;
+    });
+
+    expect(result.current.users).toEqual([
+      {
+        id: "1234",
+        name: "latest_user",
+        email: "latest_user@example.com",
+        phone: "09000001234",
+      },
+    ]);
+
+    await act(async () => {
+      firstSearch.resolve({
+        data: [
+          {
+            id: "123",
+            name: "stale_user",
+            email: "stale_user@example.com",
+            phone: "09000000123",
+          },
+        ],
+        error: null,
+      });
+      await firstFetch;
+    });
+
+    expect(result.current.users).toEqual([
+      {
+        id: "1234",
+        name: "latest_user",
+        email: "latest_user@example.com",
+        phone: "09000001234",
+      },
+    ]);
+  });
+
+  it("should not restore users from an in-flight search after clear", async () => {
+    const search = createDeferred<{
+      data: { id: string; name: string; email: string; phone: string }[];
+      error: null;
+    }>();
+
+    (fetchUsersBySearchParams as jest.Mock).mockReturnValueOnce(search.promise);
+
+    const { result } = renderHook(() => useSearchUsers());
+
+    let fetchPromise = Promise.resolve();
+
+    act(() => {
+      fetchPromise = result.current.fetch("123");
+    });
+
+    act(() => {
+      result.current.clear();
+    });
+
+    await act(async () => {
+      search.resolve({
+        data: [
+          {
+            id: "123",
+            name: "stale_user",
+            email: "stale_user@example.com",
+            phone: "09000000123",
+          },
+        ],
+        error: null,
+      });
+      await fetchPromise;
+    });
+
+    expect(result.current.users).toEqual([]);
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.error).toBeNull();
   });
 });
