@@ -1,6 +1,7 @@
 import { User } from "@/types";
 import { SearchUserParams } from "@/types/search-users-params";
 import client from "@/utils/supabase/client";
+import type { TablesUpdate } from "@/utils/supabase/database.types";
 
 export const fetchUsersBySearchParams = (params?: SearchUserParams) => {
   if (
@@ -51,7 +52,7 @@ export const fetchUser = (userId: number) => {
 };
 
 export const updateUser = (userId: number, user: Partial<User>) => {
-  const updateData = {
+  const updateData: TablesUpdate<"users"> = {
     name: user.name,
     pronunciation: user.pronunciation,
     email: user.email,
@@ -73,7 +74,7 @@ export const updateUser = (userId: number, user: Partial<User>) => {
   };
 
   // undefinedの値を除外
-  const filteredUpdateData = Object.fromEntries(
+  const filteredUpdateData: TablesUpdate<"users"> = Object.fromEntries(
     Object.entries(updateData).filter(
       ([_, value]) => value !== undefined && value !== null,
     ),

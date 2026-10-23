@@ -1,6 +1,9 @@
 {
   "name": "supabase-scripts",
   "version": "1.0.0",
+  "engines": {
+    "node": "24.22.1"
+  },
   "description": "Supabase管理用スクリプト",
   "main": "index.js",
   "scripts": {

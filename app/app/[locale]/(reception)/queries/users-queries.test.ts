@@ -203,6 +203,23 @@ describe("updateUser", () => {
     expect(error).toBeNull();
   });
 
+  it("preserves empty strings, false and zero while omitting undefined fields", async () => {
+    await updateUser(1, {
+      name: "",
+      nonJapanese: false,
+      prefectureId: 0,
+      comments: undefined,
+    });
+
+    expect(supabaseTableMock.update).toHaveBeenLastCalledWith({
+      name: "",
+      non_japanese: false,
+      prefecture_id: 0,
+      updated_at: expect.any(String),
+    });
+    expect(supabaseTableMock.eq).toHaveBeenLastCalledWith("id", 1);
+  });
+
   describe("when user not found", () => {
     const mockError = new Error("User not found");
     beforeEach(() => {

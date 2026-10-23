@@ -22,7 +22,7 @@
 
 開発を始めるには、ローカルマシンに以下の環境が必要です。
 
-- Node.js (v20.9.0 以上。画像処理ライブラリ sharp の要件に合わせる)
+- Node.js 24.22.1（`.node-version` / `.nvmrc` で固定）
 - npm (Node.jsに同梱)
 - Supabase CLI
 
@@ -32,14 +32,24 @@
 
 ```bash
 git clone https://github.com/<YOUR_USERNAME>/engineercafe-reception-2025.git
-cd engineercafe-reception-2025/app
+cd engineercafe-reception-2025
 ```
 
 ### 2. 依存関係のインストール
 
-プロジェクトルート（`app` ディレクトリ）で、以下のコマンドを実行して必要なパッケージをインストールします。
+リポジトリルートで Node.js 24.22.1 に切り替えます。nodenv を使う場合は、以下を実行してください（インストール済みの場合は `nodenv install` は不要です）。
 
 ```bash
+nodenv install 24.22.1
+node --version # v24.22.1
+```
+
+nvm を使う場合は、代わりに `nvm install && nvm use` を実行してください。CI も `.node-version` を参照して同じバージョンを使用します。
+
+`app` ディレクトリで、必要なパッケージをインストールします。
+
+```bash
+cd app
 npm install
 ```
 
@@ -121,6 +131,10 @@ npm run dev
     # リンターの実行
     npm run lint
 
+    # 型チェックと本番用ビルド
+    npm run typecheck
+    npm run build
+
     # フォーマッターの実行
     npx prettier --write .
     ```
@@ -129,6 +143,14 @@ npm run dev
 
 - プロジェクト全体のコーディングスタイルは、`.prettierrc` と `eslint.config.mjs` に基づいています。
 - 原則として、既存のコードのスタイルに合わせて実装してください。
+
+### Supabase 関連パッケージの更新
+
+`@supabase/supabase-js` と `@supabase/postgrest-js` は 2.106.2、`@supabase-cache-helpers/postgrest-react-query` は 1.13.9 に固定しています。SDK 内部と cache helpers が使う PostgREST の型を揃えるため、これらの更新はまとめて行い、cache helpers の `peerDependencies` を確認してください。
+
+`npm run typecheck` は `next typegen` で Next.js の型を生成してから TypeScript を検査するため、クリーンなチェックアウトでも実行できます。
+
+更新後は `npm ls @supabase/postgrest-js` で解決結果を確認し、`npm run typecheck`、`npm test`、`npm run test:compat`、`npm run lint`、`npm run build` を実行します。`test:compat` は Node.js 標準のテストランナーで実際の SDK と cache helpers を組み合わせ、HTTP 通信だけを差し替えて互換性を確認します。CI は `npm ci` で lockfile の依存関係を再現し、型チェック・テスト・ビルドを実行します。
 
 ## コミットメッセージの規約
 

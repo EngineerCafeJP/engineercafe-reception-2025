@@ -12,14 +12,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 20
+      - name: Use project Node.js version
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: .node-version
       - name: Install dependencies
-        run: cd app && npm install
+        run: cd app && npm ci
+      - name: Check types
+        run: cd app && npm run typecheck
       - name: Run tests
         run: cd app && npm run test
+      - name: Check Supabase SDK compatibility
+        run: cd app && npm run test:compat
+      - name: Build application
+        run: cd app && npm run build
 
 env:
   NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321"
