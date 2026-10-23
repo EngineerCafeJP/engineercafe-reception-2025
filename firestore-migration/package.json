@@ -1,6 +1,9 @@
 {
   "name": "firestore-migration",
   "version": "1.0.0",
+  "engines": {
+    "node": "24.22.1"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

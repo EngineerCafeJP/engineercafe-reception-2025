@@ -48,14 +48,17 @@
 
 ```bash
 git clone https://github.com/<YOUR_USERNAME>/engineercafe-reception-2025.git
-cd engineercafe-reception-2025/app
+cd engineercafe-reception-2025
 ```
 
 ### 2. 依存関係のインストール
 
-`app`ディレクトリに移動して、依存関係をインストールします。
+Node.js 24.22.1 を使用します。nodenv では `.node-version` により自動選択されます（未インストールの場合は `nodenv install 24.22.1`）。nvm を使う場合はリポジトリルートで `nvm install && nvm use` を実行してください。
+
+`app`ディレクトリに移動して、バージョンを確認し、依存関係をインストールします。
 
 ```bash
+node --version # v24.22.1
 cd app
 npm install
 ```
