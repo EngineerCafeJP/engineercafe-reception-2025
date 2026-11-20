@@ -79,11 +79,19 @@ export const createSeatUsage = async (
   });
 };
 
-export const updateSeatUsageEndtime = async (id: number, endTime: string) => {
-  return client
+export const updateSeatUsageEndtime = async (
+  id: number,
+  endTime: string,
+  { onlyInUse = false } = {},
+) => {
+  const query = client
     .from("seat_usage_logs")
     .update({ end_time: endTime })
     .eq("id", id);
+
+  return onlyInUse
+    ? query.is("end_time", null).lte("start_time", endTime)
+    : query;
 };
 
 /**

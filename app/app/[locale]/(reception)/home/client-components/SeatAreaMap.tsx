@@ -2,7 +2,13 @@
 
 import { FC, useState } from "react";
 import AssignSeatConfirmModal from "@/[locale]/(reception)/home/client-components/AssignSeatConfirmModal";
-import { Seat, SeatUsage, SeatWithCategory, User } from "@/types";
+import {
+  FinishSeatUsage,
+  Seat,
+  SeatUsage,
+  SeatWithCategory,
+  User,
+} from "@/types";
 import { AreaBox } from "./AreaBox";
 import EmptySeatModal from "./EmptySeatModal";
 import InUseSeatModal from "./InUseSeatModal";
@@ -12,7 +18,7 @@ type SeatAreaMapProps = {
   seatUsages: SeatUsage[];
   searchUserList: User[] | null;
   onExtendSeatUsage: (seatUsage: SeatUsage) => void;
-  onFinishSeatUsage: (seatUsage: SeatUsage) => void;
+  onFinishSeatUsage: FinishSeatUsage;
   onMoveSeat: (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => void;
   onAssignSeat: (
     seat: Seat,

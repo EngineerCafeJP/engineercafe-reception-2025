@@ -6,7 +6,7 @@ import {
   fetchSeatUsageLogById,
   updateSeatUsageEndtime,
 } from "@/[locale]/(reception)/queries/seat-usages-queries";
-import { SeatUsage } from "@/types";
+import { FinishSeatUsage, SeatUsage } from "@/types";
 
 export const useSeatUsage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -92,28 +92,32 @@ export const useSeatUsage = () => {
 
   // 座席使用終了時間を更新する
   //@param seatUsage 座席使用
-  //@returns 更新後の座席使用データ
-  const finishSeatUsage = async (seatUsage: SeatUsage) => {
+  const finishSeatUsage: FinishSeatUsage = async (seatUsage) => {
     setIsLoading(true);
-    const { error: seatUsageError } = await fetchSeatUsageLogById(seatUsage.id);
-    if (seatUsageError) {
-      setError(seatUsageError);
-      setIsLoading(false);
-      return;
-    }
+    try {
+      const { data: usage, error: seatUsageError } =
+        await fetchSeatUsageLogById(seatUsage.id);
+      if (seatUsageError) {
+        setError(seatUsageError);
+        return;
+      }
 
-    const { data, error } = await updateSeatUsageEndtime(
-      seatUsage.id,
-      new Date().toISOString(),
-    );
-    if (error) {
-      setError(error);
-      setIsLoading(false);
-      return;
-    }
-    setIsLoading(false);
+      if (usage.end_time != null) return;
 
-    return humps.camelizeKeys(data);
+      const now = new Date();
+      if (new Date(usage.start_time) > now) {
+        return "利用開始前のため退席できません。";
+      }
+
+      const { error } = await updateSeatUsageEndtime(
+        seatUsage.id,
+        now.toISOString(),
+        { onlyInUse: true },
+      );
+      if (error) setError(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // 座席使用を移動する

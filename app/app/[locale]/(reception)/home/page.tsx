@@ -145,8 +145,9 @@ export default function HomePage() {
 
   const handleFinishSeatUsage = useCallback(
     async (seatUsage: SeatUsage) => {
-      await finishSeatUsage(seatUsage);
+      const message = await finishSeatUsage(seatUsage);
       await fetchInUseSeatUsage();
+      return message;
     },
     [finishSeatUsage, fetchInUseSeatUsage],
   );
@@ -274,13 +275,14 @@ export default function HomePage() {
       <div className="mx-auto max-w-full">
         <div className="absolute flex w-full justify-between">
           <button
+            aria-haspopup="dialog"
             className="btn btn-sm btn-outline btn-accent m-2"
+            disabled={seatUsageLoading || seatUsagesLoading}
             type="button"
-            onClick={() =>
-              setIsBatchExtendSeatsModalOpen(!isBatchExtendSeatsModalOpen)
-            }
-            onKeyDown={(e) => e.preventDefault()}
-            onKeyUp={(e) => e.preventDefault()}
+            onClick={() => setIsBatchExtendSeatsModalOpen(true)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") event.stopPropagation();
+            }}
           >
             座席一括延長
           </button>
@@ -332,13 +334,13 @@ export default function HomePage() {
           onSave={handleUpdateUser}
         />
       )}
-      {seatUsages.length > 0 && (
+      {isBatchExtendSeatsModalOpen && (
         <BatchExtendSeatsModal
-          isOpen={isBatchExtendSeatsModalOpen}
           seatUsages={seatUsages}
           seats={seats}
           onClose={() => setIsBatchExtendSeatsModalOpen(false)}
           onExecute={handleBatchExtendSeats}
+          onFinishSeatUsage={handleFinishSeatUsage}
         />
       )}
       {isLoading && (
