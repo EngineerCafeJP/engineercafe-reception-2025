@@ -294,6 +294,25 @@ describe("updateSeatUsageEndtime", () => {
       end_time: endTime,
     });
   });
+
+  it("can restrict checkout to the active usage once it has started", async () => {
+    const endTime = "2025-03-14T10:00:00Z";
+    const result = { data: null, error: null };
+    const guardedUpdate = {
+      is: jest.fn().mockReturnThis(),
+      lte: jest.fn().mockResolvedValue(result),
+    };
+    supabaseTableMock.eq.mockReturnValueOnce(guardedUpdate);
+
+    await expect(
+      updateSeatUsageEndtime(1, endTime, { onlyInUse: true }),
+    ).resolves.toEqual(result);
+
+    expect(supabaseTableMock.update).toHaveBeenCalledWith({ end_time: endTime });
+    expect(supabaseTableMock.eq).toHaveBeenCalledWith("id", 1);
+    expect(guardedUpdate.is).toHaveBeenCalledWith("end_time", null);
+    expect(guardedUpdate.lte).toHaveBeenCalledWith("start_time", endTime);
+  });
 });
 
 describe("updateSeatUsageIsDeleted", () => {

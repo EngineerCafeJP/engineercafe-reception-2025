@@ -185,8 +185,41 @@ describe("useSeatUsage", () => {
         expect(updateSeatUsageEndtime).toHaveBeenCalledWith(
           1,
           expect.any(String),
+          { onlyInUse: true },
         );
       });
+    });
+
+    it("should reject a usage whose stored start time is still in the future", async () => {
+      (fetchSeatUsageLogById as jest.Mock).mockResolvedValueOnce({
+        data: { ...mockSeatUsage, start_time: "2099-03-14T10:00:00Z" },
+        error: null,
+      });
+      const { result } = renderHook(() => useSeatUsage());
+
+      await act(async () => {
+        await result.current.finishSeatUsage(seatUsage);
+      });
+
+      expect(updateSeatUsageEndtime).not.toHaveBeenCalled();
+      expect(result.current.error?.message).toBe("利用開始前のため退席できません。");
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    it("should leave an already finished usage alone", async () => {
+      (fetchSeatUsageLogById as jest.Mock).mockResolvedValueOnce({
+        data: { ...mockSeatUsage, end_time: "2025-03-14T12:00:00Z" },
+        error: null,
+      });
+      const { result } = renderHook(() => useSeatUsage());
+
+      await act(async () => {
+        await result.current.finishSeatUsage(seatUsage);
+      });
+
+      expect(updateSeatUsageEndtime).not.toHaveBeenCalled();
+      expect(result.current.error).toBeNull();
+      expect(result.current.isLoading).toBe(false);
     });
 
     describe("when error occurs in fetchSeatUsageLogById", () => {
