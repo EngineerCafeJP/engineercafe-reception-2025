@@ -95,25 +95,36 @@ export const useSeatUsage = () => {
   //@returns 更新後の座席使用データ
   const finishSeatUsage = async (seatUsage: SeatUsage) => {
     setIsLoading(true);
-    const { error: seatUsageError } = await fetchSeatUsageLogById(seatUsage.id);
-    if (seatUsageError) {
-      setError(seatUsageError);
-      setIsLoading(false);
-      return;
-    }
+    try {
+      const { data: usage, error: seatUsageError } =
+        await fetchSeatUsageLogById(seatUsage.id);
+      if (seatUsageError) {
+        setError(seatUsageError);
+        return;
+      }
 
-    const { data, error } = await updateSeatUsageEndtime(
-      seatUsage.id,
-      new Date().toISOString(),
-    );
-    if (error) {
-      setError(error);
-      setIsLoading(false);
-      return;
-    }
-    setIsLoading(false);
+      if (usage.end_time != null) return;
 
-    return humps.camelizeKeys(data);
+      const now = new Date();
+      if (new Date(usage.start_time) > now) {
+        setError(new Error("利用開始前のため退席できません。"));
+        return;
+      }
+
+      const { data, error } = await updateSeatUsageEndtime(
+        seatUsage.id,
+        now.toISOString(),
+        { onlyInUse: true },
+      );
+      if (error) {
+        setError(error);
+        return;
+      }
+
+      return humps.camelizeKeys(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // 座席使用を移動する

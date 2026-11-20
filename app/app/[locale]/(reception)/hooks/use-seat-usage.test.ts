@@ -202,7 +202,9 @@ describe("useSeatUsage", () => {
       });
 
       expect(updateSeatUsageEndtime).not.toHaveBeenCalled();
-      expect(result.current.error?.message).toBe("利用開始前のため退席できません。");
+      expect(result.current.error?.message).toBe(
+        "利用開始前のため退席できません。",
+      );
       expect(result.current.isLoading).toBe(false);
     });
 

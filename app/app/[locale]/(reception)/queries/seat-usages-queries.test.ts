@@ -308,7 +308,9 @@ describe("updateSeatUsageEndtime", () => {
       updateSeatUsageEndtime(1, endTime, { onlyInUse: true }),
     ).resolves.toEqual(result);
 
-    expect(supabaseTableMock.update).toHaveBeenCalledWith({ end_time: endTime });
+    expect(supabaseTableMock.update).toHaveBeenCalledWith({
+      end_time: endTime,
+    });
     expect(supabaseTableMock.eq).toHaveBeenCalledWith("id", 1);
     expect(guardedUpdate.is).toHaveBeenCalledWith("end_time", null);
     expect(guardedUpdate.lte).toHaveBeenCalledWith("start_time", endTime);
