@@ -1,12 +1,17 @@
 "use client";
 
 import React from "react";
-import { MdAccessAlarm, MdComment } from "react-icons/md";
-import { MdAccessTime } from "react-icons/md";
+import {
+  MdAccessAlarm,
+  MdAccessTime,
+  MdComment,
+  MdWarning,
+} from "react-icons/md";
 import SeatIcon from "@/components/icons/SeatIcon";
 import UserIcon from "@/components/icons/UserIcon";
 import { Seat, SeatUsage } from "@/types";
 import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
+import SeatNoteMark from "./SeatNoteMark";
 
 export interface SeatProps {
   seat: Seat;
@@ -24,6 +29,8 @@ const SeatCard: React.FC<SeatProps> = ({
     : null;
 
   const isOver = endTime ? new Date(endTime) < new Date() : false;
+  const comment = seatUsage?.user?.comments?.trim();
+  const warning = seatUsage?.user?.warnings?.trim();
 
   return (
     <div
@@ -55,9 +62,28 @@ const SeatCard: React.FC<SeatProps> = ({
         </div>
         {seatUsage?.userId && (
           <>
-            <div className="flex flex-row items-center gap-[0.125rem]">
-              <UserIcon />
+            <div className="flex flex-row items-center gap-px">
+              <UserIcon size={12} />
               <div className="text-base">{seatUsage.userId}</div>
+              {(comment || warning) && (
+                <div className="ml-auto flex shrink-0 items-center gap-px">
+                  {comment && (
+                    <SeatNoteMark
+                      icon={MdComment}
+                      label="コメントあり"
+                      text={comment}
+                    />
+                  )}
+                  {warning && (
+                    <SeatNoteMark
+                      className="text-error"
+                      icon={MdWarning}
+                      label="警告あり"
+                      text={warning}
+                    />
+                  )}
+                </div>
+              )}
             </div>
             <div
               className={`flex flex-row items-center gap-[0.125rem] ${isOver ? "text-error" : ""}`}

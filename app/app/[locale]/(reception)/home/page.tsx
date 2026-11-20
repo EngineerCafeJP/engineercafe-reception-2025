@@ -194,9 +194,16 @@ export default function HomePage() {
         // ユーザー情報を再取得する
         fetchUsers(searchUserKeyword);
         handleFormClose();
+        await fetchInUseSeatUsage();
       }
     },
-    [updateUser, fetchUsers, searchUserKeyword, handleFormClose],
+    [
+      updateUser,
+      fetchUsers,
+      searchUserKeyword,
+      handleFormClose,
+      fetchInUseSeatUsage,
+    ],
   );
 
   const handleDeleteUser = useCallback(
@@ -316,6 +323,7 @@ export default function HomePage() {
           seatUsages={seatUsages}
           seats={seats}
           onAssignSeat={handleAssignSeat}
+          onEditUser={setEditUser}
           onExtendSeatUsage={handleExtendSeatUsage}
           onFinishSeatUsage={handleFinishSeatUsage}
           onMoveSeat={handleMoveSeat}
