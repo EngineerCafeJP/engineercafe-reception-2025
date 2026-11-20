@@ -101,7 +101,7 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
     if (modalType == "leaveConfirm") {
       return (
         <LeaveSeatConfirmModalBox
-          seat={seat}
+          seatName={seat.name}
           seatUsage={seatUsage}
           onClose={handleClose}
           onNextButtonClick={handleLeaveSeatClick}

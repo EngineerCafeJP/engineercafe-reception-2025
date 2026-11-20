@@ -1,15 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { type Ref } from "react";
 import { useKey } from "react-use";
 import ClockIcon from "@/components/icons/ClockIcon";
 import SeatIcon from "@/components/icons/SeatIcon";
 import UserIcon from "@/components/icons/UserIcon";
-import { Seat, SeatUsage } from "@/types";
+import { SeatUsage } from "@/types";
 import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
 
 interface LeaveSeatConfirmModalBoxProps {
-  seat: Seat;
+  cancelButtonRef?: Ref<HTMLButtonElement>;
+  errorMessage?: string;
+  isPending?: boolean;
+  pendingStatusRef?: Ref<HTMLParagraphElement>;
+  seatName: string;
   seatUsage: SeatUsage;
   onClose: () => void;
   onNextButtonClick: () => void;
@@ -17,7 +21,16 @@ interface LeaveSeatConfirmModalBoxProps {
 
 export const LeaveSeatConfirmModalBox: React.FC<
   LeaveSeatConfirmModalBoxProps
-> = ({ seat, seatUsage, onClose, onNextButtonClick }) => {
+> = ({
+  cancelButtonRef,
+  errorMessage,
+  isPending = false,
+  pendingStatusRef,
+  seatName,
+  seatUsage,
+  onClose,
+  onNextButtonClick,
+}) => {
   useKey("Escape", onClose, undefined, [onClose]);
   useKey("Enter", onNextButtonClick, undefined, [onNextButtonClick]);
 
@@ -35,7 +48,7 @@ export const LeaveSeatConfirmModalBox: React.FC<
                 <SeatIcon size={40} />
               </div>
               <div className="flex items-center align-[middle] text-[1.25rem]">
-                <div>{seat.name}</div>
+                <div>{seatName}</div>
               </div>
             </li>
             <li className="list-row border-base-300 rounded-none border-b py-[0.5rem]">
@@ -57,11 +70,32 @@ export const LeaveSeatConfirmModalBox: React.FC<
           </ul>
         </div>
 
+        {errorMessage && (
+          <p className="text-error" role="alert">
+            {errorMessage}
+          </p>
+        )}
+        {isPending && (
+          <p ref={pendingStatusRef} role="status" tabIndex={-1}>
+            退席処理中…
+          </p>
+        )}
         <div className="flex justify-around">
-          <button className="btn btn-secondary" onClick={onClose}>
+          <button
+            ref={cancelButtonRef}
+            className="btn btn-secondary"
+            disabled={isPending}
+            type="button"
+            onClick={onClose}
+          >
             いいえ
           </button>
-          <button className="btn btn-primary" onClick={onNextButtonClick}>
+          <button
+            className="btn btn-primary"
+            disabled={isPending}
+            type="button"
+            onClick={onNextButtonClick}
+          >
             はい
           </button>
         </div>

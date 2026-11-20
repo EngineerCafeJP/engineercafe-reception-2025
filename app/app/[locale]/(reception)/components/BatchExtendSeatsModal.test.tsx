@@ -46,7 +46,12 @@ function renderPanel(
     onClose: jest.fn(),
     onExecute: jest.fn(),
   };
-  return { ...props, ...render(<BatchExtendSeatsModal {...props} />) };
+  const { rerender } = render(<BatchExtendSeatsModal {...props} />);
+  return {
+    ...props,
+    refreshSeatUsages: (next: SeatUsage[]) =>
+      rerender(<BatchExtendSeatsModal {...props} seatUsages={next} />),
+  };
 }
 
 function checkoutButton(seatName: string) {
@@ -54,7 +59,7 @@ function checkoutButton(seatName: string) {
 }
 
 it("checks out only the clicked usage and preserves the remaining selection after refresh", async () => {
-  const { onExecute, onFinishSeatUsage, rerender, ...props } = renderPanel();
+  const { onExecute, onFinishSeatUsage, refreshSeatUsages } = renderPanel();
   fireEvent.click(
     screen.getByRole("checkbox", { name: "座席1を延長対象にする" }),
   );
@@ -70,14 +75,7 @@ it("checks out only the clicked usage and preserves the remaining selection afte
 
   await act(async () => {
     fireEvent.click(within(confirm).getByRole("button", { name: "はい" }));
-    rerender(
-      <BatchExtendSeatsModal
-        {...props}
-        onExecute={onExecute}
-        onFinishSeatUsage={onFinishSeatUsage}
-        seatUsages={[{ ...usages[1] }]}
-      />,
-    );
+    refreshSeatUsages([{ ...usages[1] }]);
   });
 
   expect(onFinishSeatUsage).toHaveBeenCalledTimes(1);
@@ -124,7 +122,7 @@ it("prevents duplicate submissions and keeps the empty panel open after the last
   const pending = new Promise<void>((resolve) => {
     finish = resolve;
   });
-  const { onClose, onExecute, onFinishSeatUsage, rerender, ...props } =
+  const { onClose, onExecute, onFinishSeatUsage, refreshSeatUsages } =
     renderPanel(
       [usages[0]],
       jest.fn(() => pending),
@@ -146,15 +144,7 @@ it("prevents duplicate submissions and keeps the empty panel open after the last
   expect(onExecute).not.toHaveBeenCalled();
 
   await act(async () => {
-    rerender(
-      <BatchExtendSeatsModal
-        {...props}
-        onClose={onClose}
-        onExecute={onExecute}
-        onFinishSeatUsage={onFinishSeatUsage}
-        seatUsages={[]}
-      />,
-    );
+    refreshSeatUsages([]);
     finish();
   });
 
@@ -165,15 +155,9 @@ it("prevents duplicate submissions and keeps the empty panel open after the last
 });
 
 it("does not check out a replacement usage on the same seat", async () => {
-  const { onFinishSeatUsage, rerender, ...props } = renderPanel([usages[0]]);
+  const { onFinishSeatUsage, refreshSeatUsages } = renderPanel([usages[0]]);
   fireEvent.click(checkoutButton("座席1"));
-  rerender(
-    <BatchExtendSeatsModal
-      {...props}
-      onFinishSeatUsage={onFinishSeatUsage}
-      seatUsages={[{ ...usages[0], id: 20 }]}
-    />,
-  );
+  refreshSeatUsages([{ ...usages[0], id: 20 }]);
 
   await act(async () => {
     fireEvent.click(screen.getByRole("button", { name: "はい" }));

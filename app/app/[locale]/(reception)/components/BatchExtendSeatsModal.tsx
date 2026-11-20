@@ -1,224 +1,279 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
-import { useKey } from "react-use";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { Seat, SeatUsage } from "@/types";
 import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
+import { LeaveSeatConfirmModalBox } from "../home/client-components/LeaveSeatConfirmModalBox";
 
 interface BatchExtendSeatsModalProps {
-  isOpen: boolean;
   onClose: () => void;
   seats: Seat[];
   seatUsages: SeatUsage[];
   onExecute: (seatUsages: SeatUsage[]) => void;
+  onFinishSeatUsage: (seatUsage: SeatUsage) => Promise<void>;
 }
 
-type SeatUsageWithSelected = {
-  seatUsage: SeatUsage;
-  seat: Seat | null;
-  selected: boolean;
-  endTime: Date | null;
-};
-
-export const BatchExtendSeatsModal: React.FC<BatchExtendSeatsModalProps> = ({
-  isOpen,
+export function BatchExtendSeatsModal({
   onClose,
   seats,
   seatUsages,
   onExecute,
-}) => {
-  const [seatUsagesWithSelected, setSeatUsagesWithSelected] = useState<
-    SeatUsageWithSelected[]
-  >([]);
+  onFinishSeatUsage,
+}: BatchExtendSeatsModalProps) {
+  const [selection, setSelection] = useState(() => new Map<number, boolean>());
+  const [checkout, setCheckout] = useState<SeatUsage | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string>();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const checkoutInProgress = useRef(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const listCancelRef = useRef<HTMLButtonElement>(null);
+  const confirmCancelRef = useRef<HTMLButtonElement>(null);
+  const pendingStatusRef = useRef<HTMLParagraphElement>(null);
+  const lastCheckoutId = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
+    const dialog = dialogRef.current;
+    dialog?.showModal();
+    return () => dialog?.close();
+  }, []);
 
-    setSeatUsagesWithSelected(
-      seatUsages.map((seatUsage) => {
-        const endTime = seatUsage?.startTime
-          ? addMinutes(seatUsage.startTime, seatUsage.usageDurationMinutes)
-          : null;
-        const isOver = endTime ? new Date(endTime) < new Date() : false;
-        const seat = seats.find((seat) => seat.id === seatUsage.seatId);
-
-        return {
-          seatUsage,
-          seat: seat || null,
-          selected: isOver,
-          endTime: endTime ? new Date(endTime) : null,
-        };
-      }),
-    );
-  }, [seatUsages, seats, isOpen]);
-
-  const handleChangeSelected = (
-    seatUsageWithSelected: SeatUsageWithSelected,
-  ) => {
-    const newSeatUsagesWithSelected = seatUsagesWithSelected.map((s) => {
-      if (s.seatUsage.id === seatUsageWithSelected.seatUsage.id) {
-        return {
-          ...s,
-          selected: !s.selected,
-        };
+  useEffect(() => {
+    const now = new Date();
+    setSelection((previous) => {
+      const next = new Map<number, boolean>();
+      for (const usage of seatUsages) {
+        const endTime = new Date(
+          addMinutes(usage.startTime, usage.usageDurationMinutes),
+        );
+        next.set(usage.id, previous.get(usage.id) ?? endTime < now);
       }
-      return s;
+      return next;
     });
+  }, [seatUsages]);
 
-    setSeatUsagesWithSelected(newSeatUsagesWithSelected);
-  };
+  useEffect(() => {
+    if (isCheckingOut) {
+      pendingStatusRef.current?.focus();
+    } else if (checkout) {
+      confirmCancelRef.current?.focus();
+    } else if (lastCheckoutId.current !== null) {
+      const button = dialogRef.current?.querySelector<HTMLButtonElement>(
+        `#batch-seat-checkout-${lastCheckoutId.current}`,
+      );
+      (button ?? listCancelRef.current)?.focus();
+      lastCheckoutId.current = null;
+    }
+  }, [checkout, isCheckingOut]);
+
+  const getSeat = (usage: SeatUsage) =>
+    seats.find((seat) => seat.id === usage.seatId);
+
+  const getSeatName = (usage: SeatUsage) =>
+    getSeat(usage)?.name ?? `座席ID ${usage.seatId}`;
+
+  const sortedUsages = [...seatUsages].sort(
+    (a, b) => Date.parse(a.startTime) - Date.parse(b.startTime),
+  );
+  const selectedUsages = sortedUsages.filter((usage) =>
+    selection.get(usage.id),
+  );
 
   const handleExecute = () => {
-    const seatUsages = seatUsagesWithSelected
-      .filter((s) => s.selected)
-      .map((s) => s.seatUsage);
-    onExecute(seatUsages);
+    if (selectedUsages.length === 0) return;
+    onExecute(selectedUsages);
     onClose();
   };
 
-  const handleKeyboardExecute = useCallback(() => {
-    if (!isOpen) return;
-    const seatUsages = seatUsagesWithSelected
-      .filter((s) => s.selected)
-      .map((s) => s.seatUsage);
-    onExecute(seatUsages);
-    onClose();
-  }, [isOpen, seatUsagesWithSelected, onExecute, onClose]);
+  const openCheckout = (usage: SeatUsage) => {
+    lastCheckoutId.current = usage.id;
+    setCheckout(usage);
+    setCheckoutError(
+      new Date(usage.startTime) > new Date()
+        ? "利用開始前のため退席できません。"
+        : undefined,
+    );
+  };
 
-  const handleKeyboardClose = useCallback(() => {
-    if (!isOpen) return;
-    onClose();
-  }, [isOpen, onClose]);
+  const handleDismiss = () => {
+    if (checkoutInProgress.current) return;
+    if (checkout) {
+      setCheckout(null);
+    } else {
+      onClose();
+    }
+  };
 
-  // useKeyでキーボードイベントをハンドリング
-  useKey("Enter", handleKeyboardExecute, undefined, [
-    isOpen,
-    handleKeyboardExecute,
-  ]);
-  useKey("Escape", handleKeyboardClose, undefined, [
-    isOpen,
-    handleKeyboardClose,
-  ]);
+  const handleCheckout = async () => {
+    if (!checkout || checkoutInProgress.current) return;
+
+    const currentUsage = seatUsages.find((usage) => usage.id === checkout.id);
+    if (!currentUsage) {
+      setCheckout(null);
+      return;
+    }
+
+    if (new Date(currentUsage.startTime) > new Date()) {
+      setCheckoutError("利用開始前のため退席できません。");
+      return;
+    }
+
+    checkoutInProgress.current = true;
+    setIsCheckingOut(true);
+    setCheckoutError(undefined);
+    try {
+      await onFinishSeatUsage(currentUsage);
+      setCheckout(null);
+    } catch {
+      setCheckoutError("退席の処理に失敗しました。");
+    } finally {
+      checkoutInProgress.current = false;
+      setIsCheckingOut(false);
+    }
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDialogElement>) => {
+    if (event.key === "Escape") {
+      event.stopPropagation();
+      event.preventDefault();
+      handleDismiss();
+    } else if (event.key === "Enter") {
+      event.stopPropagation();
+      if (event.repeat || checkoutInProgress.current) {
+        event.preventDefault();
+      } else if (!checkout && !(event.target instanceof HTMLButtonElement)) {
+        event.preventDefault();
+        handleExecute();
+      }
+    }
+  };
 
   return (
     <dialog
-      className={`modal ${isOpen ? "modal-open" : ""}`}
+      ref={dialogRef}
+      aria-label={checkout ? "退席確認" : "座席一括延長"}
+      className="modal"
       id="batch-extend-seats-modal"
+      onCancel={(event) => {
+        event.preventDefault();
+        handleDismiss();
+      }}
+      onKeyDown={handleKeyDown}
     >
-      <div className="modal-box border-accent border-b-2 p-[0]">
-        <div className="bg-accent text-primary-content flex h-[50px] items-center justify-center text-[1.25rem] font-[800]">
-          座席一括延長
-        </div>
+      {checkout ? (
+        <LeaveSeatConfirmModalBox
+          cancelButtonRef={confirmCancelRef}
+          errorMessage={checkoutError}
+          isPending={isCheckingOut}
+          pendingStatusRef={pendingStatusRef}
+          seatName={getSeatName(checkout)}
+          seatUsage={checkout}
+          onClose={handleDismiss}
+          onNextButtonClick={handleCheckout}
+        />
+      ) : (
+        <div className="modal-box border-accent border-b-2 p-0">
+          <h2 className="bg-accent text-primary-content flex h-[50px] items-center justify-center text-[1.25rem] font-[800]">
+            座席一括延長
+          </h2>
 
-        <div className="max-h-[50vh] overflow-y-auto p-2">
-          <p className="mb-4 text-center text-sm">
-            チェックされている座席を延長します。
-          </p>
-          {seatUsagesWithSelected
-            .sort((a, b) => {
-              if (a.seatUsage.startTime && b.seatUsage.startTime) {
-                return (
-                  new Date(a.seatUsage.startTime).getTime() -
-                  new Date(b.seatUsage.startTime).getTime()
-                );
-              }
-              return 0;
-            })
-            .map((seatUsageWithSelected) => (
-              <div
-                key={seatUsageWithSelected.seatUsage.id}
-                className="border-b"
-              >
-                <div className="flex flex-row items-center justify-between">
-                  <div className="flex flex-row items-center gap-2">
+          <div className="max-h-[50vh] overflow-y-auto p-2">
+            <p className="mb-4 text-center text-sm">
+              {seatUsages.length === 0
+                ? "利用中の座席はありません"
+                : "チェックされている座席を延長します。"}
+            </p>
+            {sortedUsages.map((usage) => {
+              const seat = getSeat(usage);
+              const seatName = seat?.name ?? `座席ID ${usage.seatId}`;
+              const endTime = addMinutes(
+                usage.startTime,
+                usage.usageDurationMinutes,
+              );
+              const selected = selection.get(usage.id) ?? false;
+
+              return (
+                <div
+                  key={usage.id}
+                  className="flex flex-wrap items-center justify-between gap-2 border-b p-2"
+                >
+                  <div className="flex items-center gap-2">
                     <input
-                      checked={seatUsageWithSelected.selected}
+                      aria-label={`${seatName}を延長対象にする`}
+                      checked={selected}
                       type="checkbox"
-                      onChange={() =>
-                        handleChangeSelected(seatUsageWithSelected)
-                      }
+                      onChange={(event) => {
+                        const checked = event.target.checked;
+                        setSelection((previous) =>
+                          new Map(previous).set(usage.id, checked),
+                        );
+                      }}
                     />
                     <div>
-                      <div>{seatUsageWithSelected.seat?.name}</div>
-                      <div>{seatUsageWithSelected.seatUsage.userId}</div>
+                      <div>{seatName}</div>
+                      <div>{usage.userId}</div>
                     </div>
                   </div>
-                  <div className="basis-1/2">
+                  <div className="whitespace-nowrap">
                     <div
-                      className={`flex items-center align-[middle] text-[1rem] ${
-                        seatUsageWithSelected.endTime &&
-                        seatUsageWithSelected.endTime < new Date()
+                      className={
+                        new Date(endTime) < new Date()
                           ? "text-error"
                           : "text-base-content"
-                      }`}
+                      }
                     >
-                      <div>
-                        {formatTimeWithQuarter(
-                          seatUsageWithSelected.seatUsage.startTime,
-                        )}
-                      </div>
-                      <div className="mx-2">-</div>
-                      <div>
+                      {formatTimeWithQuarter(usage.startTime)} -{" "}
+                      {formatTimeWithQuarter(endTime)}
+                    </div>
+                    {selected && (
+                      <div className="text-accent">
+                        {formatTimeWithQuarter(endTime)} -{" "}
                         {formatTimeWithQuarter(
                           addMinutes(
-                            seatUsageWithSelected.seatUsage.startTime,
-                            seatUsageWithSelected.seatUsage
-                              .usageDurationMinutes,
+                            endTime,
+                            seat?.usageDurationMinutes ?? 120,
                           ),
                         )}
                       </div>
-                    </div>
-                    {seatUsageWithSelected.selected && (
-                      <div className="flex items-center align-[middle] text-[1rem]">
-                        <div className="text-accent">
-                          {formatTimeWithQuarter(
-                            addMinutes(
-                              seatUsageWithSelected.seatUsage.startTime,
-                              seatUsageWithSelected.seatUsage
-                                .usageDurationMinutes,
-                            ),
-                          )}
-                        </div>
-
-                        <div className="text-accent mx-4">-</div>
-                        <div className="text-accent">
-                          {formatTimeWithQuarter(
-                            addMinutes(
-                              seatUsageWithSelected.seatUsage.startTime,
-                              seatUsageWithSelected.seatUsage
-                                .usageDurationMinutes +
-                                (seatUsageWithSelected.seat
-                                  ?.usageDurationMinutes ?? 120),
-                            ),
-                          )}
-                        </div>
-                      </div>
                     )}
                   </div>
+                  <button
+                    aria-label={`${seatName}を退席`}
+                    className="btn btn-outline btn-warning btn-sm"
+                    id={`batch-seat-checkout-${usage.id}`}
+                    type="button"
+                    onClick={() => openCheckout(usage)}
+                  >
+                    退席
+                  </button>
                 </div>
-              </div>
-            ))}
-        </div>
+              );
+            })}
+          </div>
 
-        <div className="flex justify-between p-4">
-          <button
-            className="btn"
-            type="button"
-            onClick={() => {
-              onClose();
-            }}
-          >
-            キャンセル
-          </button>
-          <button className="btn btn-primary" onClick={handleExecute}>
-            実行する
-          </button>
+          <div className="flex justify-between p-4">
+            <button
+              ref={listCancelRef}
+              className="btn"
+              type="button"
+              onClick={onClose}
+            >
+              キャンセル
+            </button>
+            <button
+              className="btn btn-primary"
+              disabled={selectedUsages.length === 0}
+              type="button"
+              onClick={handleExecute}
+            >
+              実行する
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="modal-backdrop" onClick={onClose}></div>
+      <div className="modal-backdrop" onClick={handleDismiss}></div>
     </dialog>
   );
-};
+}
 
 export default BatchExtendSeatsModal;
