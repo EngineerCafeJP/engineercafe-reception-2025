@@ -12,6 +12,12 @@ describe("useInUseSeatUsages", () => {
       seat_id: "123",
       start_time: "2025-03-14 10:00:00",
       end_time: null,
+      user: {
+        id: 123,
+        name: "テスト会員",
+        comments: "受付用メモ",
+        warnings: null,
+      },
     },
   ];
 
@@ -33,6 +39,7 @@ describe("useInUseSeatUsages", () => {
           seatId: "123",
           startTime: "2025-03-14 10:00:00",
           endTime: null,
+          user: mockSeatUsages[0].user,
         },
       ]);
       expect(result.current.isLoading).toBe(false);

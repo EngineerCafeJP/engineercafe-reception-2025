@@ -60,7 +60,7 @@ export const fetchInUseSeatUsageLogsBySeatId = async (seatId: number) => {
 export const fetchInUseSeatUsageLogs = async () => {
   return client
     .from("seat_usage_logs")
-    .select("*, user:users (id, name)")
+    .select("*, user:users (id, name, comments, warnings)")
     .filter("end_time", "is", null);
 };
 

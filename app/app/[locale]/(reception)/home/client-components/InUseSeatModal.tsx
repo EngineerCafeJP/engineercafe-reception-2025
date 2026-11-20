@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { FinishSeatUsage, Seat, SeatUsage } from "@/types";
+import { FinishSeatUsage, Seat, SeatUsage, User } from "@/types";
 import { addMinutes } from "@/utils/format-time";
 import { ExtendSeatConfirmModalBox } from "./ExtendSeatConfirmModalBox";
 import { InUseSeatModalBox } from "./InUseSeatModalBox";
@@ -12,6 +12,7 @@ import { MoveSeatSelectModalBox } from "./MoveSeatSelectModalBox";
 interface InUseSeatModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onEditUser: (user: User) => void;
   seat: Seat;
   seatUsage: SeatUsage;
   onFinishSeatUsage: FinishSeatUsage;
@@ -30,6 +31,7 @@ type InUseSeatModalType =
 export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
   isOpen,
   onClose,
+  onEditUser,
   seat,
   seatUsage,
   onFinishSeatUsage,
@@ -176,6 +178,7 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
           seat={seat}
           seatUsage={seatUsage}
           onClose={handleClose}
+          onEditUser={onEditUser}
           onExtendSeatClick={() => handleExtendSeatClicked()}
           onLeaveSeatClick={() => setModalType("leaveConfirm")}
           onMoveSeatClick={() => setModalType("moveSeatSelect")}

@@ -17,6 +17,7 @@ type SeatAreaMapProps = {
   seats: SeatWithCategory[];
   seatUsages: SeatUsage[];
   searchUserList: User[] | null;
+  onEditUser: (user: User) => void;
   onExtendSeatUsage: (seatUsage: SeatUsage) => void;
   onFinishSeatUsage: FinishSeatUsage;
   onMoveSeat: (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => void;
@@ -39,6 +40,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
   seats,
   seatUsages,
   searchUserList,
+  onEditUser,
   onExtendSeatUsage,
   onFinishSeatUsage,
   onMoveSeat,
@@ -55,6 +57,11 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
     setSelectedSeatUsage(seatUsage);
   };
 
+  const handleCloseSeatModal = () => {
+    setSelectedSeat(null);
+    setSelectedSeatUsage(null);
+  };
+
   const handleAssignSeat = (
     seat: Seat,
     user: User,
@@ -62,8 +69,7 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
     usageDurationMinutes?: number,
   ) => {
     onAssignSeat(seat, user, startTime, usageDurationMinutes);
-    setSelectedSeat(null);
-    setSelectedSeatUsage(null);
+    handleCloseSeatModal();
   };
 
   const renderSeatModal = () => {
@@ -84,9 +90,10 @@ export const SeatAreaMap: FC<SeatAreaMapProps> = ({
             seat={selectedSeat}
             seatUsage={selectedSeatUsage}
             seats={seats}
-            onClose={() => {
-              setSelectedSeat(null);
-              setSelectedSeatUsage(null);
+            onClose={handleCloseSeatModal}
+            onEditUser={(user) => {
+              handleCloseSeatModal();
+              onEditUser(user);
             }}
             onExtendSeatUsage={onExtendSeatUsage}
             onFinishSeatUsage={onFinishSeatUsage}

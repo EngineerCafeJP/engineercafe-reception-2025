@@ -189,7 +189,7 @@ describe("fetchInUseSeatUsageLogs", () => {
     expect(error).toBeNull();
     expect(supabase.from).toHaveBeenCalledWith("seat_usage_logs");
     expect(supabaseTableMock.select).toHaveBeenCalledWith(
-      "*, user:users (id, name)",
+      "*, user:users (id, name, comments, warnings)",
     );
     expect(supabaseTableMock.filter).toHaveBeenCalledWith(
       "end_time",
