@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Seat, SeatUsage } from "@/types";
+import React, { useRef, useState } from "react";
+import { FinishSeatUsage, Seat, SeatUsage } from "@/types";
 import { addMinutes } from "@/utils/format-time";
 import { ExtendSeatConfirmModalBox } from "./ExtendSeatConfirmModalBox";
 import { InUseSeatModalBox } from "./InUseSeatModalBox";
@@ -14,7 +14,7 @@ interface InUseSeatModalProps {
   onClose: () => void;
   seat: Seat;
   seatUsage: SeatUsage;
-  onFinishSeatUsage: (seatUsage: SeatUsage) => void;
+  onFinishSeatUsage: FinishSeatUsage;
   onMoveSeat: (prevSeatUsage: SeatUsage, nextSeatUsage: SeatUsage) => void;
   onExtendSeatUsage: (seatUsage: SeatUsage) => void;
   seats: Seat[];
@@ -42,16 +42,41 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
   const [nextSeat, setNextSeat] = useState<Seat | null>(null);
   const [nextSeatUsage, setNextSeatUsage] = useState<SeatUsage | null>(null);
 
+  const [checkoutError, setCheckoutError] = useState<string>();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const checkoutInProgress = useRef(false);
+
   const handleClose = () => {
+    if (checkoutInProgress.current) return;
+    setCheckoutError(undefined);
     setModalType(null);
     setNextSeat(null);
     setNextSeatUsage(null);
     onClose();
   };
 
-  const handleLeaveSeatClick = () => {
-    onFinishSeatUsage(seatUsage);
-    handleClose();
+  const handleLeaveSeatClick = async () => {
+    if (checkoutInProgress.current) return;
+
+    checkoutInProgress.current = true;
+    setIsCheckingOut(true);
+    setCheckoutError(undefined);
+
+    let errorMessage: string | void;
+    try {
+      errorMessage = await onFinishSeatUsage(seatUsage);
+    } catch {
+      errorMessage = "退席の処理に失敗しました。";
+    } finally {
+      checkoutInProgress.current = false;
+      setIsCheckingOut(false);
+    }
+
+    if (errorMessage) {
+      setCheckoutError(errorMessage);
+    } else {
+      handleClose();
+    }
   };
 
   const handleMoveSeatClick = (nextSeat: Seat) => {
@@ -101,6 +126,8 @@ export const InUseSeatModal: React.FC<InUseSeatModalProps> = ({
     if (modalType == "leaveConfirm") {
       return (
         <LeaveSeatConfirmModalBox
+          errorMessage={checkoutError}
+          isPending={isCheckingOut}
           seatName={seat.name}
           seatUsage={seatUsage}
           onClose={handleClose}

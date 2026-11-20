@@ -198,13 +198,13 @@ describe("useSeatUsage", () => {
       const { result } = renderHook(() => useSeatUsage());
 
       await act(async () => {
-        await result.current.finishSeatUsage(seatUsage);
+        await expect(result.current.finishSeatUsage(seatUsage)).resolves.toBe(
+          "利用開始前のため退席できません。",
+        );
       });
 
       expect(updateSeatUsageEndtime).not.toHaveBeenCalled();
-      expect(result.current.error?.message).toBe(
-        "利用開始前のため退席できません。",
-      );
+      expect(result.current.error).toBeNull();
       expect(result.current.isLoading).toBe(false);
     });
 

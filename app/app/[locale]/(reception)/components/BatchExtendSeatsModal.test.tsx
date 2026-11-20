@@ -178,3 +178,21 @@ it("explains why a usage cannot be checked out before it starts", () => {
   );
   expect(onFinishSeatUsage).not.toHaveBeenCalled();
 });
+
+it("keeps the confirmation open if the stored usage cannot be checked out", async () => {
+  renderPanel(
+    [usages[0]],
+    jest.fn().mockResolvedValue("利用開始前のため退席できません。"),
+  );
+  fireEvent.click(checkoutButton("座席1"));
+
+  await act(async () => {
+    fireEvent.click(screen.getByRole("button", { name: "はい" }));
+  });
+
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "利用開始前のため退席できません。",
+  );
+  fireEvent.click(screen.getByRole("button", { name: "いいえ" }));
+  expect(checkoutButton("座席1")).toHaveFocus();
+});

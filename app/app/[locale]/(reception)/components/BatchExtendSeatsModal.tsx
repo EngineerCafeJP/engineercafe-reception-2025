@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { Seat, SeatUsage } from "@/types";
+import { FinishSeatUsage, Seat, SeatUsage } from "@/types";
 import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
 import { LeaveSeatConfirmModalBox } from "../home/client-components/LeaveSeatConfirmModalBox";
 
@@ -10,7 +10,7 @@ interface BatchExtendSeatsModalProps {
   seats: Seat[];
   seatUsages: SeatUsage[];
   onExecute: (seatUsages: SeatUsage[]) => void;
-  onFinishSeatUsage: (seatUsage: SeatUsage) => Promise<void>;
+  onFinishSeatUsage: FinishSeatUsage;
 }
 
 export function BatchExtendSeatsModal({
@@ -78,10 +78,15 @@ export function BatchExtendSeatsModal({
     selection.get(usage.id),
   );
 
+  const closePanel = () => {
+    dialogRef.current?.close();
+    onClose();
+  };
+
   const handleExecute = () => {
     if (selectedUsages.length === 0) return;
     onExecute(selectedUsages);
-    onClose();
+    closePanel();
   };
 
   const openCheckout = (usage: SeatUsage) => {
@@ -99,7 +104,7 @@ export function BatchExtendSeatsModal({
     if (checkout) {
       setCheckout(null);
     } else {
-      onClose();
+      closePanel();
     }
   };
 
@@ -121,8 +126,12 @@ export function BatchExtendSeatsModal({
     setIsCheckingOut(true);
     setCheckoutError(undefined);
     try {
-      await onFinishSeatUsage(currentUsage);
-      setCheckout(null);
+      const message = await onFinishSeatUsage(currentUsage);
+      if (message) {
+        setCheckoutError(message);
+      } else {
+        setCheckout(null);
+      }
     } catch {
       setCheckoutError("退席の処理に失敗しました。");
     } finally {
@@ -162,6 +171,7 @@ export function BatchExtendSeatsModal({
       {checkout ? (
         <LeaveSeatConfirmModalBox
           cancelButtonRef={confirmCancelRef}
+          enableGlobalShortcuts={false}
           errorMessage={checkoutError}
           isPending={isCheckingOut}
           pendingStatusRef={pendingStatusRef}
@@ -255,7 +265,7 @@ export function BatchExtendSeatsModal({
               ref={listCancelRef}
               className="btn"
               type="button"
-              onClick={onClose}
+              onClick={closePanel}
             >
               キャンセル
             </button>

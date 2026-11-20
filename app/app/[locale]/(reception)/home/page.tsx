@@ -145,8 +145,9 @@ export default function HomePage() {
 
   const handleFinishSeatUsage = useCallback(
     async (seatUsage: SeatUsage) => {
-      await finishSeatUsage(seatUsage);
+      const message = await finishSeatUsage(seatUsage);
       await fetchInUseSeatUsage();
+      return message;
     },
     [finishSeatUsage, fetchInUseSeatUsage],
   );
@@ -276,6 +277,7 @@ export default function HomePage() {
           <button
             aria-haspopup="dialog"
             className="btn btn-sm btn-outline btn-accent m-2"
+            disabled={seatUsageLoading || seatUsagesLoading}
             type="button"
             onClick={() => setIsBatchExtendSeatsModalOpen(true)}
             onKeyDown={(event) => {

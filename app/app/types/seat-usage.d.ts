@@ -13,3 +13,6 @@ export type SeatUsage = {
   seat?: Seat;
   user?: User;
 };
+
+// 退席を確定できない場合は確認画面に表示する案内を返す。
+export type FinishSeatUsage = (seatUsage: SeatUsage) => Promise<string | void>;

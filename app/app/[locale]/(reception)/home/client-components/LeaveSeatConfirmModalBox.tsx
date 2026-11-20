@@ -10,6 +10,7 @@ import { addMinutes, formatTimeWithQuarter } from "@/utils/format-time";
 
 interface LeaveSeatConfirmModalBoxProps {
   cancelButtonRef?: Ref<HTMLButtonElement>;
+  enableGlobalShortcuts?: boolean;
   errorMessage?: string;
   isPending?: boolean;
   pendingStatusRef?: Ref<HTMLParagraphElement>;
@@ -23,6 +24,7 @@ export const LeaveSeatConfirmModalBox: React.FC<
   LeaveSeatConfirmModalBoxProps
 > = ({
   cancelButtonRef,
+  enableGlobalShortcuts = true,
   errorMessage,
   isPending = false,
   pendingStatusRef,
@@ -31,8 +33,23 @@ export const LeaveSeatConfirmModalBox: React.FC<
   onClose,
   onNextButtonClick,
 }) => {
-  useKey("Escape", onClose, undefined, [onClose]);
-  useKey("Enter", onNextButtonClick, undefined, [onNextButtonClick]);
+  useKey(
+    (event) => enableGlobalShortcuts && !isPending && event.key === "Escape",
+    onClose,
+    undefined,
+    [enableGlobalShortcuts, isPending, onClose],
+  );
+  useKey(
+    (event) =>
+      enableGlobalShortcuts &&
+      !isPending &&
+      event.key === "Enter" &&
+      !event.repeat &&
+      !(event.target instanceof HTMLButtonElement),
+    onNextButtonClick,
+    undefined,
+    [enableGlobalShortcuts, isPending, onNextButtonClick],
+  );
 
   return (
     <div className="modal-box border-warning border-2 p-[0]">
